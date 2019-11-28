@@ -13,7 +13,7 @@ The content of the lesson is as follows:
     * real-world example of benchmarking: assessment of understanding
     * Ask users to build a mental model to link between steps of benchmarking
 2. Why benchmarking is essential?
-3. Benchmarking in HPC
+<!--3. Benchmarking in HPC
     * Software and hardware performance
     * Factors affecting software performances
     * Useful performance metrics in HPC
@@ -27,7 +27,7 @@ The content of the lesson is as follows:
     * Quntifying speedup: t<sub>1</sub>/t<sub>p</sub>
     * Scaling
     * Practical: Run a simple LJ run for LAMMPS and discuss its scaling (no OPT)
-5. Amdahl's Law
+5. Amdahl's Law -->
 6. Factors affecting software performances in a HPC
     * cpu frequency
     * number of cores per node
