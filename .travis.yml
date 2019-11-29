@@ -5,29 +5,11 @@ branches:
   only:
   - gh-pages
   - /.*/
-before_install:
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-  - echo "deb https://cran.rstudio.com/bin/linux/ubuntu trusty/" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get update -y
-  - sudo apt-get install -y --allow-unauthenticated r-base
-  - sudo Rscript -e "install.packages('knitr', repos = 'https://', dependencies = TRUE)"
-  - sudo Rscript -e "install.packages('stringr', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
-  - sudo Rscript -e "install.packages('checkpoint', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
-  - sudo Rscript -e "install.packages('ggplot2', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
-  - rvm default
-  - gem install json kramdown jekyll
-install:
-  - pip install pyyaml
-script:
-  - make lesson-check-all
-  - make --always-make site
 
 # Add spellchecking for PRs
 jobs:
   include:
     - stage: spelling
-      # The default before_install step is slow because of ruby and unnecessary for spellchecking
-      before_install:
       install:
         # Use codespell for spell checking
         sudo pip install codespell
@@ -63,3 +45,19 @@ jobs:
           $(git diff --name-only --diff-filter=AM $TRAVIS_BRANCH...HEAD|tr '\n' ' ')
 
     - stage: check_and_build
+      before_install:
+        - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+        - echo "deb https://cran.rstudio.com/bin/linux/ubuntu trusty/" | sudo tee -a /etc/apt/sources.list
+        - sudo apt-get update -y
+        - sudo apt-get install -y --allow-unauthenticated r-base
+        - sudo Rscript -e "install.packages('knitr', repos = 'https://', dependencies = TRUE)"
+        - sudo Rscript -e "install.packages('stringr', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
+        - sudo Rscript -e "install.packages('checkpoint', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
+        - sudo Rscript -e "install.packages('ggplot2', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
+        - rvm default
+        - gem install json kramdown jekyll
+      install:
+        - pip install pyyaml
+      script:
+        - make lesson-check-all
+        - make --always-make site
