@@ -1,23 +1,77 @@
-dist: xenial  # Ubuntu 16.04 (required for python 3.7)
-language: python
-python: 3.7
+before_install:
+  - sudo apt-get update -y
+  - sudo apt-get install libgit2-dev libudunits2-dev
+  - sudo apt-get install python3-setuptools python3-pip
+  - rvm install 2.5.3
+  - rvm 2.5.3 do ruby -S gem install bundle
+  - R -q -e 'install.packages(c("remotes", "curl"))'
+  - R -q -e 'remotes::install_github("hadley/requirements")'
+install:
+  - sudo -H pip3 install pyyaml
+script:
+  - bundle install
+  - make lesson-check-all
+  - make --always-make site
+
+
+# Header
+language: r
+sudo: false
+cache: packages
+latex: false
+
 branches:
   only:
   - gh-pages
   - /.*/
-before_install:
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-  - echo "deb https://cran.rstudio.com/bin/linux/ubuntu trusty/" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get update -y
-  - sudo apt-get install -y r-base
-  - sudo Rscript -e "install.packages('knitr', repos = 'https://', dependencies = TRUE)"
-  - sudo Rscript -e "install.packages('stringr', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
-  - sudo Rscript -e "install.packages('checkpoint', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
-  - sudo Rscript -e "install.packages('ggplot2', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
-  - rvm default
-  - gem install json kramdown jekyll
-install:
-  - pip install pyyaml
-script:
-  - make lesson-check-all
-  - make --always-make site
+
+#env
+env:
+  global:
+  - _R_CHECK_FORCE_SUGGESTS_=false
+  #- MAKEFLAGS="-j 2"
+
+# Add spellchecking for PRs
+jobs:
+  include:
+    - stage: spelling
+      language: python
+      sudo: true
+      python: "3.6"
+      # The default before_install step is slow because of ruby and unnecessary for spellchecking
+      before_install:
+      install:
+        # Use codespell for spell checking
+        sudo pip install codespell
+      script:
+        # Run a non-erroring version to report spelling errors using standard filters
+        # (weird comment style is because of how travis joins lines)
+        - echo -e "\n\n\e[32mChecking repo with standard filters (does not return an error)\e[0m\n";
+          codespell
+          `# skip these directories and file types`
+          --skip="assets,bin,css,data,deprecated,fig,files,AUTHORS,CONTRIBUTORS.md,*.csv,.mailmap"
+          `# keep reporting to what is necessary`
+          --quiet-level=2
+          `# allow for some false positives`
+          --ignore-words-list="rouge,keyserver"
+          `# do not return an error code`
+          ||true
+
+        # Run an error reporting version (which may be customized for the repo):
+        # - Filter ipynb since any included images give a lot of false positives (other errors will be reported with the
+        #   non-erroring version above)
+        # - For this repo we also check the bin directory for spelling errors
+        # - Add comments on additional filters here (could also include regex with `--regex`)
+        - echo -e "\n\n\n\e[31mRunning codespell with custom filters (returns errorcode)\e[0m\n";
+          echo -e "Files checked:\n\t$(git diff --name-only --diff-filter=AM $TRAVIS_BRANCH...HEAD|tr '\n' ' ')\n\n";
+          codespell
+          `# skip these directories and file types`
+          --skip="assets,fig,*.svg,AUTHORS,.mailmap"
+          `# keep reporting to what is necessary`
+          --quiet-level=2
+          `# allow for some false positives`
+          --ignore-words-list="rouge,keyserver"
+          `# only check files changed`
+          $(git diff --name-only --diff-filter=AM $TRAVIS_BRANCH...HEAD|tr '\n' ' ')
+
+    - stage: check_and_build
