@@ -26,9 +26,6 @@ script:
 jobs:
   include:
     - stage: spelling
-      language: python
-      sudo: true
-      python: "3.6"
       # The default before_install step is slow because of ruby and unnecessary for spellchecking
       before_install:
       install:
