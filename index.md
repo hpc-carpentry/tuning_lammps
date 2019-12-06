@@ -22,7 +22,7 @@ The content of the lesson is as follows:
         * Flops
         * Theoretical peak performance
 4. Speed-up
-    * Various ways to speed-up/accelarate a code
+    * Various ways to speed-up/accelerate a code
     * parallel processing
     * Quntifying speedup: t<sub>1</sub>/t<sub>p</sub>
     * Scaling
@@ -44,7 +44,7 @@ The content of the lesson is as follows:
     * Optimization
     * Implementing parallelization: OpenMP, MPI, CUDA
     * Further tuning using accelarting libraries
-8. Accelaration packages for LAMMPS
+8. Acceleration packages for LAMMPS
     * OPT
     * USER-OMP
     * USER-INTEL
@@ -53,7 +53,7 @@ The content of the lesson is as follows:
 9. Accelarating LAMMPS using GPU package
     * Basic usage
     * Case study 1: demonstration
-    * Excercise 1: for users
+    * Exercise 1: for users
 9. Accelerating LAMMPS using KOKKOS
     * What is Kokkos?
     * Important features of LAMMPS Kokkos package

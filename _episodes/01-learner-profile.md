@@ -7,12 +7,12 @@ questions:
 - "What can I expect from this course?"
 objectives:
 - "Identify performance bottlenecks of running LAMMPS in a HPC cluster"
-- "Be eanble to use hardware architecture support at run-time using KOKKOS"
-- "Be able to identify appropriate run-time input parameters to acheive LAMMPS performance acceleration"
+- "Be enable to use hardware architecture support at run-time using KOKKOS"
+- "Be able to identify appropriate run-time input parameters to achieve LAMMPS performance acceleration"
 keypoints:
 - "Merely running a software like LAMMPS on a HPC may not provide expected performance boostup"
 - "To assess performance bottlenecks this is important to benchmark LAMMPS"
-- "Performance acceleration of LAMMPS for a specific HPC hardware can be acheived using its Kokkos package"
+- "Performance acceleration of LAMMPS for a specific HPC hardware can be achieved using its Kokkos package"
 ---
 # Why should I take this course?
 

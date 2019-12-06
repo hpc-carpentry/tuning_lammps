@@ -29,7 +29,7 @@ To compare the performance of a code, we often need to set a standard for judgin
 2. Appropriate choice of benchmark data
 3. Appropriate choice of hardwares
 4. Choosing best representative benchmarking suite
-5. Identifying the souce of varying benchamarking results
+5. Identifying the source of varying benchmarking results
 
 ## 1.2 Scaling
 A few lies on scaling behaviour to be discussed here.
