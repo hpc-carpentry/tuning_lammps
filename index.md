@@ -8,67 +8,99 @@ In this lesson, we will work on to focus on various accelerating modules that ar
 
 The content of the lesson is as follows:
 
-1. What is benchmark?
-    * general definition
-    * real-world example of benchmarking: assessment of understanding
-    * Ask users to build a mental model to link between steps of benchmarking
-2. Why benchmarking is essential?
-<!--3. Benchmarking in HPC
-    * Software and hardware performance
-    * Factors affecting software performances
-    * Useful performance metrics in HPC
-        * walltime
-        * cpuh
-        * Flops
-        * Theoretical peak performance
-4. Speed-up
-    * Various ways to speed-up/accelerate a code
-    * parallel processing
+1. __Why should I take this course?__
+    * Why should I bother about software performance?
+    * What can I expect to learn from this course?
+
+2. __What is performance?__
+    * What is the difference between software and hardware performance?
+    * How can I measure performance?
+        * What is Flop?
+        * What is walltime?
+        * What is cpuh?
+    * What are the factors affecting performance?
+
+3. __How do I benchmark software performance in HPC?__
+    * What is benchmarking?
+    * What are the factors that can affect a benchmark?
+    * _**Case study 1:**_ A simple benchmarking example of LAMMPS in a HPC
+    * _**Hands-on 1:**_ Can you do it on your own?
+
+4. __Can I accelerate performance?__
+    * Hardware acceleration and software acceleration
+        * multi-core cpu
+        * GPU
+
+    * Can I use specialised code to extract best of an available hardware?
+        * Multi-threading via OpenMP: parallel processing in shared memory platform
+            * Thread based parallelism
+            * Important run-time environment variables
+            * bottlenecks in an OpenMP applications
+                * hyperthreading
+                * cpu affinity
+
+        * Multi-threading via CUDA: host-device relationship
+            * bottlenecks in host-device architectures
+
+    * What if I need more workers than that available in a single node?
+        * How using MPI we can acheive this?
+        * What is the bottleneck here?
+            - communication overhead
+            - domain decomposition
+
+    * Is this possible to use optimized library/code to get acceleration?
+        *  Brief mention about various optimized libraries like MKL, FFTW
+
+5. __What is scaling?__
     * Quntifying speedup: t<sub>1</sub>/t<sub>p</sub>
-    * Scaling
-    * Practical: Run a simple LJ run for LAMMPS and discuss its scaling (no OPT)
-5. Amdahl's Law -->
-6. Factors affecting software performances in a HPC
-    * cpu frequency
-    * number of cores per node
-    * memory
-    * inter-node communications: latency
-    * compilers
-    * algorithms
-    * ways of parallelizing a code: OpenMP,MPI,CUDA
-    * compute libraries
-7. Ways to enhance performance
-    * Identify performance bottlenecks
-        * Discuss timings for LAMMPS
-    * Tuning code for hardwares
-    * Optimization
-    * Implementing parallelization: OpenMP, MPI, CUDA
-    * Further tuning using accelarting libraries
-8. Acceleration packages for LAMMPS
-    * OPT
-    * USER-OMP
-    * USER-INTEL
-    * GPU
-    * KOKKOS
-9. Accelarating LAMMPS using GPU package
-    * Basic usage
-    * Case study 1: demonstration
-    * Exercise 1: for users
-9. Accelerating LAMMPS using KOKKOS
-    * What is Kokkos?
-    * Important features of LAMMPS Kokkos package
-    * Fixes that support KOKKOS in LAMMPS
-    * Package options
-    * How to compile and run Kokkos in LAMMPS?
-    * Case study 1: for Skylake AVX-512 architecture
-        * Exercise 2: for users
-    * Case study 2: for KNL architecture
-    * Case study 3: for GPU Volta70 acrhitecture
-        * Exercise 3: for users
-10. Some rule of thumbs for accelarator packages
-    * CPUs
-    * GPUs
-11. Summary
+    * Am I wasting my resourse?
+        * _**Case Study 2:**_ Get scaling data for a LAMMPS run
+        * _**Hands-on 2:**_ Do a scaling analysis 
+
+6. __Identifying bottlenecks in LAMMPS__
+    * _**Case study 3:**_ Understand the task timing breakdown of LAMMPS output
+    * _**Hands-on 3:**_ Understand the task timing breakdown of LAMMPS output of a different problem
+
+7. __How can I accelerate LAMMPS performance?__
+
+    * Knowing what hardwares LAMMPS can be used on
+
+    * How can I enable arcitecture support at runtime?
+
+        * Accelerator packages in LAMMPS
+            * What packages for which architecture?
+                * OPT
+                * USER-OMP
+                * USER-INTEL
+                * GPU
+                * KOKKOS
+
+    * Why KOKKOS?
+        * What is Kokkos?
+        * Important features of LAMMPS Kokkos package
+        * Fixes that support KOKKOS in LAMMPS
+        * Package options
+
+8. __How do I invoke KOKKOS in LAMMPS?__
+    * Transition from regular LAMMPS call to accelerated call
+
+9. __Comapre KOKKOS/OpenMP performance with regular LAMMPS/OpenMP performance__
+
+    * _**Case study 4:**_ using OpenMP+KOKKOS for Skylake AVX-512 architecture
+    * Comparing LAMMPS performance between runs with and without KOKKOS 
+    * _**Exercise 4:**_ Similar study with slightly different problem
+
+10. __Comapre KOKKOS/GPU performance with regular LAMMPS/GPU performance__
+    * _**Case study 5:**_ using OpenMP+KOKKOS for NVIDIA Tesla V100 architecture
+    * Comparing LAMMPS performance between runs with and without KOKKOS 
+    * _**Exercise 5:**_ Similar study with slightly different problem
+
+11. __What are the limitatations of different accelerator packages?__
+
+12. __Knowing when LAMMPS is working efficiently__
+    * Expected performance for given example
+    * Rule of thumbs for various accelerator packages
+    
 
 ## Prerequisites
 
