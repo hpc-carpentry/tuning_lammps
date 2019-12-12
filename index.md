@@ -43,7 +43,7 @@ The content of the lesson is as follows:
             * bottlenecks in host-device architectures
 
     * What if I need more workers than that available in a single node?
-        * How using MPI we can acheive this?
+        * How using MPI we can achieve this?
         * What is the bottleneck here?
             - communication overhead
             - domain decomposition
