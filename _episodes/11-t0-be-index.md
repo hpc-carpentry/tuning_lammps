@@ -64,7 +64,7 @@ It is evident that these components would work differently and therefore a softw
 > * Write a few sentences about which components/processors are you running your LAMMPS jobs?
 > * Probably, a more enagaing one: Do you know whether your LAMMPS binary was prepared to run optimally on this components? 
 
-
+{% include links.md %}
 
 
 

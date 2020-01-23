@@ -3,112 +3,62 @@ layout: lesson
 root: .  # Is the only page that doesn't follow the pattern /:path/index.html
 permalink: index.html  # Is the only page that doesn't follow the pattern /:path/index.html
 ---
-# About the Lesson
-In this lesson, we will work on to focus on various accelerating modules that are implemented in LAMMPS for achieving a performance gain. First, we will discuss about the various options and then I'll show you an example to demonstrate how to decide on input parametrs to gain a performance boost. In the practical session, you will get a chance to work on another LAMMPS problem to test some of the accelearting tools that are embedded in LAMMPS. 
 
-The content of the lesson is as follows:
+# Why should I take this course?
 
-1. __Why should I take this course?__
-    * Why should I bother about software performance?
-    * What can I expect to learn from this course?
+>Before you start the class, type a few sentences about why you are here.
 
-2. __What is performance?__
-    * What is the difference between software and hardware performance?
-    * How can I measure performance?
-        * What is Flop?
-        * What is walltime?
-        * What is cpuh?
-    * What are the factors affecting performance?
+At this point, I assume that all of you have some level of experiences of running [LAMMPS](https://lammps.sandia.gov/) software on a HPC system. A HPC enable us to run jobs that would either be impossible or much slower either in a Desktop or a laptop. The phrase 'much slower' in the previous sentence is not much informative. The first question that arises here is:
+>   * How slow is running LAMMPS on my HPC than its standard performance?
 
-3. __How do I benchmark software performance in HPC?__
-    * What is benchmarking?
-    * What are the factors that can affect a benchmark?
-    * _**Case study 1:**_ A simple benchmarking example of LAMMPS in a HPC
-    * _**Hands-on 1:**_ Can you do it on your own?
+Again, for a novice even this question is vague in some sense. Actually it gives rise to more questions like:
+>   * What is meant by the term 'performance' of a software?
+>   * What is the metric of measuring this performance?
+>   * How to measure standard performance of a software?
 
-4. __Can I accelerate performance?__
-    * Hardware acceleration and software acceleration
-        * multi-core cpu
-        * GPU
+and finally,
+>   * if a software performance is not optimal in my system, is there something that can I do to accelerate it?
 
-    * Can I use specialised code to extract best of an available hardware?
-        * Multi-threading via OpenMP: parallel processing in shared memory platform
-            * Thread based parallelism
-            * Important run-time environment variables
-            * bottlenecks in an OpenMP applications
-                * hyperthreading
-                * cpu affinity
+If the above questions bother you, then you might be a good candidate for taking this course.
 
-        * Multi-threading via CUDA: host-device relationship
-            * bottlenecks in host-device architectures
+> ## Let us know about your HPC experiences with LAMMPS
+> Before moving further, we'll take this opportunity to know a little more about your HPC story. Please feel free to talk to your neighbour or [rubber duck](https://rubberduckdebugging.com/) about your HPC experience, like
+>  * What HPC system do you use?
+>  * Do you know what kind of processors does it ?
+>  * Did you build LAMMPS on this HPC by yourself, or are you using a global veersion that was installed by a sys-admin of the HPC?
+>  * What kind of simulations you do with LAMMPS, e.g. molecular dynamic (MD), or QM/MM, or MC, etc etc.?
+>  * How big is your 'system', i.e. how many atoms/molecules are there in your simulation box?
+>  * How long these run take on average?
+>  * ...and finally, are you happy with the time that it takes to run a single job?
 
-    * What if I need more workers than that available in a single node?
-        * How using MPI we can achieve this?
-        * What is the bottleneck here?
-            - communication overhead
-            - domain decomposition
+# Workforces on a HPC
+HPC is a complex computing platform that has several hardware components and we often talk about its central processing units (cpu), primary and secondary memories and various interconnects. The processing units are the ones that actually do the calculations and if you study the evaluation of these processing units you would be quite amazed to see how many different types/generations they have. The most basic cpu has only one core. This means that it can do only one work at a time.
 
-    * Is this possible to use optimized library/code to get acceleration?
-        *  Brief mention about various optimized libraries like MKL, FFTW
+In recent days, we talk about multi-core cpus and graphical processing units (gpu). Naturally, the muti-core cpus have many processing units that can work in parallel. Similarly the gpus have many processing units as well but they work differenty than a cpu. If you look at the infrastructure of a modern HPC, you would find that it is a heterogeneous computing system since its computing workforce consists of several components.  Some of these components are built using the multi-core cpus only, some of them use the gpus, and some are made up using the Xeon-Phi components, and there could be many more.
 
-5. __What is scaling?__
-    * Quntifying speedup: t<sub>1</sub>/t<sub>p</sub>
-    * Am I wasting my resourse?
-        * _**Case Study 2:**_ Get scaling data for a LAMMPS run
-        * _**Hands-on 2:**_ Do a scaling analysis 
+As a real-life example of the above scenario, let me describe various computing components of the HPC that I am using at ICHEC. The most recent HPC implementation at ICHEC is known as [Kay](https://www.ichec.ie/about/infrastructure/kay). Kay has four key components:
 
-6. __Identifying bottlenecks in LAMMPS__
-    * _**Case study 3:**_ Understand the task timing breakdown of LAMMPS output
-    * _**Hands-on 3:**_ Understand the task timing breakdown of LAMMPS output of a different problem
+| component nanme | processing units | How many of them? | cores/node |
+|-----------------|------------------|-------------------|---------|
+| cluster | Intel Xeon Gold (Skylake)/2.4 GHz/192 GiB RAM | 336 nodes | 40 |
+| High memory | Intel Xeon Gold (Skylake)/2.4 GHz/1 TiB RAM | 6 nodes | 40 |
+| Phi | Intel Xeon Phi 7210 (KNL)/ 1.3 GHz/ 192 GiB RAM | 16 nodes | 40 |
+| GPU | Skylake + 2X NVIDIA Tesla V100 16GB PCI | 16 nodes | 5120 CUDA cores & 640 Tensor cores |
 
-7. __How can I accelerate LAMMPS performance?__
+It is evident that these components would work differently and therefore a software performance will vary depending on what component it is being run, and how optimized the code is for that platform. By now, you might have some realization about how different it is to run a LAMMPS job on a laptop or Desktop from running it on a HPC!
 
-    * Knowing what hardwares LAMMPS can be used on
+> ## Well, let us know a little more about your HPC processing units now
+>Take a minute and write down the computing units that your HPC is providing you.
 
-    * How can I enable arcitecture support at runtime?
+> ## Have you ever used GPU or Phi to run LAMMPS?
+> * Write a few sentences about which components/processors are you running your LAMMPS jobs?
+> * Probably, a more enagaing one: Do you know whether your LAMMPS binary was prepared to run optimally on this components?
 
-        * Accelerator packages in LAMMPS
-            * What packages for which architecture?
-                * OPT
-                * USER-OMP
-                * USER-INTEL
-                * GPU
-                * KOKKOS
-
-    * Why KOKKOS?
-        * What is Kokkos?
-        * Important features of LAMMPS Kokkos package
-        * Fixes that support KOKKOS in LAMMPS
-        * Package options
-
-8. __How do I invoke KOKKOS in LAMMPS?__
-    * Transition from regular LAMMPS call to accelerated call
-
-9. __Comapre KOKKOS/OpenMP performance with regular LAMMPS/OpenMP performance__
-
-    * _**Case study 4:**_ using OpenMP+KOKKOS for Skylake AVX-512 architecture
-    * Comparing LAMMPS performance between runs with and without KOKKOS 
-    * _**Exercise 4:**_ Similar study with slightly different problem
-
-10. __Comapre KOKKOS/GPU performance with regular LAMMPS/GPU performance__
-    * _**Case study 5:**_ using OpenMP+KOKKOS for NVIDIA Tesla V100 architecture
-    * Comparing LAMMPS performance between runs with and without KOKKOS 
-    * _**Exercise 5:**_ Similar study with slightly different problem
-
-11. __What are the limitatations of different accelerator packages?__
-
-12. __Knowing when LAMMPS is working efficiently__
-    * Expected performance for given example
-    * Rule of thumbs for various accelerator packages
-    
-
-## Prerequisites
+> ## Prerequisites
 
 > For these lessons, I'll assume that you have a prior experience on working in a HPC cluster, basic Linux/unix commands, shell scripts, and the primary knowledge to understand LAMMPS inputs files and running LAMMPS jobs in a cluster.
 
 > To know about the basic LAMMPS commands, you may go through this [link](https://lammps.sandia.gov/doc/Commands_all.html).
 
->To get a basic introduction on HPC, you may follow [this](https://github.com/hpc-carpentry/hpc-intro) link.
-
-
-
+> To get a basic introduction on HPC, you may follow [this](https://github.com/hpc-carpentry/hpc-intro) link.
+{:.prereq}
