@@ -1,5 +1,5 @@
 ---
-title: "Introduction"
+title: "Why bother with performance?"
 teaching: 0
 exercises: 0
 questions:
