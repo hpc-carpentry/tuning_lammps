@@ -86,13 +86,13 @@ The following list of items is meant as a guide on what content should go where 
 * [06-invoking-kokkos.md: How do I invoke KOKKOS in LAMMPS?](_episodes/06-invoking-kokkos.md):technical aspects to use KOKKOS with LAMMPS
     * Transition from regular LAMMPS call to accelerated call
 
-* [07-kokkos-openmp.md: Comapre KOKKOS/OpenMP performance with regular LAMMPS/OpenMP performance](_episodes/07-kokkos-openmp.md):learn to use openmp with KOKKOS
+* [07-kokkos-openmp.md: Compare KOKKOS/OpenMP performance with regular LAMMPS/OpenMP performance](_episodes/07-kokkos-openmp.md):learn to use openmp with KOKKOS
 
     * _**Case study 4:**_ using OpenMP+KOKKOS for Skylake AVX-512 architecture
     * Comparing LAMMPS performance between runs with and without KOKKOS
     * _**Exercise 4:**_ Similar study with slightly different problem
 
-* [08-kokkos-gpu.md: Comapre KOKKOS/GPU performance with regular LAMMPS/GPU performance](_episodes/08-kokkos-gpu.md):learn to use gpu with KOKKOS
+* [08-kokkos-gpu.md: Compare KOKKOS/GPU performance with regular LAMMPS/GPU performance](_episodes/08-kokkos-gpu.md):learn to use gpu with KOKKOS
     * _**Case study 5:**_ using OpenMP+KOKKOS for NVIDIA Tesla V100 architecture
     * Comparing LAMMPS performance between runs with and without KOKKOS
     * _**Exercise 5:**_ Similar study with slightly different problem
