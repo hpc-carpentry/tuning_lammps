@@ -18,7 +18,7 @@
          * Performance prediction: key-word search (Performance)
          * Compare this data among various HPC platforms (JSC/Kay/LAMMPS-data): Benchmark plot
          * Discuss now what could be the probable reasons for such variation of timing (Discuss a bit about cpuinfo)
-         * Discuss about 'CPU use' keywork and discuss the cpu-utilization of the MPI p[rocesses
+         * Discuss about 'CPU use' keyword and discuss the cpu-utilization of the MPI processes
          
 * 3. Now go for HANDS-ON-1: 
      for this we choose 'in.chain' input file. This also requires a data file called 'data.chain'
@@ -37,8 +37,10 @@
         * Run the LJ-problem with 4/8/16/24 MPI-processes (stick to  1-node at this time)
         * Discuss how it affects walltime/%cpu-use/various timing sections like Pair.Nbr, etc. 
         * Introduce the 'timer full' command in the input at this stage
-        * Show how does it affect the output/what more info can it extract
+        * Show how does it affect the output. What extra info can it show in the output?
         * Plot walltime vs ncpu, and discuss scaling
+7.
+
 
 
 
