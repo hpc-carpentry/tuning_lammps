@@ -1,0 +1,55 @@
+# Notes for developing the examples and exercises
+
+  Useful liks: https://lammps.sandia.gov/doc/Run_output.html
+              https://sourceforge.net/p/lammps/mailman/message/34844339/
+
+
+* 1. Two problems have been chosen from the 'bench' directory: in.lj and in.chain
+     in.lj describes a system of Lennard-Jones particle
+     in.chain is chosen since it is structurally very different from the LJ-system chosen for the first problem
+
+* 2. First, we'll run in.lj with with 1 MPI process (no OpenMP) : 32000 atoms/100 steps
+     And try to understand the output.
+     * But first thing first. Briefly describe the LAMMPS input file (2 minutes)
+     * How to prepare the batch job submission file (2 minutes)
+     * Discuss the outfiles. Try to identify the output files and their purposes.
+     * Discuss the output: log.lammps
+         * how to get wall-time:  key-word search (loop time)
+         * Performance prediction: key-word search (Performance)
+         * Compare this data among various HPC platforms (JSC/Kay/LAMMPS-data): Benchmark plot
+         * Discuss now what could be the probable reasons for such variation of timing (Discuss a bit about cpuinfo)
+         * Discuss about 'CPU use' keyword and discuss the cpu-utilization of the MPI processes
+         
+* 3. Now go for HANDS-ON-1: 
+     for this we choose 'in.chain' input file. This also requires a data file called 'data.chain'
+     * ask the users to run the simulation using 1 MPI process
+     * Ask them to benchmark and discuss their results. For benchmark plot, ask them to plot performance ns/day on the LHS and walltime on the RHS and compare with data provided for other systems. Essentially a bar-plot.
+     * Discuss the results with their neighbours and try to note down any possible reasons for finding the agreement/disagreement of their data.
+
+* 4. In this step we'll discuss about the Timing chart provide in the LAMMPS log output file. 
+        * Pair term/Bond/Kspace/Neigh/Comm/Output/Modify/Other : Purpose of each term
+        * Discuss this table for the LJ-problem
+        * Identify which knob to tune to get the performance.
+5. Now ask the users to do the same for the CHAIN-problem (unmodified in.chain)
+        * Ask their feedback about what they think about the timing output?
+        * Which knob do they want to tune to get performance and why?
+6. Now introduce, the concept of parallel processing (essentially MPI processes: more workers/ less time)
+        * Run the LJ-problem with 4/8/16/24 MPI-processes (stick to  1-node at this time)
+        * Discuss how it affects walltime/%cpu-use/various timing sections like Pair.Nbr, etc. 
+        * Introduce the 'timer full' command in the input at this stage
+        * Show how does it affect the output. What extra info can it show in the output?
+        * Plot walltime vs ncpu, and discuss scaling
+7.
+
+
+
+
+        
+
+              
+
+
+
+
+
+
