@@ -142,7 +142,7 @@ Taking a step further, the lines of code can be highlighted using;
 
 But say you want to get a block of code in, you include it from the snippets library, which is located in `_includes/snippets/lesson-outline/test.snip`. It has a short practical which can be included using;
 
-*include /snippets/lesson-outline/test.snip*
+{% include /snippets/lesson-outline/test.snip %}
 
 or if you just want to include a block of code for the content or part of a practical;
 
