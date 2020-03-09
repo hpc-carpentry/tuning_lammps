@@ -151,7 +151,7 @@ or if you just want to include a block of code for the content or part of a prac
 ```
 {: .bash }
 ```
-{% include /snippets/lesson-outline/test.snip %}
+{% include /snippets/lesson-outline/code_block.snip %}
 ```
 {: .output }
 
