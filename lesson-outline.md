@@ -103,4 +103,88 @@ The following list of items is meant as a guide on what content should go where 
     * Expected performance for given example
     * Rule of thumbs for various accelerator packages
 
+# Writing practicals and content
 
+This guide shows all the styles that are used across Carpentry. **This section will need deleting after content is made so as to preserve the original purpose of `lesson-outline.md`**
+
+## Overview and key points
+
+Highlighted by the following format
+```
+---
+title: "FIXME"
+teaching: 10
+exercises: 5
+questions:
+- "Why is software performance important?"
+objectives:
+- "Understand the necessity of code optimisation"
+keypoints:
+- "(FIXME)"
+---
+```
+Keypoints has is own separate field at the bottom when seen on web browser.
+
+## For material
+
+It is as simple as this.
+
+Commands like `this` highlight a word as a code section.
+
+This can be done with abstractions too. Logging into your host can be done too. `{{ site.host_name }}` at `{{ site.host_location }}` will display as (Kay at ICHEC, Irish Centre for High End-Computing).
+
+Taking a step further, the lines of code can be highlighted using;
+
+```
+{{ site.host_prompt }} ssh yourUsername@{{ site.host_login }}
+```
+{: .bash}
+
+But say you want to get a block of code in, you include it from the snippets library, which is located in `_includes/snippets/lesson-outline/test.snip`. It has a short practical which can be included using;
+
+{% include /snippets/lesson-outline/test.snip %}
+
+or if you just want to include a block of code for the content or part of a practical;
+
+```
+{{ site.host_name }}
+```
+{: .bash }
+```
+{% include /snippets/lesson-outline/test.snip %}
+```
+{: .output }
+
+**Include a different folder for each lesson entitled the number code of the lesson. Eg. 01 -> 01-why-bother-with-performance**
+
+For including images, the notation is as follows;
+
+{% include figure.html url="" max-width="40%" file="/fig/figure.png" alt="Figure" caption="this picture" %}
+
+> ## This is a callout
+> 
+> For an important point to highlight, which will appear in the lesson as a lime-green box with a pin symbol
+>
+> You can direct to a website using [this](https://google.com) when referring to external material.
+>
+{: .callout}
+
+> ## This is a practical question/challenge
+> 
+> This can be a normal question
+>
+{: .challenge}
+
+> ## This is an MCQ
+> 
+> MCQs are done as so;
+> 
+> 1. {OPTION 1}
+> 2. {OPTION 2}
+> 
+> > ## Solution
+> > 1. {SOLUTION 1}
+> > 2. {SOLUTION 2}
+> >
+>{: .solution}
+{: .challenge}

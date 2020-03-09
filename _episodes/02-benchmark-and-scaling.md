@@ -10,7 +10,13 @@ keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
 
-FIXME
+## What is benchmarking?
+
+## What factors can affect a benchmark?
+
+## Case study: Benchmarking
+
+> ## 
 
 {% include links.md %}
 
