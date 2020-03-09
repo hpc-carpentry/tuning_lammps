@@ -3,7 +3,7 @@ title: "Introduction"
 teaching: 0
 exercises: 0
 questions:
-- "Key question (FIXME)"
+- "How do I invoke KOKKOS with LAMMPS?"
 objectives:
 - "First learning objective. (FIXME)"
 keypoints:

@@ -3,7 +3,11 @@ title: "Introduction"
 teaching: 0
 exercises: 0
 questions:
-- "Key question (FIXME)"
+- "What are the various options to accelerate LAMMPS"
+- "What hardwares can LAMMPS be used on?"
+- "How can I enable architecture support at runtime?"
+- "What accelerator packages are compatible with which hardware?"
+- "What is KOKKOS and why should I use it?"
 objectives:
 - "First learning objective. (FIXME)"
 keypoints:
@@ -11,7 +15,7 @@ keypoints:
 ---
  # Accelerating LAMMPS using KOKKOS
    
-## What is Kokkos?
+## What is KOKKOS?
 
 * supports OpenMP and GPU
 * provide excellent scalability to many OpenMP threads
@@ -69,16 +73,22 @@ The list of LAMMPS features that is supported by Kokkos is given below:
 * K-space style:
     * pppm
 
-## Package options: some rule of thumbs
+## Package options: some rules of thumb
 
 ## How to compile and run Kokkos in LAMMPS?
 
 ## Case study 1: for Skylake AVX-512 architecture
 
-###  Exercise 2: for users
+> ##  Exercise 2: for users
+> 
+{: .challenge}
 
 ## Case study 2: for KNL architecture
 
 ## Case study 3: for GPU Volta70 acrhitecture
 
-### Exercise 3: for users
+> ## Exercise 3: for users
+> 
+{: .challenge}
+
+{% include links.md %}
