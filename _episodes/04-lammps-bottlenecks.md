@@ -1,5 +1,5 @@
 ---
-title: "Acceleration modules"
+title: "Bottlenecks in LAMMPS"
 teaching: 0
 exercises: 0
 questions:

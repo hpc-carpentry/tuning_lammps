@@ -1,5 +1,5 @@
 ---
-title: "Acceleration"
+title: "Acceleration Methods"
 teaching: 0
 exercises: 0
 questions:
@@ -30,11 +30,15 @@ Using multi-core CPUs and GPUs, positives, negatives of each
 
 There are a number of ways multi-threading can be implemented, using OpenMP or CUDA.
 
-### OpenMP
+### OpenMP & MPI
 
 (FIXME)
 
 ### CUDA
+
+(FIXME)
+
+### Pool of workers
 
 (FIXME)
 
@@ -44,10 +48,13 @@ There are a number of ways multi-threading can be implemented, using OpenMP or C
 
 > ## Acceleration
 > 
-> How can we accelerate the following code. Discuss with your neighbour?
+> How can we accelerate the following code. Discuss with your neighbour(?)
+>
 > ```
 > code or includes
 > ```
+> {: .bash}
+>
 {: .challenge}
 
 {% include links.md %}

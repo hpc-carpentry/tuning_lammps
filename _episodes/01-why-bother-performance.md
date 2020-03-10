@@ -67,7 +67,9 @@ keypoints:
 
 ## How can performance be enhanced?
 
-(FIXME)
+(FIXME) Mention pool of workers, tuning, OpenMP, MPI, GPU and libraries and will refer to them later
+
+## HPC layout and partitioning
 
 > ## Enhancing Performance
 >

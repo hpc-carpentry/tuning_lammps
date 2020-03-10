@@ -1,5 +1,5 @@
 ---
-title: "Introduction"
+title: "Accelerating LAMMPS"
 teaching: 0
 exercises: 0
 questions:
@@ -13,7 +13,9 @@ objectives:
 keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
- # Accelerating LAMMPS using KOKKOS
+## Accelerating LAMMPS using KOKKOS
+
+## Knowing your hardware
    
 ## What is KOKKOS?
 
@@ -72,6 +74,34 @@ The list of LAMMPS features that is supported by Kokkos is given below:
     * harmonic
 * K-space style:
     * pppm
+
+> ## LAMMPS hardware compatability
+> Which of these hardwares is LAMMPS compatible on?
+> 
+> 1. 
+> 2. 
+> 3. 
+> ...
+> > ## Solution
+> > 
+> > 1. 
+> > 2. 
+> > 3. 
+> >
+> {: .solution}
+{: .challenge}
+
+
+> ## Software vs. Hardware compatability
+> 
+> Which hardwares can the following software packages be used on? There can be multiple results for each software.
+> 
+> > ## Solution
+> > 
+> > solution
+> > 
+> {: .solution}
+{: .challenge}
 
 ## Package options: some rules of thumb
 

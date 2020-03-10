@@ -12,6 +12,7 @@ questions:
 objectives:
 - "Be able to perform a benchmark analysis"
 - "Be able to perform a scaling analysis"
+- "Determine factors in load balancing(?!) (FIXME)"
 keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
@@ -74,6 +75,7 @@ Good scaling vs poor scaling. How to choose no. of nodes, preventing waste of re
 > ```
 > code
 > ```
+> {: .bash}
 >
 > Which of this would be the best option to speed up performance?
 > 

@@ -1,9 +1,10 @@
 ---
-title: "Introduction"
+title: "Limitations and Thumbrules"
 teaching: 0
 exercises: 0
 questions:
-- "Key question (FIXME)"
+- "What are the limitations of KOKKOS and other accelerator packages?"
+- "How can I be sure that LAMMPS is working efficiently"
 objectives:
 - "First learning objective. (FIXME)"
 keypoints:
@@ -11,6 +12,12 @@ keypoints:
 ---
 
 FIXME
+
+> ## Discussion
+> 
+> Nothing is perfect! Discuss amongst yourselves the limitations of different accelerator packages
+>
+{: .challenge}
 
 {% include links.md %}
 
