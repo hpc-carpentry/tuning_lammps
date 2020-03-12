@@ -26,9 +26,9 @@ keypoints:
 
 > ## Enchancing performance: rationale
 >
-> How long will the example below take to run?
+> How long will the example below take to run on one core?
 > ```
-> command
+> 
 > ```
 > {: language-bash}
 > 
@@ -54,10 +54,15 @@ keypoints:
 
 (FIXME)
 
-> ## Calculate Walltime
+> ## Calculate CPU hours
 > 
-> In the following example, calculate the walltime and CPU hours required to run the following job.
->
+> In the following example, calculate the CPU hours required to run the following job. Each node has 40 cores
+> 
+> ```
+> #SBATCH --nodes = 2 
+> ```
+> {: .bash}
+> 
 > > ## Solution
 > >
 > > Walltime xxx hours. CPU hours
@@ -74,18 +79,26 @@ keypoints:
 > ## Enhancing Performance
 >
 > Which of these is a viable way of enhancing performance?
-> 1. {OPTION 1}
-> 2. {OPTION 2}
-> 3. {OPTION 3}
-> 4. {OPTION 4}
-> 5. {OPTION 5}
+> 1. Utilising more cores
+> 2. Utilising more nodes
+> 3. Increasing the project walltime and CPUh
+> 4. Optimising the code
+> 5. Utilising MPI (Message Passing Interface)
+> 6. Utilising OpenMP
+> 7. Using performance enhancing libraries
+> 8. Use GPUs instead of CPUs
+> 9. 
 > 
 > > ## Solution
-> > 1. {SOLUTION 1}
-> > 2. {SOLUTION 2}
-> > 3. {SOLUTION 3}
-> > 4. {SOLUTION 4}
-> > 5. {SOLUTION 5}
+> > 1. Yes
+> > 2. Yes
+> > 3. No, increasing walltime and CPUh only increases the duration the code will run for. It does not improve the code performance
+> > 4. Yes
+> > 5. Yes
+> > 6. Yes
+> > 7. Yes
+> > 8. Yes
+> > 9. Yes
 > >
 >{: .solution}
 {: .challenge}
