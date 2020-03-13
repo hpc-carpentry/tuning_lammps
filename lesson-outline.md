@@ -159,9 +159,8 @@ or if you just want to include a block of code for the content or part of a prac
 
 For including images, the notation is as follows;
 
-```
-include figure.html url="" max-width="40%" file="/fig/figure.png" alt="Figure" caption="this picture"
-```
+{% include figure.html url="" max-width="40%" file="/fig/01/40x40x40_cube.png" alt="Figure" caption="this picture" %}
+
 
 > ## This is a callout
 > 

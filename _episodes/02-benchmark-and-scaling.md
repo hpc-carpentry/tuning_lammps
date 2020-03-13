@@ -70,7 +70,7 @@ Good scaling vs poor scaling. How to choose no. of nodes, preventing waste of re
 
 > ## Wasting resources
 > 
-> There are many factors in getting the "optimal" performance, which is dependent on the system you are dealing with. Take the code below as an example (or use the code we had in the previous excercise??).
+> There are many factors in getting the "optimal" performance, which is dependent on the system you are dealing with. Take the code below as an example (or use the code we had in the previous excrcise??).
 >
 > ```
 > code

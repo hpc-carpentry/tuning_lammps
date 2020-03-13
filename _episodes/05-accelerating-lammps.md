@@ -75,7 +75,7 @@ The list of LAMMPS features that is supported by Kokkos is given below:
 * K-space style:
     * pppm
 
-> ## LAMMPS hardware compatability
+> ## LAMMPS hardware compatibility
 > Which of these hardwares is LAMMPS compatible on?
 > 
 > 1. 
@@ -92,7 +92,7 @@ The list of LAMMPS features that is supported by Kokkos is given below:
 {: .challenge}
 
 
-> ## Software vs. Hardware compatability
+> ## Software vs. Hardware compatibility
 > 
 > Which hardwares can the following software packages be used on? There can be multiple results for each software.
 > 
