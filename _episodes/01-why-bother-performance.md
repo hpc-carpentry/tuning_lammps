@@ -57,7 +57,7 @@ There are a number of key terms in computing when it comes to understanding perf
 > 
 > Walltime is simply the length of time, usually measured in seconds that a program takes to run or to execute its assigned tasks. 
 >
-> This is specfied in a submission script when before your task officially starts running. If the task takes longer than the walltime that is specified, the task gets killed and will not complete.
+> This is specified in a submission script when before your task officially starts running. If the task takes longer than the walltime that is specified, the task gets killed and will not complete.
 >
 {: .callout}
 
