@@ -17,7 +17,7 @@ keypoints:
 - "Just because a way is correct doesn't always mean it is the best option"
 ---
 
-## What is software performance?
+## What is performance?
 
 
 
@@ -29,7 +29,7 @@ keypoints:
 >
 > Imagine you had a 40 x 40 x 40 box like the one below, divided up into smaller boxes, each measuring 1 x 1 x 1. If you wanted and you wanted to simulate what was happening inside each smaller box for 10 hours each How long will the example below take to run on one core?
 >
-> include figure.html url="" max-width="40%" file="/fig/01/40x40x40_cube.png" alt="Figure" caption="40 x 40 x 40 cube"
+> {% include 40x40x40_cube.png url="" max-width="40%" file="/fig/01/40x40x40_cube.png" alt="Figure" caption="40 x 40 x 40 cube" %}
 > 
 > {: language-bash}
 > 
@@ -71,7 +71,7 @@ There are a number of key terms in computing when it comes to understanding perf
 
 > ## Calculate CPU hours
 > 
-> In the following example, assume that you are utilising all the available core in a node. Calculate the CPU hours required to run the following job. Each node has 40 cores.
+> In the following example, assume that you are utilising all the available core in a node. Calculate the CPU hours requested to run the following job. Each node has 40 cores.
 > 
 > ```
 > #SBATCH --nodes = 2
