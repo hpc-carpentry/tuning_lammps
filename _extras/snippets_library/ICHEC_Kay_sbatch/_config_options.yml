@@ -1,0 +1,25 @@
+# ICHEC, Irish Centre for High End Computing: Kay + SBATCH
+host_name: "Kay"
+host_login: "kay.ichec.ie"
+host_location: "ICHEC, Irish Centre for High End-Computing"
+host_homedir: "/ichec/home/course01"  # watch out due to course accounts
+host_prompt: "[user@laptop ~]$"
+sched_name: "SBATCH" # Check
+sched_submit: "sbatch"
+sched_submit_options: "-A course01" # check
+sched_status: "sstat"
+sched_flag_user: "-u yourUsername"
+sched_del: "scancel"
+sched_interactive: "sbatch"
+sched_comment: "#SBATCH"
+sched_flag_name: "-N" # EDITME
+sched_hist: "" # EDITME
+sched_flag_histdetail: "" # EDITME 
+module_lammps: "module load " # EDITME
+module_intel: "module load " # EDITME
+module_devel: "module load " # EDITME
+module_usage: "" # EDITME
+run_openmp: "srun"
+run_mpi: ""
+
+
