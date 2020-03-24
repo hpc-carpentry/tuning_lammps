@@ -29,7 +29,7 @@ keypoints:
 >
 > Imagine you had a 40 x 40 x 40 box like the one below, divided up into smaller boxes, each measuring 1 x 1 x 1. If you wanted and you wanted to simulate what was happening inside each smaller box for 10 hours each How long will the example below take to run on one core?
 >
-> include 40x40x40_cube.png url="" max-width="40%" file="/fig/01/40x40x40_cube.png" alt="Figure" caption="40 x 40 x 40 cube"
+> {% include 40x40x40_cube.png url="" max-width="40%" file="/fig/01/40x40x40_cube.png" alt="Figure" caption="40 x 40 x 40 cube" %}
 > 
 > {: language-bash}
 > 
