@@ -32,7 +32,7 @@ keypoints:
 > ## Benchmarking
 > 
 > From what you have learned in this session, try a benchmark of `this`.
->
+> {% include /snippets/ep02/in.lj %}
 {: .challenge}
 
 ## Scaling
