@@ -32,8 +32,9 @@ As a first exercise, we will start with the simplest Lennard-Jones (LJ) system a
 
 The input file for the LJ-system is given below: 
 
-{% include /snippets/ep02/in.lj %}
 {: .bash}
+{% include /snippets/ep02/in.lj %}
+
 
 Before prceeding further, though we assume here that you already know how to run a LAMMPS job in a HPC, let us have a quick recap on how to submit a LAMMPS job in a HPC and understand the output files.
 
