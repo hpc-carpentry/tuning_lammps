@@ -27,13 +27,16 @@ keypoints:
 
 ## Case study: Benchmarking
 
-(FIXME) test 
+By now you already got some understanding about how benchmarking enables you to compare the peformance of your computing system with some 'standard' systems, and thus it helps you to know whether a further fine tuning of your job is required or not. 
+As a first exercise, we will start with the simplest Lennard-Jones (LJ) system as provided in the 'bench' directory of the latest LAMMPS distribution. Following this, you will be given another example and you will follow the same set of excercises and compare your results with some 'known' benchmark. 
 
-> ## Benchmarking
+The input file for the LJ-system is given below: 
 > 
-> From what you have learned in this session, try a benchmark of `this`.
 > {% include /snippets/ep02/in.lj %}
 {: .challenge}
+
+Before prceeding further, though we assume here that you already know how to run a LAMMPS job in a HPC, let us have a quick recap on how to submit a LAMMPS job in a HPC and understand the output files.
+
 
 ## Scaling
 
