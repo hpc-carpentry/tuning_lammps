@@ -33,7 +33,7 @@ As a first exercise, we will start with the simplest Lennard-Jones (LJ) system a
 The input file for the LJ-system is given below: 
 >
 > ```
-{% include /snippets/ep02/in.lj %}
+> {% include /snippets/ep02/in.lj %}
 > ```
 >
 {: .bash}
