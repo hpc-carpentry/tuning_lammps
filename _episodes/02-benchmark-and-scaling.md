@@ -36,7 +36,7 @@ The input file for the LJ-system is given below:
 ```
 {% include /snippets/ep02/in.lj %}
 ```
-{: .bash}
+{: .Input}
 
 Before prceeding further, though we assume here that you already know how to run a LAMMPS job in a HPC, let us have a quick recap on how to submit a LAMMPS job in a HPC and understand the output files.
 
