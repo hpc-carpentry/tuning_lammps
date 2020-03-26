@@ -31,11 +31,9 @@ By now you already got some understanding about how benchmarking enables you to 
 As a first exercise, we will start with the simplest Lennard-Jones (LJ) system as provided in the 'bench' directory of the latest LAMMPS distribution. Following this, you will be given another example and you will follow the same set of excercises and compare your results with some 'known' benchmark. 
 
 The input file for the LJ-system is given below: 
->
-> ~~~
-> {% include /snippets/ep02/in.lj %}
-> ~~~
-{: .output}
+
+{% include /snippets/ep02/in.lj %}
+{: .bash}
 
 Before prceeding further, though we assume here that you already know how to run a LAMMPS job in a HPC, let us have a quick recap on how to submit a LAMMPS job in a HPC and understand the output files.
 
