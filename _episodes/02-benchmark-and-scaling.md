@@ -91,7 +91,8 @@ module load LAMMPS/9Jan2020-cuda
 >
 > > # Solution
 > > This is because this module was used to build LAMMPS and during runtime LAMMPS execuatble will look for all these libraries etc. 
-> {: .solution}
+> > {: .solution}
+>
 {: .challenge}
 
 
