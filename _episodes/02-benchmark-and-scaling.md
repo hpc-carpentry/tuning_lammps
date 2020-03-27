@@ -34,7 +34,6 @@ As a first exercise, we will start with the simplest Lennard-Jones (LJ) system a
 > Can you list bare minimum files that you need to schedule a LAMMPS job in a HPC?
 > > ## Solution
 > > For running a LAMMPS job, we must need an input file, empirical potential file (optional), and a data file (optional). We need these optional files only when the empirical potential model parameters and the molecular coordinates are not defined within the LAMMPS input file. In addition, for submitting a LAMMPS job to a HPC queue, we need a batch file. In general, each HPC uses a queing system to manage all the jobs. Two such popular ones are PBS and Slurm. 
->
 {: .challenge}
 
 The input file for the LJ-system is given below: 
@@ -48,7 +47,9 @@ The timing information for this run with both 1 and 4 processors is also provide
 
 
 > ## Batch file to submit a LAMMPS job
+>
 > Here is a shown a SLURM script to submit a LAMMPS job using 2 nodes and 48 processors. Can you modify the necessary fields in this script to submit the job using 4 processors?
+>
 > > ~~~
 > > {% include /snippets/ep02/runjob.sh %}
 > > ~~~
