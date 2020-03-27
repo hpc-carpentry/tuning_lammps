@@ -68,7 +68,7 @@ The timing information for this run with both 1 and 4 processors is also provide
 > 
 > > ## Solution
 > > ~~~
-> > #SBATCH --nodes=2
+> > #SBATCH --nodes=1
 > > #SBATCH --ntasks-per-node=4
 > > ~~~
 > > {: .input}
