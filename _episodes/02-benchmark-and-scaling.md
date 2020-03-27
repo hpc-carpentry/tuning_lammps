@@ -59,6 +59,17 @@ The timing information for this run with both 1 and 4 processors is also provide
 
 Before prceeding further, though we assume here that you already know how to run a LAMMPS job in a HPC, let us have a quick recap on how to submit a LAMMPS job in a HPC and understand the output files.
 
+> ## Batch file to submit a LAMMPS job
+>
+> text
+> text
+> text
+>
+> ~~~
+> {% include /snippets/ep02/runjob.sh %}
+> ~~~
+> {: .source}
+{: .callout}
 
 ## Scaling
 
