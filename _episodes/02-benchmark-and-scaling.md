@@ -85,6 +85,14 @@ module load LAMMPS/9Jan2020-cuda
 ~~~
 {: .source}
 
+> ## Module 
+>
+> In the above example, this is evident that 'LAMMPS/9Jan2020-cuda' is the LAMMPS module that load the LAMMPS specific environment variables. Can you tell now why we loaded other modules like intel-para/2019a?
+>
+> > # Solution
+> > This is because this module was used to build LAMMPS and during runtime LAMMPS execuatble will look for all these libraries etc. 
+> {: .solution}
+{: .challenge}
 
 
 ## Scaling
