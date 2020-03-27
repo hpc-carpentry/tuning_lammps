@@ -75,6 +75,15 @@ The timing information for this run with both 1 and 4 processors is also provide
 > {: .solution}
 {: .challenge}
 
+Okay, the rest part of the batch file should now be used to set the LAMMPS environment variables and finally we need to invoke the LAMMPS executable for the run. In all modern HPCs, package specific environment variables are loaded or unloaded using modules. Module is a piece of code that is load or unloaded into Kernal as required thus eliminating the requirement of system reboot each time you need to extend the functionalities of the Kernel. Here we show an example code on how to use the 'module' command to load LAMMPS in Jureca.
+
+~~~
+module use /usr/local/software/jureca/OtherStages
+module load Stages/Devel-2019a
+module load intel-para/2019a
+module load LAMMPS/9Jan2020-cuda
+~~~
+{: .source}
 
 
 
