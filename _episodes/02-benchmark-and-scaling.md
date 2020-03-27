@@ -50,10 +50,10 @@ The timing information for this run with both 1 and 4 processors is also provide
 >
 > Here is a shown a SLURM script to submit a LAMMPS job using 2 nodes and 48 processors. Can you modify the necessary fields in this script to submit the job using 4 processors?
 >
-> ~~~
+> ```
 > {% include /snippets/ep02/runjob.sh %}
-> ~~~
-> {: .source}
+> ```bash
+> 
 {: .challenge}
 
 Before prceeding further, though we assume here that you already know how to run a LAMMPS job in a HPC, let us have a quick recap on how to submit a LAMMPS job in a HPC and understand the output files.
