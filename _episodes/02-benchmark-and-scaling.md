@@ -46,10 +46,10 @@ The timing information for this run with both 1 and 4 processors is also provide
 
 > ## Batch file to submit a LAMMPS job
 > Here is a shown a SLURM script to submit a LAMMPS job using 2 nodes and 48 processors. Can you modify the necessary fields in this script to submit the job using 4 processors?
-~~~
-{% include /snippets/ep02/runjob.sh %}
-~~~
-{: .source}
+> > ~~~
+> > {% include /snippets/ep02/runjob.sh %}
+> > ~~~
+> {: .source}
 >
 {: .challenege}
 
