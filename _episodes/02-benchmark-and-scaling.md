@@ -66,7 +66,7 @@ Before prceeding further, though we assume here that you already know how to run
 > text
 >
 > ~~~
-> {% include /snippets/ep02/runjob.sh %}
+> test code
 > ~~~
 > {: .source}
 {: .callout}
