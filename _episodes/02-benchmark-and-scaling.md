@@ -48,55 +48,31 @@ The timing information for this run with both 1 and 4 processors is also provide
 
 > ## Batch file to submit a LAMMPS job
 >
-> Here is a shown a SLURM script to submit a LAMMPS job using 2 nodes and 48 processors. Can you modify the necessary fields in this script to submit the job using 4 processors?
+> Here is shown the header of a SLURM script to submit a LAMMPS job using 2 nodes and 48 processors. Can you modify the necessary fields in this script to submit the job using 4 processors?
 >
 > ~~~
 > #!/bin/bash -x
-> #SBATCH --account=ecam
+> #SBATCH --account=myAccount
 > #SBATCH --nodes=2
 > #SBATCH --ntasks-per-node=24
 > #SBATCH --output=mpi-out.%j
 > #SBATCH --error=mpi-err.%j
 > #SBATCH --time=00:05:00
-> #SBATCH --partition=batch
+> #SBATCH --partition=myQueue
 >
-> module use /usr/local/software/jureca/OtherStages
-> module load Stages/Devel-2019a
-> module load intel-para/2019a
-> module load LAMMPS/9Jan2020-cuda
->
->srun lmp < in.lj > out.lj
+> ... ... ...
+> ... ... ...
 > ~~~
 > {: .input}
+> 
+> > ## Solution
+> > #SBATCH --nodes=2
+> > #SBATCH --ntasks-per-node=4
+> {: .solution}
 {: .challenge}
 
-Before prceeding further, though we assume here that you already know how to run a LAMMPS job in a HPC, let us have a quick recap on how to submit a LAMMPS job in a HPC and understand the output files.
 
-> ## Batch file to submit a LAMMPS job
->
-> text
-> text
-> text
->
-> ~~~
-> #!/bin/bash -x
-> #SBATCH --account=ecam
-> #SBATCH --nodes=2
-> #SBATCH --ntasks-per-node=24
-> #SBATCH --output=mpi-out.%j
-> #SBATCH --error=mpi-err.%j
-> #SBATCH --time=00:05:00
-> #SBATCH --partition=batch
->
-> module use /usr/local/software/jureca/OtherStages
-> module load Stages/Devel-2019a
-> module load intel-para/2019a
-> module load LAMMPS/9Jan2020-cuda
->
->srun lmp < in.lj > out.lj
-> ~~~
-> {: .source}
-{: .callout}
+
 
 ## Scaling
 
