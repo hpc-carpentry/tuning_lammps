@@ -103,14 +103,14 @@ In this case, lmp is the name of the LAMMPS executable. But, in your HPC it coul
 
 > ## Slurm script: full view
 >
-> Just following the exercise above can you create a batch file to submit your LAMMPS job to 3 nodes such that a total of 36 processes are distributed equally among these nodes. You will submit the job to a partition/queue named 'batch'. The job might take nearly 65 hours to complete, and the 'batch' partition allows you to submit jobs not crossing 72 hours time limit. The name of the LAMMPS executable is lmp_mpi and the name of the input file is in.chain.
+> Just following the exercise above can you create a batch file to submit a LAMMPS job for the above input file (say, in.lj) to 1 core only. You will submit the job to a partition/queue named 'batch'. The job is expected to take not more than 5 minutes, and the 'batch' partition allows you to submit jobs not crossing 72 hours time limit. The name of the LAMMPS executable is lmp. 
 >
 > > ## Solution
 > > ~~~
 > > #!/bin/bash -x
 > > #SBATCH --account=ecam
-> > #SBATCH --nodes=3
-> > #SBATCH --ntasks-per-node=12
+> > #SBATCH --nodes=1
+> > #SBATCH --ntasks-per-node=1
 > > #SBATCH --output=mpi-out.%j
 > > #SBATCH --error=mpi-err.%j
 > > #SBATCH --time=72:00:00
@@ -121,11 +121,22 @@ In this case, lmp is the name of the LAMMPS executable. But, in your HPC it coul
 > > module load intel-para/2019a
 > > module load LAMMPS/9Jan2020-cuda
 > >
-> > srun lmp < in.chain > out.chain
+> > srun lmp < in.lj > out.lj
 > > ~~~
 > > {: .input}
 > {: .solution}
 {: .challenge}
+
+## Understand the output files
+Let us now check what are the new files created after the job is finished. You would notice that in this case two files have been created: log.lammps and out.lj. Among these two, 'out.lj' is mainly to capture the screen output that have been generated during the job execution. The one that is created by LAMMPS is log.lammps. 
+
+Once you open the file you will notice that this file contains most of the important information starting from the LAMMPS version, number of processors used for the runs, processor lay out, thermdynamic steps, as well as the timing information. For the purpose of this tutorial, we would like to concentrate more on the timing breakups.  The keywords that are of interest is listed below:
+
+         * how to get wall-time:  key-word search (loop time)
+         * Performance prediction: key-word search (Performance)
+         * Compare this data among various HPC platforms (JSC/Kay/LAMMPS-data): Benchmark plot
+         * Discuss now what could be the probable reasons for such variation of timing (Discuss a bit about cpuinfo)
+         * Discuss about 'CPU use' keyword and discuss the cpu-utilization of the MPI processes
 
 ## Scaling
 
