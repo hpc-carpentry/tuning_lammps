@@ -124,7 +124,7 @@ In this case, lmp is the name of the LAMMPS executable. But, in your HPC it coul
 > > srun lmp < in.chain > out.chain
 > > ~~~
 > > {: .input}
-> {: .source}
+> {: .solution}
 {: .challenge}
 
 ## Scaling
