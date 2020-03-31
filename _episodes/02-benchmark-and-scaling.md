@@ -41,12 +41,12 @@ The input file for the LJ-system is given below:
 ```
 {% include /snippets/ep02/in.lj %}
 ```
-{: .input}
+{: .Input}
 
 
 The timing information for this run with both 1 and 4 processors is also provided with LAMMPS distribution. So, to benchmark it would be wise to run the same job with same processor settings. Let us now create a batch file to submit this job. 
 
-(Chris - files/01/file_to_include L54)
+
 > ## Batch file to submit a LAMMPS job
 >
 > Here is shown the header of a SLURM script to submit a LAMMPS job using 2 nodes and 48 processors. Can you modify the necessary fields in this script to submit the job using 4 processors?
@@ -94,6 +94,38 @@ module load LAMMPS/9Jan2020-cuda
 > {: .solution}
 {: .challenge}
 
+Now we'll invoke LAMMPS executable to do the job. This can be done as following
+```
+srun lmp < in.lj|tee out.lj
+```
+{: .source}
+In this case, lmp is the name of the LAMMPS executable. But, in your HPC it could named something else.
+
+> ## Slurm script: full view
+>
+> Just following the exercise above can you create a batch file to submit your LAMMPS job to 3 nodes such that a total of 36 processes are distributed equally among these nodes. You will submit the job to a partition/queue named 'batch'. The job might take nearly 65 hours to complete, and the 'batch' partition allows you to submit jobs not crossing 72 hours time limit. The name of the LAMMPS executable is lmp_mpi and the name of the input file is in.chain.
+>
+> > ## Solution
+> > ~~~
+> > #!/bin/bash -x
+> > #SBATCH --account=ecam
+> > #SBATCH --nodes=3
+> > #SBATCH --ntasks-per-node=12
+> > #SBATCH --output=mpi-out.%j
+> > #SBATCH --error=mpi-err.%j
+> > #SBATCH --time=72:00:00
+> > #SBATCH --partition=batch
+> >
+> > module use /usr/local/software/jureca/OtherStages
+> > module load Stages/Devel-2019a
+> > module load intel-para/2019a
+> > module load LAMMPS/9Jan2020-cuda
+> >
+> > srun lmp < in.chain > out.chain
+> > ~~~
+> > {: .input}
+> {: .source}
+{: .challenge}
 
 ## Scaling
 
