@@ -132,11 +132,11 @@ Let us now check what are the new files created after the job is finished. You w
 
 Once you open the file you will notice that this file contains most of the important information starting from the LAMMPS version, number of processors used for the runs, processor lay out, thermdynamic steps, as well as the timing information. For the purpose of this tutorial, we would like to concentrate more on the timing breakups.  The keywords that are of interest is listed below:
 
-         * how to get wall-time:  key-word search (loop time)
-         * Performance prediction: key-word search (Performance)
-         * Compare this data among various HPC platforms (JSC/Kay/LAMMPS-data): Benchmark plot
-         * Discuss now what could be the probable reasons for such variation of timing (Discuss a bit about cpuinfo)
-         * Discuss about 'CPU use' keyword and discuss the cpu-utilization of the MPI processes
+  * how to get wall-time:  key-word search (loop time)
+  * Performance prediction: key-word search (Performance)
+  * Compare this data among various HPC platforms (JSC/Kay/LAMMPS-data): Benchmark plot
+  * Discuss now what could be the probable reasons for such variation of timing (Discuss a bit about cpuinfo)
+  * Discuss about 'CPU use' keyword and discuss the cpu-utilization of the MPI processes
 
 ## Scaling
 
