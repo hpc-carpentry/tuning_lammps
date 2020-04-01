@@ -237,12 +237,12 @@ This is very useful in the sense that it helps you to identify the performance b
 > ## Now run a benchmark...
 >
 > Now submit a LAMMPS job for the above input file in a HPC that is available to you using both 1 and 4 processors. Extract the loop times for your runs and make a bar plot to see how the performance of your HPC for this particular job compares with LAMMPS standard benchmark and with the performance for another two HPCs, Kay and Jureca.
-> | HPC system | 1 proc (sec) | 4 proc (sec) |
-> |----------- | ------------ |------------- |
-> | LAMMPS     | 2.26185      | 0.635957     |
-> | Kay        | 2.24207      | 0.592148     |
-> | Jureca     | 1.76553      | 0.531145     |
-> | your HPC   | ?            | ?            |
+> > | HPC system | 1 proc (sec) | 4 proc (sec) |
+> > |----------- | ------------ |------------- |
+> > | LAMMPS     | 2.26185      | 0.635957     |
+> > | Kay        | 2.24207      | 0.592148     |
+> > | Jureca     | 1.76553      | 0.531145     |
+> > | your HPC   | ?            | ?            |
 >
 {: .challenge}
 
