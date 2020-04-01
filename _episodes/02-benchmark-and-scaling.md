@@ -179,45 +179,64 @@ Total wall time: 0:00:01
 {: .log.lammps}
 
 ## Useful keyword to search for
-  * The ```Loop time``` is the total wall-clock time for the simulation to run.
+  * The ```Loop time``` is the total wall-clock time for the simulation to run. (source: LAMMPS manual)
 Use the following to extract this from ```log.lammps```:
 ```
 grep "Loop time" log.lammps| sed 's/|/ /' | awk '{print $4}'
 ```
 ```
-1.76553
+xxx]$ 1.76553
 ```
-{: .output}
 
-  * The Performance line is provided for convenience to help predict how long it will take to run a desired physical simulation. 
-Use the following command line to extract the value in units of ```tau/day```:
+  * The Performance line is provided for convenience to help predict how long it will take to run a desired physical simulation.  (source: LAMMPS manual)
+Use the following command line to extract the value in units of ```tau/day``` :
 ```
 grep "Performance" log.lammps| sed 's/|/ /' | awk '{print $2}'
 ```
 ```
-24468.549
+xxx]$ 24468.549
 ```
-{: .output}
 
-  * The CPU use line provides the CPU utilization per MPI task; it should be close to 100% times the number of OpenMP threads (or 1 of not using OpenMP). Lower numbers correspond to delays due to file I/O or insufficient thread utilization.
-Use the following command line to extract the value in units of ```tau/day```:
+  * The CPU use line provides the CPU utilization per MPI task; it should be close to 100% times the number of OpenMP threads (or 1 of not using OpenMP). Lower numbers correspond to delays due to file I/O or insufficient thread utilization. (source: LAMMPS manual)
+Use the following command line to extract the value in units of ```tau/day``` :
 ```
 grep "CPU use" log.lammps| sed 's/|/ /' | awk '{print $1}'
 ```
 ```
-100.0%
+xxx]$ 100.0%
 ```
-{: .output}
+* Next, we'll discuss about the timing breakdown table for CPU runtime. If try the following command line
+```
+grep -A 8 "breakdown" log.lammps 
+```
+you should see the following output:
+```
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 1.5244     | 1.5244     | 1.5244     |   0.0 | 86.34
+Neigh   | 0.19543    | 0.19543    | 0.19543    |   0.0 | 11.07
+Comm    | 0.016556   | 0.016556   | 0.016556   |   0.0 |  0.94
+Output  | 7.2241e-05 | 7.2241e-05 | 7.2241e-05 |   0.0 |  0.00
+Modify  | 0.023852   | 0.023852   | 0.023852   |   0.0 |  1.35
+Other   |            | 0.005199   |            |       |  0.29
+```
+The above table shows the times taken by the major categories of a LAMMPS run. A brief description of these categories has been provided in LAMMPS manual (quoted below):
+
+  * Pair = non-bonded force computations
+  * Bond = bonded interactions: bonds, angles, dihedrals, impropers
+  * Kspace = long-range interactions: Ewald, PPPM, MSM
+  * Neigh = neighbor list construction
+  * Comm = inter-processor communication of atoms and their properties
+  * Output = output of thermodynamic info and dump files
+  * Modify = fixes and computes invoked by fixes
+  * Other = all the remaining time
 
 
 
-
-  * how to get wall-time:  key-word search (loop time)
-  * Performance prediction: key-word search (Performance)
   * Compare this data among various HPC platforms (JSC/Kay/LAMMPS-data): Benchmark plot
   * Discuss now what could be the probable reasons for such variation of timing (Discuss a bit about cpuinfo)
-  * Discuss about 'CPU use' keyword and discuss the cpu-utilization of the MPI processes
-
+  
 ## Scaling
 
 Good scaling vs poor scaling. How to choose no. of nodes, preventing waste of resources.
