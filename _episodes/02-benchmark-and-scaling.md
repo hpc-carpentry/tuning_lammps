@@ -221,7 +221,7 @@ Output  | 7.2241e-05 | 7.2241e-05 | 7.2241e-05 |   0.0 |  0.00
 Modify  | 0.023852   | 0.023852   | 0.023852   |   0.0 |  1.35
 Other   |            | 0.005199   |            |       |  0.29
 ```
-The above table shows the times taken by the major categories of a LAMMPS run. A brief description of these categories has been provided in LAMMPS manual (quoted below):
+The above table shows the times taken by the major categories of a LAMMPS run. A brief description of these categories has been provided in [LAMMPS manual](https://lammps.sandia.gov/doc/Run_output.html):
 
   * Pair = non-bonded force computations
   * Bond = bonded interactions: bonds, angles, dihedrals, impropers
@@ -232,10 +232,21 @@ The above table shows the times taken by the major categories of a LAMMPS run. A
   * Modify = fixes and computes invoked by fixes
   * Other = all the remaining time
 
+This is very useful in the sense that it helps you to identify the performance bottlenecks! It will discussed later in more detail.
 
+> ## Now run a benchmark...
+>
+> Now submit a LAMMPS job for the above input file in a HPC that is available to you using both 1 and 4 processors. Extract the loop times for your runs and make a bar plot to see how the performance of your HPC for this particular job compares with LAMMPS standard benchmark and with the performance for another two HPCs, Kay and Jureca.
+> | HPC system | 1 proc (sec) | 4 proc (sec) |
+> |----------- | ------------ |------------- |
+> | LAMMPS     | 2.26185      | 0.635957     |
+> | Kay        | 2.24207      | 0.592148     |
+> | Jureca     | 1.76553      | 0.531145     |
+> | your HPC   | ?            | ?            |
+>
+{: .challenge}
 
   * Compare this data among various HPC platforms (JSC/Kay/LAMMPS-data): Benchmark plot
-  * Discuss now what could be the probable reasons for such variation of timing (Discuss a bit about cpuinfo)
   
 ## Scaling
 
