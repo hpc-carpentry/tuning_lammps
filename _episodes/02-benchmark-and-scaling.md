@@ -87,7 +87,7 @@ module load LAMMPS/18Feb2020-cuda
 
 > ## Module 
 >
-> In the above example, this is evident that 'LAMMPS/9Jan2020-cuda' is the LAMMPS module that load the LAMMPS specific environment variables. Can you tell now why we loaded other modules like intel-para/2019a?
+> In the above example, this is evident that ```LAMMPS/9Jan2020-cuda``` is the LAMMPS module that load the LAMMPS specific environment variables. Can you tell now why we loaded other modules like intel-para/2019a?
 >
 > > ## Solution
 > > This is because this module was used to build LAMMPS and during runtime LAMMPS execuatble will look for all these libraries etc. 
@@ -106,11 +106,11 @@ mpirun -np 1 lmp < in.lj
 ```
 {: .input}
 
-In this case, lmp is the name of the LAMMPS executable. But, in your HPC it could named something else.
+In this case, ```lmp``` is the name of the LAMMPS executable. But, in your HPC it could named something else.
 
 > ## Slurm script: full view
 >
-> Just following the exercise above can you create a batch file to submit a LAMMPS job for the above input file (say, in.lj) to 1 core only. You will submit the job to a partition/queue named 'batch'. The job is expected to take not more than 5 minutes, and the 'batch' partition allows you to submit jobs not crossing 72 hours time limit. The name of the LAMMPS executable is lmp. 
+> Just following the exercise above can you create a batch file to submit a LAMMPS job for the above input file (say, in.lj) to 1 core only. You will submit the job to a partition/queue named ```batch```. The job is expected to take not more than 5 minutes, and the ```batch``` partition allows you to submit jobs not crossing 72 hours time limit. The name of the LAMMPS executable is ```lmp```. 
 >
 > > ## Solution
 > > ~~~
@@ -135,9 +135,51 @@ In this case, lmp is the name of the LAMMPS executable. But, in your HPC it coul
 {: .challenge}
 
 ## Understand the output files
-Let us now look for the output files. You would notice that in this case three files have been created: log.lammps, mpi-out.xxxxx, and mpi-err.xxxxx. Among these three, 'mpi-out.xxxxx' is mainly to capture the screen output that have been generated during the job execution. The purpose of the ```mpi-err.xxxxx``` file is to log entries if there is any error occurring during run-time. The one that is created by LAMMPS is log.lammps. 
+Let us now look for the output files. You would notice that in this case three files have been created: ```log.lammps```, ```mpi-out.xxxxx```, and ```mpi-err.xxxxx```. Among these three, ```mpi-out.xxxxx``` is mainly to capture the screen output that have been generated during the job execution. The purpose of the ```mpi-err.xxxxx``` file is to log entries if there is any error occurring during run-time. The one that is created by LAMMPS is called ```log.lammps```. 
 
-Once you open the file you will notice that this file contains most of the important information starting from the LAMMPS version, number of processors used for the runs, processor lay out, thermdynamic steps, as well as the timing information. For the purpose of this tutorial, we would like to concentrate more on the timing breakups.  The keywords that are of interest is listed below:
+Once you open the ```log.lammps``` file you will notice that this file contains most of the important information starting from the LAMMPS version, number of processors used for the runs, processor lay out, thermdynamic steps, and the timing information. The header of a ```log.lammps``` file would be somewhat similar to this:
+```
+LAMMPS (18 Feb 2020)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:94)
+  using 1 OpenMP thread(s) per MPI task
+```
+Note that it tells you about the LAMMPS version, and ```OMP_NUM_THREADS``` which is one of the important environment variables required to set for obtainging a performance boost. This would be discussed later in this tutorial. But for now, we'll focus mainly on the timing information provided in this file. 
+
+When the run concludes, LAMMPS prints the final thermodynamic state and a total run time for the simulation. It also appends statistics about the CPU time and storage requirements for the simulation. An example set of statistics is shown here:
+
+```
+Loop time of 1.76553 on 1 procs for 100 steps with 32000 atoms
+
+Performance: 24468.549 tau/day, 56.640 timesteps/s
+100.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 1.5244     | 1.5244     | 1.5244     |   0.0 | 86.34
+Neigh   | 0.19543    | 0.19543    | 0.19543    |   0.0 | 11.07
+Comm    | 0.016556   | 0.016556   | 0.016556   |   0.0 |  0.94
+Output  | 7.2241e-05 | 7.2241e-05 | 7.2241e-05 |   0.0 |  0.00
+Modify  | 0.023852   | 0.023852   | 0.023852   |   0.0 |  1.35
+Other   |            | 0.005199   |            |       |  0.29
+
+Nlocal:    32000 ave 32000 max 32000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    19657 ave 19657 max 19657 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.20283e+06 ave 1.20283e+06 max 1.20283e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 1202833
+Ave neighs/atom = 37.5885
+Neighbor list builds = 5
+Dangerous builds not checked
+Total wall time: 0:00:01
+```
+{: .output}
+
+
+For the purpose of this tutorial, we would like to concentrate more on the timing breakups.  The keywords that are of interest is listed below:
 
   * how to get wall-time:  key-word search (loop time)
   * Performance prediction: key-word search (Performance)
