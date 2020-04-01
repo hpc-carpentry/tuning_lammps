@@ -20,19 +20,15 @@ keypoints:
 
 ## What is software performance?
 
-Before getting into the software side of things, lets take a few steps back. Performance is a generic term that applies to may factors of our lives, from physical to mental and engineering. However with software performance the emphasis isn't always on the most powerful machine, it is how you best utilise the power that you have. Say you are the chef in a restaurant and every dish that you do is perfect. You would be able to produce a set 7 course meal for a table of 3-6 without too much difficulty. If your restaurant is full though, it becomes more difficult, as people would be waiting many hours for their food. However if you had a team of 6 additional chefs with you, assisting as well as communicating with each other, delegating tasks, you have a much higher chance of getting the food out on time and coping with a large workload, likely with each concentrating on doing one course.
+Before getting into the software side of things, lets take a few steps back. Performance is a generic term that applies to may factors of our lives, from physical to mental and engineering. However with software performance the emphasis isn't always on the most powerful machine, it is how you best utilise the power that you have. Say you are the chef in a restaurant and every dish that you do is perfect. You would be able to produce a set 7 course meal for a table of 3-6 without too much difficulty. If your restaurant is full though, it becomes more difficult, as people would be waiting many hours for their food. However if you had a team of 6 additional chefs with you, assisting as well as communicating with each other, delegating tasks, you have a much higher chance of getting the food out on time and coping with a large workload, likely with each concentrating on doing one course each.
 
 It's the same with software performance, if you have one process running doing one thing there is usually never an issue. But if you have one doing several things, it will obviously take much longer. Furthermore if you hade several workers working on several tasks, it will take a fraction of the time. That is the essence of software performance, using the resources you have to their best capabilities.
 
-(Right place?)
-Let's consider our chefs again, and assume that they are all bound by secrecy, and are not allowed to reveal to you what their craft is, pastry, meat, fish, soup, etc. You have to find out what their specialities are, what do you do? Do a test run and assign a chef to each course. Having a worker set to each task is all well and good, but there are certain combinations which work and some which do not, you might get away with your starter chef preparing a fish course, or your lamb chef switching to cook beef and vice versa, but you wouldn't put your pastry chef in charge of the main meat dish, you leave that to someone more qualified and better suited to the job. Eventually after a few test meals, you find out the best combination and you apply that to all your future meals.
-
-Computing works in a similar way, thankfully not to that level of detail where one specific core is suited to one specific task, but finding the best combination is important and can hugely impact your code's performance. As ever with enhancing performance, you may have the resources, but the effective use of the resources is where the challenge lies
-(Right place?)
-
 ## Why is software performance important?
 
-(FIXME)
+Its simple, because its a waste of resources! In our restaurant example, if you had 4 shelves in a bread oven, you'd try and utilise all 4 instead of just one, meaning that you'd get 4 loaves out at a time instead of just one. On large HPC machines, you could have dozens to hundreds of cores at your disposal, so why not make use of them if you have requested access to them.
+
+The second aspect to this is time, your four bread loaves in the one oven may take a couple of hours to cook, but if you put one loaf in at a time, your loaves may take a morning and afternoon to bake, which is very inefficient, and that's at a small scale. Simulations in LAMMPS can be much, much bigger. 
 
 > ## Enchancing performance: rationale
 >
@@ -46,7 +42,7 @@ Computing works in a similar way, thankfully not to that level of detail where o
 >> 
 >> 64000 hours or just over 73 years.
 >>
->> This is way longer than anyone could bear! But remember, that is utilising just one core. If you had a machine that could simulate each of those smaller boxes simultaneously and a code that enables each box to effectively interact with each other, the whole job would only take roughly 10-12 hours. So it provides the motivation we need to speed up the code we have and utilise the machine to its best capacity
+>> This is way longer than anyone could bear! But remember, that is utilising just one core. If you had a machine that could simulate each of those smaller boxes simultaneously and a code that enables each box to effectively interact with each other, the whole job would only take roughly 10-12 hours. So it provides the motivation we need to speed up the code we have and utilise the machine to its best capacity.
 >>
 >{: .solution}
 {: .challenge}
@@ -68,36 +64,36 @@ There are a number of key terms in computing when it comes to understanding perf
 >
 {: .challenge}
 
-> ### Walltime
+> ## Walltime
 > 
-> Walltime is simply the length of time, usually measured in seconds that a program takes to run or to execute its assigned tasks. 
+> Walltime is simply the length of time, usually measured in seconds that a program takes to run or to execute its assigned tasks.
 >
 > This is specified in a submission script when before your task officially starts running. If the task takes longer than the walltime that is specified, the task gets killed and will not complete.
 >
 {: .callout}
 
-> ### CPUH
+> ## CPUH
 >
 > CPU hours is the processor time needed to complete a task, i.e. the amount of computing work done. 
 >
->
+> Normally when submitting a job, you need to have an idea on how long your job will take to run, otherwise you may end up having your job terminate before it gets the chance to finish
 {: .callout}
 
 
 > ## Calculate CPU hours
 > 
-> In the following example, assume that you are utilising all the available core in a node. Calculate the CPU hours requested to run the following job. Each node has 40 cores.
+> In the following example, assume that you are utilising all the available cores in a node and that your code has been fully optimised. Calculate the CPU hours requested to run the following job. Each node has 40 cores.
 > 
 > ```
-> #SBATCH --nodes = 2
-> #SBATCH --time = 05:00:00
+> {{ site.sched_comment }} {{ site.sched_flag_nodes }} = 2
+> {{ site.sched_comment }} {{ site.sched_flag_time }}  = 05:00:00
 > ```
 > {: .bash}
 > 
-> > ## Solution
-> >
-> > 400 CPUh.
-> > 
+>> ## Solution
+>>
+>> 400 CPUh.
+>> 
 >{: .solution}
 {: .challenge}
 
@@ -116,12 +112,13 @@ The `--time` variable used in the exercise is the amount of CPU hours requested,
 > ```
 > {: .bash}
 >
-> > 
-> > ## Solution
-> >
-> > 
-> >
-> >{: .solution}
+>> ## Solution
+>> 
+>>
+>> 
+>>
+>>
+>{: .solution}
 {: challenge}
 
 ## How can performance be enhanced?
@@ -164,11 +161,13 @@ If these terms are unfamiliar now, don't worry as we will cover them over the du
 > 4. Use GPUs instead of CPUs
 > 5. Splitting code up into smaller segments
 >
-> > 1. Yes, MPI can enable you to split your code into multiple processes distributed over multiple cores, known as parallel programming.
-> > 2. Yes, like MPI this is also parallel programming, but deals with threads, by splitting a process into multiple threads, each thread using a single core.
-> > 3. Yes, that is their purpose. Different libraries run on different architectures however.
-> > 4. Yes, GPUs are better at handling multiple tasks, whereas a CPU is better running singular tasks quickly.
-> > 5. No, if you have a simulation that needs to be run from start to completion, splitting the code into segments won't be of any benefit and will waste compute resources.
+>> ## Solution
+>> 1. Yes, MPI can enable you to split your code into multiple processes distributed over multiple cores, known as parallel programming.
+>> 2. Yes, like MPI this is also parallel programming, but deals with threads, by splitting a process into multiple threads, each thread using a single core.
+>> 3. Yes, that is their purpose. Different libraries run on different architectures however.
+>> 4. Yes, GPUs are better at handling multiple tasks, whereas a CPU is better running singular tasks quickly.
+>> 5. No, if you have a simulation that needs to be run from start to completion, splitting the code into segments won't be of any benefit and will waste compute resources.
+>>
 >{: .solution}
 {: .challenge}
 

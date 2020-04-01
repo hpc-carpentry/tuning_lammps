@@ -9,6 +9,8 @@ sched_submit: "sbatch"
 sched_submit_options: "-A course01" # check
 sched_status: "sstat"
 sched_flag_user: "-u yourUsername"
+sched_flag_time: "--time "
+sched_flag_node: "--nodes "
 sched_del: "scancel"
 sched_interactive: "sbatch"
 sched_comment: "#SBATCH"
