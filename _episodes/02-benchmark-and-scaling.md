@@ -148,10 +148,6 @@ Let us assume that they are all bound by secrecy, and are not allowed to reveal 
 
 Scaling in computing works in a similar way, thankfully not to that level of detail where one specific core is suited to one specific task, but finding the best combination is important and can hugely impact your code's performance. As ever with enhancing performance, you may have the resources, but the effective use of the resources is where the challenge lies. Having each chef cooking their specialised dishes would be good scaling, an effective use of your resources, but poor scaling is having your pastry chef doing the main dish, which is an ineffective use of resources.
 
-Good scaling vs poor scaling. How to choose no. of nodes, preventing waste of resources.
-
-(FIXME)
-
 > ## Plotting performance and number of cores
 > 
 > Use the code template below to analyse how performance changes based on the setup (FIXME)
