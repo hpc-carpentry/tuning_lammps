@@ -242,7 +242,7 @@ This is very useful in the sense that it helps you to identify the performance b
 > > | LAMMPS     | 2.26185      | 0.635957     |
 > > | Kay        | 2.24207      | 0.592148     |
 > > | Jureca     | 1.76553      | 0.531145     |
-> > | your HPC   | ?            | ?            |
+> > | your HPC   |     ?        |     ?        |
 >
 {: .challenge}
 
