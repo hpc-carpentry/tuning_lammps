@@ -81,7 +81,7 @@ Okay, the rest part of the batch file should now be used to set the LAMMPS envir
 module use /usr/local/software/jureca/OtherStages
 module load Stages/Devel-2019a
 module load intel-para/2019a
-module load LAMMPS/9Jan2020-cuda
+module load LAMMPS/18Feb2020-cuda
 ~~~
 {: .source}
 
@@ -96,9 +96,16 @@ module load LAMMPS/9Jan2020-cuda
 
 Now we'll invoke LAMMPS executable to do the job. This can be done as following
 ```
-srun lmp < in.lj|tee out.lj
+srun lmp < in.lj
 ```
-{: .source}
+{: .input}
+
+Or, if you are using ```mpirun``` instead of ```srun```, the submission line would be:
+```
+mpirun -np 1 lmp < in.lj
+```
+{: .input}
+
 In this case, lmp is the name of the LAMMPS executable. But, in your HPC it could named something else.
 
 > ## Slurm script: full view
@@ -128,7 +135,7 @@ In this case, lmp is the name of the LAMMPS executable. But, in your HPC it coul
 {: .challenge}
 
 ## Understand the output files
-Let us now check what are the new files created after the job is finished. You would notice that in this case two files have been created: log.lammps and out.lj. Among these two, 'out.lj' is mainly to capture the screen output that have been generated during the job execution. The one that is created by LAMMPS is log.lammps. 
+Let us now look for the output files. You would notice that in this case three files have been created: log.lammps, mpi-out.xxxxx, and mpi-err.xxxxx. Among these three, 'mpi-out.xxxxx' is mainly to capture the screen output that have been generated during the job execution. The purpose of the ```mpi-err.xxxxx``` file is to log entries if there is any error occurring during run-time. The one that is created by LAMMPS is log.lammps. 
 
 Once you open the file you will notice that this file contains most of the important information starting from the LAMMPS version, number of processors used for the runs, processor lay out, thermdynamic steps, as well as the timing information. For the purpose of this tutorial, we would like to concentrate more on the timing breakups.  The keywords that are of interest is listed below:
 
