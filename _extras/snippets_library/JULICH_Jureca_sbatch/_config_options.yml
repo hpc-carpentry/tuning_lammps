@@ -7,6 +7,8 @@ host_prompt: "[user@laptop ~]$"
 sched_name: "SBATCH" # Check
 sched_submit: "sbatch"
 sched_submit_options: "-A course01" # check
+sched_flag_time: "--time "
+sched_flag_node: "--nodes "
 sched_status: "sstat"
 sched_flag_user: "-u yourUsername"
 sched_del: "scancel"
