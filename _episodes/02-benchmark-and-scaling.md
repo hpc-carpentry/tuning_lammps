@@ -53,13 +53,13 @@ The timing information for this run with both 1 and 4 processors is also provide
 >
 > ~~~
 > #!/bin/bash -x
-> #SBATCH --account=myAccount
-> #SBATCH --nodes=2
-> #SBATCH --ntasks-per-node=24
-> #SBATCH --output=mpi-out.%j
-> #SBATCH --error=mpi-err.%j
-> #SBATCH --time=00:05:00
-> #SBATCH --partition=myQueue
+> {{ site.sched_comment }} --account=myAccount
+> {{ site.sched_comment }} --nodes=2
+> {{ site.sched_comment }} --ntasks-per-node=24
+> {{ site.sched_comment }} --output=mpi-out.%j
+> {{ site.sched_comment }} --error=mpi-err.%j
+> {{ site.sched_comment }} --time=00:05:00
+> {{ site.sched_comment }} --partition=myQueue
 >
 > ... ... ...
 > ... ... ...
@@ -68,8 +68,8 @@ The timing information for this run with both 1 and 4 processors is also provide
 > 
 > > ## Solution
 > > ~~~
-> > #SBATCH --nodes=1
-> > #SBATCH --ntasks-per-node=4
+> > {{ site.sched_comment }} --nodes=1
+> > {{ site.sched_comment }} --ntasks-per-node=4
 > > ~~~
 > > {: .input}
 > {: .solution}
@@ -115,13 +115,13 @@ In this case, ```lmp``` is the name of the LAMMPS executable. But, in your HPC i
 > > ## Solution
 > > ~~~
 > > #!/bin/bash -x
-> > #SBATCH --account=ecam
-> > #SBATCH --nodes=1
-> > #SBATCH --ntasks-per-node=1
-> > #SBATCH --output=mpi-out.%j
-> > #SBATCH --error=mpi-err.%j
-> > #SBATCH --time=72:00:00
-> > #SBATCH --partition=batch
+> > {{ site.sched_comment }} --account=ecam
+> > {{ site.sched_comment }} --nodes=1
+> > {{ site.sched_comment }} --ntasks-per-node=1
+> > {{ site.sched_comment }} --output=mpi-out.%j
+> > {{ site.sched_comment }} --error=mpi-err.%j
+> > {{ site.sched_comment }} --time=72:00:00
+> > {{ site.sched_comment }} --partition=batch
 > >
 > > module use /usr/local/software/jureca/OtherStages
 > > module load Stages/Devel-2019a
