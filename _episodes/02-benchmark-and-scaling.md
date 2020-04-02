@@ -92,7 +92,7 @@ module load LAMMPS/18Feb2020-cuda
 > In the above example, this is evident that ```LAMMPS/9Jan2020-cuda``` is the LAMMPS module that load the LAMMPS specific environment variables. Can you tell now why we loaded other modules like intel-para/2019a?
 >
 > > ## Solution
-> > This is because this module was used to build LAMMPS and during runtime LAMMPS execuatble will look for all these libraries etc. 
+> > LAMMPS was built using Intel compiler and could have dynamic linking set to some of the important libraries that are called at runtime.  
 > {: .solution}
 {: .challenge}
 
@@ -187,7 +187,7 @@ Use the following to extract this from ```log.lammps```:
 grep "Loop time" log.lammps| sed 's/|/ /' | awk '{print $4}'
 ```
 ```
-xxx]$ 1.76553
+$ 1.76553
 ```
 
   * The Performance line is provided for convenience to help predict how long it will take to run a desired physical simulation.  (source: LAMMPS manual)
@@ -196,7 +196,7 @@ Use the following command line to extract the value in units of ```tau/day``` :
 grep "Performance" log.lammps| sed 's/|/ /' | awk '{print $2}'
 ```
 ```
-xxx]$ 24468.549
+$ 24468.549
 ```
 
   * The CPU use line provides the CPU utilization per MPI task; it should be close to 100% times the number of OpenMP threads (or 1 of not using OpenMP). Lower numbers correspond to delays due to file I/O or insufficient thread utilization. (source: LAMMPS manual)
@@ -205,7 +205,7 @@ Use the following command line to extract the value in units of ```tau/day``` :
 grep "CPU use" log.lammps| sed 's/|/ /' | awk '{print $1}'
 ```
 ```
-xxx]$ 100.0%
+$ 100.0%
 ```
 * Next, we'll discuss about the timing breakdown table for CPU runtime. If try the following command line
 ```
