@@ -29,13 +29,13 @@ Benchmarking in computing works in a similar way, as it is a way of assessing th
 
 ## Case study: Benchmarking
 
-By now you already got some understanding about how benchmarking enables you to compare the peformance of your computing system with some 'standard' systems, and thus it helps you to know whether a further fine tuning of your job is required or not. 
-As a first exercise, we will start with the simplest Lennard-Jones (LJ) system as provided in the 'bench' directory of the latest LAMMPS distribution. Following this, you will be given another example and you will follow the same set of excercises and compare your results with some 'known' benchmark.
+By now you already got some understanding about how benchmarking enables you to compare the performance of your computing system with some 'standard' systems, and thus it helps you to know whether a further fine tuning of your job is required or not. 
+As a first exercise, we will start with the simplest Lennard-Jones (LJ) system as provided in the 'bench' directory of the latest LAMMPS distribution. Following this, you will be given another example and you will follow the same set of exercises and compare your results with some 'known' benchmark.
 
 > ## Run a LAMMPS job in a HPC
 > Can you list bare minimum files that you need to schedule a LAMMPS job in a HPC?
 > > ## Solution
-> > For running a LAMMPS job, we must need an input file, empirical potential file (optional), and a data file (optional). We need these optional files only when the empirical potential model parameters and the molecular coordinates are not defined within the LAMMPS input file. In addition, for submitting a LAMMPS job to a HPC queue, we need a batch file. In general, each HPC uses a queing system to manage all the jobs. Two such popular ones are PBS and Slurm. 
+> > For running a LAMMPS job, we must need an input file, empirical potential file (optional), and a data file (optional). We need these optional files only when the empirical potential model parameters and the molecular coordinates are not defined within the LAMMPS input file. In addition, for submitting a LAMMPS job to a HPC queue, we need a batch file. In general, each HPC uses a queueing system to manage all the jobs. Two such popular ones are PBS and Slurm. 
 > {: .solution}
 {: .challenge}
 
@@ -77,7 +77,7 @@ The timing information for this run with both 1 and 4 processors is also provide
 > {: .solution}
 {: .challenge}
 
-Okay, the rest part of the batch file should now be used to set the LAMMPS environment variables and finally we need to invoke the LAMMPS executable for the run. In all modern HPCs, package specific environment variables are loaded or unloaded using modules. Module is a piece of code that is load or unloaded into Kernal as required thus eliminating the requirement of system reboot each time you need to extend the functionalities of the Kernel. Here we show an example code on how to use the 'module' command to load LAMMPS in Jureca.
+Okay, the rest part of the batch file should now be used to set the LAMMPS environment variables and finally we need to invoke the LAMMPS executable for the run. In all modern HPCs, package specific environment variables are loaded or unloaded using modules. Module is a piece of code that is load or unloaded into Kernel as required thus eliminating the requirement of system reboot each time you need to extend the functionalities of the Kernel. Here we show an example code on how to use the 'module' command to load LAMMPS in Jureca.
 
 ~~~
 module use /usr/local/software/jureca/OtherStages
