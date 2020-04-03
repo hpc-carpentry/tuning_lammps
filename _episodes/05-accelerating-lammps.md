@@ -13,6 +13,8 @@ objectives:
 keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
+## How can I accelerate LAMMPS performance?
+Well, there are two basic approaches to accelerate LAMMPS performance. One is to use better algorithm, and the other one is to device 
 ## Accelerating LAMMPS using KOKKOS
 
 ## Knowing your hardware
