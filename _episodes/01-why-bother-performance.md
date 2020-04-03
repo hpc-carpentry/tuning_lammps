@@ -24,12 +24,6 @@ Before getting into the software side of things, lets take a few steps back. Per
 
 It's the same with software performance, if you have one process running doing one thing there is usually never an issue. But if you have one doing several things, it will obviously take much longer. Furthermore if you hade several workers working on several tasks, it will take a fraction of the time. That is the essence of software performance, using the resources you have to their best capabilities.
 
-(Right place?)
-Let's consider our chefs again, and assume that they are all bound by secrecy, and are not allowed to reveal to you what their craft is, pastry, meat, fish, soup, etc. You have to find out what their specialities are, what do you do? Do a test run and assign a chef to each course. Having a worker set to each task is all well and good, but there are certain combinations which work and some which do not, you might get away with your starter chef preparing a fish course, or your lamb chef switching to cook beef and vice versa, but you wouldn't put your pastry chef in charge of the main meat dish, you leave that to someone more qualified and better suited to the job. Eventually after a few test meals, you find out the best combination and you apply that to all your future meals.
-
-Computing works in a similar way, thankfully not to that level of detail where one specific core is suited to one specific task, but finding the best combination is important and can hugely impact your code's performance. As ever with enhancing performance, you may have the resources, but the effective use of the resources is where the challenge lies
-(Right place?)
-
 ## Why is software performance important?
 
 (FIXME)
@@ -55,11 +49,11 @@ Computing works in a similar way, thankfully not to that level of detail where o
 
 There are a number of key terms in computing when it comes to understanding performance and expected duration of tasks. The most important of these are flops, walltime and cpuh
 
-> ### Flops
+> ## Flops
 >
 > Flops stands for floating point operations per second and they are typically used to measure the performance of a computer's processor.
 >
-> The theoretical peak flops is given by `(CHECKME!!!!!!!!!)` Number of cores * Average frequency * Operations per cycle.
+> The theoretical peak flops is given by `(FIXME)` **Number of cores * Average frequency * Operations per cycle.**
 {: .callout}
 
 > ## Calculate Flops
@@ -68,7 +62,7 @@ There are a number of key terms in computing when it comes to understanding perf
 >
 {: .challenge}
 
-> ### Walltime
+> ## Walltime
 > 
 > Walltime is simply the length of time, usually measured in seconds that a program takes to run or to execute its assigned tasks. 
 >
@@ -76,7 +70,7 @@ There are a number of key terms in computing when it comes to understanding perf
 >
 {: .callout}
 
-> ### CPUH
+> ## CPUH
 >
 > CPU hours is the processor time needed to complete a task, i.e. the amount of computing work done. 
 >
@@ -89,20 +83,19 @@ There are a number of key terms in computing when it comes to understanding perf
 > In the following example, assume that you are utilising all the available core in a node. Calculate the CPU hours requested to run the following job. Each node has 40 cores.
 > 
 > ```
-> Test 1
 > {{ site.sched_comment }} {{ site.sched_flag_nodes }} = 2
 > {{ site.sched_comment }} {{ site.sched_flag_time }} = 05:00:00
 > ```
 > {: .bash}
 > 
-> > ## Solution
-> >
-> > 400 CPUh.
-> > 
+>> ## Solution
+>>
+>> 400 CPUh.
+>> 
 >{: .solution}
 {: .challenge}
 
-The `--time` variable used in the exercise is the amount of CPU hours requested, which will differ from the actual CPU hours the code spent to run.
+The `{{ site.sched_flag_time }}` variable used in the exercise is the amount of CPU hours requested, which will differ from the actual CPU hours the code spent to run.
 
 > ## Requested CPU vs. Actual CPU
 >
@@ -117,12 +110,11 @@ The `--time` variable used in the exercise is the amount of CPU hours requested,
 > ```
 > {: .bash}
 >
-> > 
-> > ## Solution
-> >
-> > 
-> >
-> >{: .solution}
+>> ## Solution
+>>
+>> 
+>>
+>{: .solution}
 {: challenge}
 
 ## How can performance be enhanced?
@@ -130,6 +122,8 @@ The `--time` variable used in the exercise is the amount of CPU hours requested,
 (FIXME) Mention pool of workers, tuning, OpenMP, MPI, GPU and libraries and will refer to them later
 
 ## HPC layout and partitioning
+
+(FIXME) Discussed briefly in index.md, how much detail should we add?
 
 ## Optimisation
 
@@ -142,14 +136,14 @@ The `--time` variable used in the exercise is the amount of CPU hours requested,
 > 3. Optimising the code
 > 4. Having a computer with higher flops
 > 
-> > ## Solution
-> > 1. Yes, the more cores and nodes you have, the more work can be distributed across those cores.
-> > 2. No, increasing simulation walltime and CPUh only increases the duration the code will run for. It does not improve the code performance.
-> > 3. Yes, making the code more efficient by cutting out unnecessary loops and bottlenecks can greatly increase performance.
-> > 4. Yes, the faster the computer, the faster the code can run, however, this may not always be possible logistically.
-> >
-> > As you can see, there are a lot of right answers, however some methods work better than others, and it can entirely depend on the problem you are trying to solve.
-> >
+>> ## Solution
+>> 1. Yes, the more cores and nodes you have, the more work can be distributed across those cores.
+>> 2. No, increasing simulation walltime and CPUh only increases the duration the code will run for. It does not improve the code performance.
+>> 3. Yes, making the code more efficient by cutting out unnecessary loops and bottlenecks can greatly increase performance.
+>> 4. Yes, the faster the computer, the faster the code can run, however, this may not always be possible logistically.
+>>
+>> As you can see, there are a lot of right answers, however some methods work better than others, and it can entirely depend on the problem you are trying to solve.
+>>
 >{: .solution}
 {: .challenge}
 
@@ -165,11 +159,12 @@ If these terms are unfamiliar now, don't worry as we will cover them over the du
 > 4. Use GPUs instead of CPUs
 > 5. Splitting code up into smaller segments
 >
-> > 1. Yes, MPI can enable you to split your code into multiple processes distributed over multiple cores, known as parallel programming.
-> > 2. Yes, like MPI this is also parallel programming, but deals with threads, by splitting a process into multiple threads, each thread using a single core.
-> > 3. Yes, that is their purpose. Different libraries run on different architectures however.
-> > 4. Yes, GPUs are better at handling multiple tasks, whereas a CPU is better running singular tasks quickly.
-> > 5. No, if you have a simulation that needs to be run from start to completion, splitting the code into segments won't be of any benefit and will waste compute resources.
+>> ## Solution
+>> 1. Yes, MPI can enable you to split your code into multiple processes distributed over multiple cores, known as parallel programming.
+>> 2. Yes, like MPI this is also parallel programming, but deals with threads, by splitting a process into multiple threads, each thread using a single core.
+>> 3. Yes, that is their purpose. Different libraries run on different architectures however.
+>> 4. Yes, GPUs are better at handling multiple tasks, whereas a CPU is better running singular tasks quickly.
+>> 5. No, if you have a simulation that needs to be run from start to completion, splitting the code into segments won't be of any benefit and will waste compute resources.
 >{: .solution}
 {: .challenge}
 
