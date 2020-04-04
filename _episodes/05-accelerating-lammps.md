@@ -14,7 +14,17 @@ keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
 ## How can I accelerate LAMMPS performance?
-Well, there are two basic approaches to accelerate LAMMPS performance. One is to use better algorithm, and the other one is to device 
+Well, there are two basic approaches to speed-up LAMMPS. One is to use better algorithm for certain types of calculation, and the other one is to use highly optimized codes via various "accelerator packages" deviced for hardware specific platforms. 
+
+One popular example of first type of approach is to use the Wolf summation method instead of the Ewald summation method for calcultaing long range Coulomb interaction effectively using a short-range potential. Similarly there are a few FFT schemes are offered by LAMMPS and a user has to make a trade-off between accuracy and performance depending on his computational needs. The current tutorial is not aimed to discuss such types of algorithm based speed-up of LAMMPS rather we'll be discussing mainly on a few accelerator packages that is used to extract the most out of an available hardware of a HPC system.
+
+There are five accelerator packages currently offered by LAMMPS:
+  * OPT
+  * USER-OMP
+  * USER-INTEL
+  * GPU
+  * Kokkos
+  
 ## Accelerating LAMMPS using KOKKOS
 
 ## Knowing your hardware
