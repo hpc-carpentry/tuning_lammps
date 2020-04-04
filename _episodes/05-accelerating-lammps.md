@@ -24,7 +24,9 @@ There are five accelerator packages currently offered by LAMMPS:
   * USER-INTEL
   * GPU
   * Kokkos
-  
+ 
+The next question that comes to mind is that which hardwares are supported by these packages? 
+ 
 ## Accelerating LAMMPS using KOKKOS
 
 ## Knowing your hardware
