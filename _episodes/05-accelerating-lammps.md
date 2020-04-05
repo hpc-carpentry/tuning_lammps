@@ -18,7 +18,7 @@ Well, there are two basic approaches to speed-up LAMMPS. One is to use better al
 
 One popular example of first type of approach is to use the Wolf summation method instead of the Ewald summation method for calcultaing long range Coulomb interaction effectively using a short-range potential. Similarly there are a few FFT schemes are offered by LAMMPS and a user has to make a trade-off between accuracy and performance depending on his computational needs. The current tutorial is not aimed to discuss such types of algorithm based speed-up of LAMMPS rather we'll be discussing mainly on a few accelerator packages that is used to extract the most out of an available hardware of a HPC system.
 
-There are five accelerator packages currently offered by LAMMPS. These are OPT, USER-INTEL, USER-OMP, GPU and Kokkos. Specialized codes contained in these packages help LAMMPS to perform well on modern HPC platforms which could have different hardware partitions. Therefore, the very next question that arises that what are these hardwares that are supported by these packages?
+There are five accelerator packages currently offered by LAMMPS. These are **OPT**, **USER-INTEL**, **USER-OMP**, **GPU** and **Kokkos**. Specialized codes contained in these packages help LAMMPS to perform well on modern HPC platforms which could have different hardware partitions. Therefore, the very next question that arises that what are these hardwares that are supported by these packages?
 
 > ## Supported hardwares
 >
@@ -29,6 +29,15 @@ There are five accelerator packages currently offered by LAMMPS. These are OPT, 
 > | NVIDIA GPU | GPU, Kokkos |
 >
 {: .callout}
+
+Within the limited scope of this tutorial, this is almost impossible to discuss all of the above packages here. The key point to understand here is that the acceleration is achieved by multithreading either through OpenMP or GPU. The ONLY accelerator package that supports both kinds of hardwares is **Kokkos**. Kokkos is a templated C++ library developed in Sandia National Laboratory and this helps to create an abstraction that allows a *single implementation* of a software application on different kinds of hardwraes by simply mapping C++ kernel onto various backend languages. 
+
+Before discussing on Kokkos, we'll touch a few key points about other accelerator packages to give you a feel about what these packages offer and in many cases these pakckages outperform Kokkos in its current form! 
+
+> ## Kokkos: a developing library
+>
+> Most of the accelerator packages offered by LAMMPS may outperform Kokkos. Can you think of then why should we bother to learn using Kokkos?
+{: .challenge}
 
 
 ## Accelerating LAMMPS using KOKKOS
