@@ -41,11 +41,14 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## OPT package
 >
-> > * In this case, the acceleration is mainly acheived by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
->
+> > * Acceleration, in this case, is mainly acheived by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
+> >
 > > * This also provides better vectorization operations as compared to its regular CPU version.
+> >
 > > * Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. These are *pair_eam_alloy*, *pair_eam_fs*, *pair_eam*, *pair_lj_charmm_coul_long*, *pair_lj_cut_coul_long*, *pair_lj_cut*, *pair_lj_cut_tip4p_long*, *pair_lj_long_coul_long*, *pair_morse* and *pair_ufm*.
+> >
 > > * This generally offers 5-20% savings on computational cost on most of the machines
+> >
 > > > ## Effect on timing breakdown table
 > > >
 > > > We have discussed earlier that at the end of each run LAMMPS prints a timing breakdown table where it categorises the spent time into several categories like *Pair*, *Bond*, *Kspace*, *Neigh*, *Comm*, *Output*, *Modify*, *Other*. Can you make a justified guess about which of these category could be affected by the use of the *OPT* package?
@@ -53,7 +56,6 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > > > > The *Pair* component will see a reduction in cost since this accelerator package aims to work on the pair styles only.
 > > > {: .solution}
 > > {: .challenge}
->
 {: .callout}
 
 
