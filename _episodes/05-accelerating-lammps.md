@@ -22,8 +22,8 @@ There are five accelerator packages currently offered by LAMMPS. These are OPT, 
 
 > ## Supported hardwares
 >
-> | Hardware | accelarator |
-> | -------- | ----------- |
+> | Hardware | Accelarators |
+> | -------- | ------------ |
 > | Multi-core CPUs | OPT, USER-INTEL, USER-OMP, Kokkos |
 > | Intel Xeon Phi | USER-INTEL, Kokkos |
 > | NVIDIA GPU | GPU, Kokkos |
