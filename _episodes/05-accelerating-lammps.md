@@ -48,7 +48,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > > ## Effect on timing breakdown table
 > > 
 > > We have discussed earlier that at the end of each run LAMMPS prints a timing breakdown table where it categorises the spent time into several categories like *Pair*, *Bond*, *Kspace*, *Neigh*, *Comm*, *Output*, *Modify*, *Other*. Can you make a justified guess about which of these category could be affected by the use of the *OPT* package?
-> > > Solution
+> > > ## Solution
 > > > The *Pair* component will see a reduction in cost since this accelerator package aims to work on the pair styles only.
 > > {: .solution}
 > {: .challenge}
