@@ -18,11 +18,14 @@ Well, there are two basic approaches to speed-up LAMMPS. One is to use better al
 
 One popular example of first type of approach is to use the Wolf summation method instead of the Ewald summation method for calcultaing long range Coulomb interaction effectively using a short-range potential. Similarly there are a few FFT schemes are offered by LAMMPS and a user has to make a trade-off between accuracy and performance depending on his computational needs. The current tutorial is not aimed to discuss such types of algorithm based speed-up of LAMMPS rather we'll be discussing mainly on a few accelerator packages that is used to extract the most out of an available hardware of a HPC system.
 
-There are five accelerator packages currently offered by LAMMPS:
-  * OPT * USER-OMP * USER-INTEL * GPU * Kokkos
- 
-The next question that comes to mind is that which hardwares are supported by these packages? 
- 
+There are five accelerator packages currently offered by LAMMPS. These are OPT, USER-INTEL, USER-OMP, GPU and Kokkos. Specialized codes contained in these packages help LAMMPS to perform well on modern HPC platforms which could have different hardware partitions. Therefore, the very next question that arises that what are these hardwares that are supported by these packages?
+
+> ## Supported hardwares
+>
+> Table
+{: .callout}
+
+
 ## Accelerating LAMMPS using KOKKOS
 
 ## Knowing your hardware
