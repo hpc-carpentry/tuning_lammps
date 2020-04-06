@@ -58,6 +58,56 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > {: .solution}
 {: .challenge}
 
+> ## USER-INTEL package
+>
+> * Acceleration, in this case, is mainly acheived in two different ways. One of them is to use vectorisation on multi-core CPUs and the other one is to offload calculations of neighbour list and non-bonded interactions to Phi co-processors.
+> 
+> * For using offload feature, we need Intel Xeon Phi coprocessors
+>
+> * For using vectorization feature, Intel compiler with version 14.0.1.106 or versions 15.0.2.044 and higher is required on both multi-core CPUs and Phi systems.
+>
+> Following LAMMPS features are supported by this accelerator package:
+> | Pair styles | Bonded styles | Angle style  | Fix styles | Improper style | Dihedral styles | K-space | Integrator |
+> | ----------  | ------------- | ------------ | ---------- | -------------- | --------------- | ------- | ---------- |
+> 
+> * Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. These are ```pair_eam_alloy```, ```pair_eam_fs```, ```pair_eam```, ```pair_lj_charmm_coul_long```, ```pair_lj_cut_coul_long```, ```pair_lj_cut```, ```pair_lj_cut_tip4p_long```, ```pair_lj_long_coul_long```, ```pair_morse``` and ```pair_ufm```.
+> 
+> * This generally offers 5-20% savings on computational cost on most of the machines
+{: .callout}
+
+> ## USER-OMP package
+>
+> * Acceleration, in this case, is mainly acheived by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
+> 
+> * This also provides better vectorization operations as compared to its regular CPU version.
+> 
+> * Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. These are ```pair_eam_alloy```, ```pair_eam_fs```, ```pair_eam```, ```pair_lj_charmm_coul_long```, ```pair_lj_cut_coul_long```, ```pair_lj_cut```, ```pair_lj_cut_tip4p_long```, ```pair_lj_long_coul_long```, ```pair_morse``` and ```pair_ufm```.
+> 
+> * This generally offers 5-20% savings on computational cost on most of the machines
+{: .callout}
+
+> ## GPU package
+>
+> * Acceleration, in this case, is mainly acheived by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
+> 
+> * This also provides better vectorization operations as compared to its regular CPU version.
+> 
+> * Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. These are ```pair_eam_alloy```, ```pair_eam_fs```, ```pair_eam```, ```pair_lj_charmm_coul_long```, ```pair_lj_cut_coul_long```, ```pair_lj_cut```, ```pair_lj_cut_tip4p_long```, ```pair_lj_long_coul_long```, ```pair_morse``` and ```pair_ufm```.
+> 
+> * This generally offers 5-20% savings on computational cost on most of the machines
+{: .callout}
+
+> ## Kokkos package
+>
+> * Acceleration, in this case, is mainly acheived by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
+> 
+> * This also provides better vectorization operations as compared to its regular CPU version.
+> 
+> * Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. These are ```pair_eam_alloy```, ```pair_eam_fs```, ```pair_eam```, ```pair_lj_charmm_coul_long```, ```pair_lj_cut_coul_long```, ```pair_lj_cut```, ```pair_lj_cut_tip4p_long```, ```pair_lj_long_coul_long```, ```pair_morse``` and ```pair_ufm```.
+> 
+> * This generally offers 5-20% savings on computational cost on most of the machines
+{: .callout}
+
 
 ## Accelerating LAMMPS using KOKKOS
 
