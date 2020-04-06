@@ -89,7 +89,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > | sw                    |       |      |        |    |    |     |      |
 > | tersoff               |       |      |        |    |    |     |      |
 > 
-> This packages supports single, double and mixed precision calculations.
+> * This packages supports *single*, *double* and *mixed* precision calculations.
 >
 > * This generally offers ? % savings on computational cost on most of the machines
 {: .callout}
