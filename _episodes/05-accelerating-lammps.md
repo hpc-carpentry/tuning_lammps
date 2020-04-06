@@ -68,9 +68,26 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 >
 > Following LAMMPS features are supported by this accelerator package:
 >
-> | Pair styles | Bonded styles | Angle style  | Fix styles | Improper style | Dihedral styles | K-space | Integrator |
-> | ----------  | ------------- | ------------ | ---------- | -------------- | --------------- | ------- | ---------- |
-> | airebo      |       |      |        |    |    |     |      |
+> | Pair styles           | Bonded styles | Angle style  | Fix styles | Improper style | Dihedral styles | K-space  | Integrator |
+> | -------------------   | ------------- | ------------ | ---------- | -------------- | --------------- | -------  | ---------- |
+> | airebo                |  fene         | charmm       | nve        | cvff           | charmm          | pppm     | verlet_lrt |
+> | airebo_morse          |  harmonic     | harmonic     | nvt        | harmonic       | fourier         | pppm_disp|            |
+> | buck_coul_cut         |               |              | npt        |                | harmonic        |     |      |
+> | buck_coul_long        |               |              | nh         |                | opls            |     |      |
+> | buck                  |               |              | nve_asphere|    |    |     |      |
+> | dpd                   |               |              | nvt_sllod  |    |    |     |      |
+> | eam_alloy             |       |      |        |    |    |     |      |
+> | eam_fs                |       |      |        |    |    |     |      |
+> | eam                   |       |      |        |    |    |     |      |
+> | gayberne              |       |      |        |    |    |     |      |
+> | lj_charmm_coul_charmm |       |      |        |    |    |     |      |
+> | lj_charmm_coul_long   |       |      |        |    |    |     |      |
+> | lj_cut_coul_long      |       |      |        |    |    |     |      |
+> | lj_cut                |       |      |        |    |    |     |      |
+> | lj_long_coul_long     |       |      |        |    |    |     |      |
+> | rebo                  |       |      |        |    |    |     |      |
+> | sw                    |       |      |        |    |    |     |      |
+> | tersoff               |       |      |        |    |    |     |      |
 > 
 > * Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. These are ```pair_eam_alloy```, ```pair_eam_fs```, ```pair_eam```, ```pair_lj_charmm_coul_long```, ```pair_lj_cut_coul_long```, ```pair_lj_cut```, ```pair_lj_cut_tip4p_long```, ```pair_lj_long_coul_long```, ```pair_morse``` and ```pair_ufm```.
 > 
