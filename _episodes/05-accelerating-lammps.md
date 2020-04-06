@@ -89,9 +89,9 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > | sw                    |       |      |        |    |    |     |      |
 > | tersoff               |       |      |        |    |    |     |      |
 > 
-> * Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. These are ```pair_eam_alloy```, ```pair_eam_fs```, ```pair_eam```, ```pair_lj_charmm_coul_long```, ```pair_lj_cut_coul_long```, ```pair_lj_cut```, ```pair_lj_cut_tip4p_long```, ```pair_lj_long_coul_long```, ```pair_morse``` and ```pair_ufm```.
-> 
-> * This generally offers 5-20% savings on computational cost on most of the machines
+> This packages supports single, double and mixed precision calculations.
+>
+> * This generally offers ? % savings on computational cost on most of the machines
 {: .callout}
 
 > ## USER-OMP package
