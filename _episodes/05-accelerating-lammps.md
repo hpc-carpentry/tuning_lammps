@@ -41,7 +41,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## OPT package
 >
-> * Acceleration, in this case, is mainly acheived by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
+> * Acceleration, in this case, is mainly achieved by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
 > 
 > * This also provides better vectorization operations as compared to its regular CPU version.
 > 
@@ -60,13 +60,14 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## USER-INTEL package
 >
-> * Acceleration, in this case, is mainly acheived in two different ways. One of them is to use vectorisation on multi-core CPUs and the other one is to offload calculations of neighbour list and non-bonded interactions to Phi co-processors.
+> * Acceleration, in this case, is mainly achieved in two different ways. One of them is to use vectorisation on multi-core CPUs and the other one is to offload calculations of neighbour list and non-bonded interactions to Phi co-processors.
 > 
 > * For using offload feature, we need Intel Xeon Phi coprocessors
 >
 > * For using vectorization feature, Intel compiler with version 14.0.1.106 or versions 15.0.2.044 and higher is required on both multi-core CPUs and Phi systems.
 >
 > Following LAMMPS features are supported by this accelerator package:
+>
 > | Pair styles | Bonded styles | Angle style  | Fix styles | Improper style | Dihedral styles | K-space | Integrator |
 > | ----------  | ------------- | ------------ | ---------- | -------------- | --------------- | ------- | ---------- |
 > 
@@ -77,7 +78,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## USER-OMP package
 >
-> * Acceleration, in this case, is mainly acheived by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
+> * Acceleration, in this case, is mainly achieved by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
 > 
 > * This also provides better vectorization operations as compared to its regular CPU version.
 > 
@@ -88,7 +89,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## GPU package
 >
-> * Acceleration, in this case, is mainly acheived by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
+> * Acceleration, in this case, is mainly achieved by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
 > 
 > * This also provides better vectorization operations as compared to its regular CPU version.
 > 
@@ -99,7 +100,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## Kokkos package
 >
-> * Acceleration, in this case, is mainly acheived by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
+> * Acceleration, in this case, is mainly achieved by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
 > 
 > * This also provides better vectorization operations as compared to its regular CPU version.
 > 
