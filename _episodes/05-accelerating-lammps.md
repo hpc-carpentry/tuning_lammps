@@ -37,7 +37,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > ## Kokkos: a developing library
 >
 > Most of the accelerator packages offered by LAMMPS may outperform Kokkos. Can you think of then why should we bother to learn using Kokkos?
-{: .challenge}
+{: .discussion}
 
 > ## OPT package
 >
@@ -56,7 +56,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > > ## Solution
 > > The *Pair* component will see a reduction in cost since this accelerator package aims to work on the pair styles only.
 > {: .solution}
-{: .challenge}
+{: .discussion}
 
 > ## USER-INTEL package
 >
@@ -91,7 +91,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > 
 > * This packages supports *single*, *double* and *mixed* precision calculations.
 >
-> * This generally offers ? % savings on computational cost on most of the machines
+> * Performance enhancemnt using this package depends on many considerations like the hardware that is available to you, various styles that you are using in the input, size of your problem, and precision. For example, if you are using a pair style (say, reax) for which this is not implemented, its obvious that you are not going to have a performance gain for the *Pair* part of the calculation. Now, if majority of the computation time is coming from the *Pair* part then you are in trouble. If you would like to know how much speedup you can achieve using USER-INTEL, you can look [here](https://lammps.sandia.gov/doc/Speed_intel.html) 
 {: .callout}
 
 > ## USER-OMP package
