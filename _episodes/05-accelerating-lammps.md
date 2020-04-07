@@ -105,13 +105,18 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > |coul_long_soft|coul_msm|coul_wolf|dpd|dpd_tstat|eam_alloy|
 > |eam_cd|eam_fs|eam|edip|eim|gauss_cut|
 > |gauss|gayberne|gran_hertz_history|gran_hooke_history|gran_hooke|hbond_dreiding_lj|
-> |hbond_dreiding_morse|lj96_cut|lj_charmm_coul_charmm_implicit|lj_charmm_coul_charmm|lj_charmm_coul_long|
-> |lj_charmm_coul_long_soft|lj_charmm_coul_msm|lj_class2_coul_cut|lj_class2_coul_long|lj_class2|lj_cubic|lj_cut_coul_cut|
+> |hbond_dreiding_morse|lj96_cut|lj_charmm_coul_charmm_implicit|lj_charmm_coul_charmm|lj_charmm_coul_long|lj_charmm_coul_long_soft|
+> ||lj_charmm_coul_msm|lj_class2_coul_cut|lj_class2_coul_long|lj_class2|lj_cubic|lj_cut_coul_cut|
 > |lj_cut_coul_cut_soft|lj_cut_coul_debye|lj_cut_coul_dsf|lj_cut_coul_long|lj_cut_coul_long_soft|lj_cut_coul_msm|
 > |lj_cut_coul_wolf|lj_cut_dipole_cut|lj_cut|lj_cut_soft|lj_cut_thole_long|lj_cut_tip4p_cut|
 > |lj_cut_tip4p_long|lj_cut_tip4p_long_soft|lj_expand|lj_gromacs_coul_gromacs|lj_gromacs|lj_long_coul_long|
 > |lj_long_tip4p_long|lj_sdk_coul_long|lj_sdk_coul_msm|lj_sdk|lj_sf_dipole_sf|lj_smooth_linear|
-> 
+> |lj_smooth_linear|lj_smooth|lubricate|lubricate_poly|meam_spline|morse|
+> |morse_smooth_linear|nm_cut_coul_cut|nm_cut_coul_long|nm_cut|peri_lps|peri_pmb|
+> |reaxc|rebo|resquared|soft|sw|table|
+> |tersoff_mod_c|tersoff_mod|tersoff|tersoff_table|tersoff_zbl|tip4p_cut|
+> |tip4p_long|tip4p_long_soft|umf|vashishta|vashishta_table|yukawa_colloid|
+> |yukawa|zbl| | | | |
 > 
 > * USER-OMP package is mainly aimed to offer
 > 
