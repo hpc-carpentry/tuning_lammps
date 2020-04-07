@@ -98,14 +98,17 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > 
 > | Pair styles ||||||||
 > |--------------------|
-> |adp|agni|airebo_morse|airbo|beck|born_coul_long|born_coul_msm|
-> |born_coul_wolf|born|brownian|brownian_poly|buck_coul_cut|buck_coul_long|buck_coul_msm|
-> |buck_long_coul_long|buck|colloid|comb|coul_cut|coul_cut_soft|coul_debye|
-> |coul_diel|coul_dsf|coul_long|coul_long_soft|coul_msm|coul_wolf|dpd|
-> |dpd_tstat|eam_alloy|eam_cd|eam_fs|eam|edip|eim|gauss_cut|
-> |gauss|gayberne|gran_hertz_history|gran_hooke_history|gran_hooke|hbond_dreiding_lj|hbond_dreiding_morse|
-> |lj96_cut|lj_charmm_coul_charmm_implicit|lj_charmm_coul_charmm|lj_charmm_coul_long|lj_charmm_coul_long_soft|lj_charmm_coul_msm|lj_class2_coul_cut|
-> |lj_class2_coul_long|lj_class2|lj_cubic|lj_cut_coul_cut|lj_cut_coul_cut_soft|lj_cut_coul_debye|lj_cut_coul_dsf|
+> |adp|agni|airebo_morse|airbo|beck|born_coul_long|
+> |born_coul_msm|born_coul_wolf|born|brownian|brownian_poly|buck_coul_cut|
+> |buck_coul_long|buck_coul_msm|buck_long_coul_long|buck|colloid|comb|
+> |coul_cut|coul_cut_soft|coul_debye|coul_diel|coul_dsf|coul_long|
+> |coul_long_soft|coul_msm|coul_wolf|dpd|dpd_tstat|eam_alloy|
+> |eam_cd|eam_fs|eam|edip|eim|gauss_cut|
+> |gauss|gayberne|gran_hertz_history|gran_hooke_history|gran_hooke|hbond_dreiding_lj|
+> |hbond_dreiding_morse|lj96_cut|lj_charmm_coul_charmm_implicit|lj_charmm_coul_charmm|lj_charmm_coul_long|
+> |lj_charmm_coul_long_soft|lj_charmm_coul_msm|lj_class2_coul_cut|lj_class2_coul_long|lj_class2|lj_cubic|
+> |lj_cut_coul_cut|lj_cut_coul_cut_soft|lj_cut_coul_debye|lj_cut_coul_dsf|lj_cut_coul_long|lj_cut_coul_long_soft|
+> 
 >
 > * USER-OMP package is mainly aimed to offer
 > 
