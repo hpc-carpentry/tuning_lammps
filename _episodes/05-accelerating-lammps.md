@@ -96,7 +96,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## USER-OMP package
 >
-> | Pair styles |
+> | Pair styles ||
 > | ----------- |
 > | lj | eam |
 > 
