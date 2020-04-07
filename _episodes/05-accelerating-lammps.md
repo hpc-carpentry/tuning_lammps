@@ -96,10 +96,11 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## USER-OMP package
 > 
-> | Pair style  |||||||
-> |-------------------|
-> |adp|agni|airebo_morse|airbo|beck|born_coul_long|born_coul_msm|
-> |born_coul_wolf|born|brownian|brownian_poly|buck_coul_cut|buck_coul_long|buck_coul_msm|
+> | Pair styles ||||||||
+> |--------------------|
+> |adp|agni|airebo_morse|airbo|beck|born_coul_long|born_coul_msm|born_coul_wolf|
+> |born|brownian|brownian_poly|buck_coul_cut|buck_coul_long|buck_coul_msm|buck_long_coul_long|buck|
+> |colloid|comb|coul_cut|coul_cut_soft|coul_debye|coul_diel|coul_dsf|coul_long|
 >
 > * USER-OMP package is mainly aimed to offer
 > 
