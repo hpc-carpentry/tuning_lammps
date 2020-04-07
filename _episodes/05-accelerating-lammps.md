@@ -103,7 +103,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 >
 > A list of functionalities enabled with this packages (as of 3Mar20 version) is given below.
 >
-> | Pair styles up ||||||||
+> | Pair styles ||||||||
 > |--------------------|
 > |adp|agni|airebo_morse|airbo|beck|born_coul_long|
 > |born_coul_msm|born_coul_wolf|born|brownian|brownian_poly|buck_coul_cut|
@@ -157,9 +157,15 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > |-------------------|
 > |pppm_cg|pppm_disp|pppm_disp_tip4p|pppm|pppm_tip4p||
 >
->
-> 
+> Generally, one can expect 5-20% performance when using this package either in serial or parallel.
+> The optimal number of OpenMP threads to use is to be always tested for a problem. But, this gives better performance when used for less number of threads, generally 2-4.
+> Remember that MPI implementation in LAMMPS is so robust that you may always expect this to be more effective than using OpenMP on multi-core CPUs.
 {: .callout}
+
+> ## Why MPI+OpenMP is preferred over pure MPI sometimes?
+> 
+> When you use multiple nodes for your job, you might experience communication overhead. In such case using a mix of MPI and OpenMP threads often may result in better performance than a pure MPI job
+{: .discussion}
 
 > ## GPU package
 >
