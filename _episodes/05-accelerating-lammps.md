@@ -106,7 +106,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > |eam_cd|eam_fs|eam|edip|eim|gauss_cut|
 > |gauss|gayberne|gran_hertz_history|gran_hooke_history|gran_hooke|hbond_dreiding_lj|
 > |hbond_dreiding_morse|lj96_cut|lj_charmm_coul_charmm_implicit|lj_charmm_coul_charmm|lj_charmm_coul_long|lj_charmm_coul_long_soft|
-> ||lj_charmm_coul_msm|lj_class2_coul_cut|lj_class2_coul_long|lj_class2|lj_cubic|lj_cut_coul_cut|
+> |lj_charmm_coul_msm|lj_class2_coul_cut|lj_class2_coul_long|lj_class2|lj_cubic|lj_cut_coul_cut|
 > |lj_cut_coul_cut_soft|lj_cut_coul_debye|lj_cut_coul_dsf|lj_cut_coul_long|lj_cut_coul_long_soft|lj_cut_coul_msm|
 > |lj_cut_coul_wolf|lj_cut_dipole_cut|lj_cut|lj_cut_soft|lj_cut_thole_long|lj_cut_tip4p_cut|
 > |lj_cut_tip4p_long|lj_cut_tip4p_long_soft|lj_expand|lj_gromacs_coul_gromacs|lj_gromacs|lj_long_coul_long|
