@@ -102,7 +102,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > * Considerably a big sub-set of the LAMMPS routines can be used with this accelerator.
 >
 > A list of functionalities enabled with this packages (as of 3Mar20 version) is given below.
-> | Pair styles ||||||||
+> | Pair styles up ||||||||
 > |--------------------|
 > |adp|agni|airebo_morse|airbo|beck|born_coul_long|
 > |born_coul_msm|born_coul_wolf|born|brownian|brownian_poly|buck_coul_cut|
@@ -150,7 +150,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > |nph|nph_sphere|npt_asphere|npt|npt_sphere|nve|
 > |nve_sphere|nvt_asphere|nvt|nvt_sllod|nvt_sphere|peri_neigh|
 > |qeq_comb|qeq_reax|rigid_nh|rigid_nph|rigid_npt|rigid_nve|
-> |rigid_nvt|rigid|rigid_small|||
+> |rigid_nvt|rigid|rigid_small||||
 > 
 > |Kspace styles ||||||
 > |-------------------|
