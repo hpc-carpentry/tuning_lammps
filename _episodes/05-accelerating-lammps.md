@@ -41,7 +41,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## OPT package
 >
-> * Acceleration, in this case, is mainly achieved by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
+> * Acceleration, in this case, is mainly achieved by using templeted C++ library to reduce computational overheads due to `if` tests and other conditional code blocks.
 > 
 > * This also provides better vectorization operations as compared to its regular CPU version.
 > 
@@ -95,12 +95,13 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 {: .callout}
 
 > ## USER-OMP package
->
-> | Pair styles ||
-> | ----------- |
-> | lj | eam |
 > 
-> * This also provides better vectorization operations as compared to its regular CPU version.
+> | Pair style  |||||||
+> |-------------------|
+> |adp|agni|airebo_morse|airbo|beck|born_coul_long|born_coul_msm|
+> |born_coul_wolf|born|brownian|brownian_poly|buck_coul_cut|buck_coul_long|buck_coul_msm|
+>
+> * USER-OMP package is mainly aimed to offer
 > 
 > * Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. These are ```pair_eam_alloy```, ```pair_eam_fs```, ```pair_eam```, ```pair_lj_charmm_coul_long```, ```pair_lj_cut_coul_long```, ```pair_lj_cut```, ```pair_lj_cut_tip4p_long```, ```pair_lj_long_coul_long```, ```pair_morse``` and ```pair_ufm```.
 > 
