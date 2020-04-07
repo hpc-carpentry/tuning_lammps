@@ -96,7 +96,9 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## USER-OMP package
 >
-> * Acceleration, in this case, is mainly achieved by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
+> | Pair styles |
+> | ----------- |
+> | lj | eam |
 > 
 > * This also provides better vectorization operations as compared to its regular CPU version.
 > 
