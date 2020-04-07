@@ -102,6 +102,7 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > * Considerably a big sub-set of the LAMMPS routines can be used with this accelerator.
 >
 > A list of functionalities enabled with this packages (as of 3Mar20 version) is given below.
+>
 > | Pair styles up ||||||||
 > |--------------------|
 > |adp|agni|airebo_morse|airbo|beck|born_coul_long|
