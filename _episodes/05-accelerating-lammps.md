@@ -96,6 +96,11 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## USER-OMP package
 > 
+> * This accelerator package offers performance gain through otimisation and multi-threading via OpenMP interface. 
+> * In order to make the multi-threading functional, you need multi-core CPUs and a compiler that supports multithreading.
+> * If your compiler does not support multithreading then also you can use it as an optimized serial code.
+> * Considerably a big sub-set of the LAMMPS routines can be used with this accelerator.
+> A list of functionalities enabled with this packages (as of 3Mar20 version) is given below.
 > | Pair styles ||||||||
 > |--------------------|
 > |adp|agni|airebo_morse|airbo|beck|born_coul_long|
@@ -118,11 +123,40 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > |tip4p_long|tip4p_long_soft|umf|vashishta|vashishta_table|yukawa_colloid|
 > |yukawa|zbl| | | | |
 > 
-> * USER-OMP package is mainly aimed to offer
+> |Bond styles ||||||
+> |-----------------|
+> |class2|fene_expand|fene|gromos|harmonic|harmonic_shift_cut|
+> |harmonic_shift|morse|nonlinear|quartic|table||
+>
+> |Angle styles  ||||||
+> |-------------------|
+> |charmm|class2|cosine_delta|cosine|cosine_periodic|cosine_shift_exp|
+> |cosine_shift|cosine_squared|dipole|fourier|fourier_simple|harmonic|
+> |quartic|sdk|table||||
+>
+> |Improper styles. |||||||
+> |-----------------------|
+> |class2|cossq|cvff|fourier|harmonic|ring|umbrella|
+>
+> |Dihedral styles ||||||
+> |---------------------|
+> |charmm|class2|cosine_shift_exp|fourier|harmonic|helix|
+> |multi_harmonic|nharmonic|opls|quadratic|table| |
+>
+> |Fix styles |||||||
+> |-----------------|
+> |gravity|neigh_history|nh_asphere|nh|nh_sphere|nph_asphere|
+> |nph|nph_sphere|npt_asphere|npt|npt_sphere|nve|
+> |nve_sphere|nvt_asphere|nvt|nvt_sllod|nvt_sphere|
+> |peri_neigh|qeq_comb|qeq_reax|rigid_nh|rigid_nph|rigid_npt|
+> |rigid_nve|rigid_nvt|rigid|rigid_small|||
 > 
-> * Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. These are ```pair_eam_alloy```, ```pair_eam_fs```, ```pair_eam```, ```pair_lj_charmm_coul_long```, ```pair_lj_cut_coul_long```, ```pair_lj_cut```, ```pair_lj_cut_tip4p_long```, ```pair_lj_long_coul_long```, ```pair_morse``` and ```pair_ufm```.
+> |Kspace styles ||||||
+> |-------------------|
+> |pppm_cg|pppm_disp|pppm_disp_tip4p|pppm|pppm_tip4p||
+>
+>
 > 
-> * This generally offers 5-20% savings on computational cost on most of the machines
 {: .callout}
 
 > ## GPU package
