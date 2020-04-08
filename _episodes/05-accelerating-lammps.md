@@ -102,26 +102,6 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > |------------------------|
 > |verlet_lrt ||||||
 >
-> | Pair styles           | Bonded styles | Angle style  | Fix styles | Improper style | Dihedral styles | K-space  | Integrator |
-> | -------------------   | ------------- | ------------ | ---------- | -------------- | --------------- | -------  | ---------- |
-> | airebo                |  fene         | charmm       | nve        | cvff           | charmm          | pppm     | verlet_lrt |
-> | airebo_morse          |  harmonic     | harmonic     | nvt        | harmonic       | fourier         | pppm_disp|            |
-> | buck_coul_cut         |               |              | npt        |                | harmonic        |     |      |
-> | buck_coul_long        |               |              | nh         |                | opls            |     |      |
-> | buck                  |               |              | nve_asphere|    |    |     |      |
-> | dpd                   |               |              | nvt_sllod  |    |    |     |      |
-> | eam_alloy             |       |      |        |    |    |     |      |
-> | eam_fs                |       |      |        |    |    |     |      |
-> | eam                   |       |      |        |    |    |     |      |
-> | gayberne              |       |      |        |    |    |     |      |
-> | lj_charmm_coul_charmm |       |      |        |    |    |     |      |
-> | lj_charmm_coul_long   |       |      |        |    |    |     |      |
-> | lj_cut_coul_long      |       |      |        |    |    |     |      |
-> | lj_cut                |       |      |        |    |    |     |      |
-> | lj_long_coul_long     |       |      |        |    |    |     |      |
-> | rebo                  |       |      |        |    |    |     |      |
-> | sw                    |       |      |        |    |    |     |      |
-> | tersoff               |       |      |        |    |    |     |      |
 > 
 > * This packages supports *single*, *double* and *mixed* precision calculations.
 >
