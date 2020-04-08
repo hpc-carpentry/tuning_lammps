@@ -68,6 +68,40 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 >
 > Following LAMMPS features are supported by this accelerator package:
 >
+> | Pair styles ||||||
+> |------------------|
+> |airebo|airebo_morse|buck_coul_cut|buck_coul_long|buck|dpd|
+> |eam_alloy|eam_fs|eam|gayberne|lj_charmm_coul_charmm|lj_charmm_coul_long|
+> |lj_cut_coul_long|lj_cut|lj_long_coul_long|rebo|sw|tersoff|
+>
+> | Bond styles ||||||
+> |------------------|
+> |fene|harmonic|||| |
+>
+> |Angle styles ||||||
+> |------------------|
+> |charmm|harmonic|||||
+>
+> |Improper styles ||||||
+> |---------------------|
+> |cvff|harmonic||||||
+>
+> |Dihedral styles ||||||
+> |---------------------|
+> |charmm|fourier|harmonic|opls|
+>
+> |Fix styles ||||||
+> |----------------|
+> |nve|nvt|npt|nh|nve_asphere|nvt_sllod|
+>
+> |K-space styles||||||
+> |-------------------|
+> |pppm|pppm_disp|
+>
+> |Integrtator styles ||||||
+> |------------------------|
+> |verlet_lrt ||||||
+>
 > | Pair styles           | Bonded styles | Angle style  | Fix styles | Improper style | Dihedral styles | K-space  | Integrator |
 > | -------------------   | ------------- | ------------ | ---------- | -------------- | --------------- | -------  | ---------- |
 > | airebo                |  fene         | charmm       | nve        | cvff           | charmm          | pppm     | verlet_lrt |
