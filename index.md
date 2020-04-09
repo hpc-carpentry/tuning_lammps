@@ -41,6 +41,13 @@ On any machine, with different components, they would work differently and there
 > ## Note
 > 
 > - This is the draft HPC Carpentry release. Comments and feedback are welcome.
+>
+> `{{ site.exec_env_gpu }}`
+> 
+> ```
+> {{ site.exec_env_gpu }}
+> ```
+> {: .bash}
 {: .callout}
 
 > ## Prerequisites
