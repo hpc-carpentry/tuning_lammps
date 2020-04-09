@@ -20,17 +20,6 @@ An HPC is a complex computing platform that has several hardware components and 
 
 In recent days, we talk about multi-core CPUs and graphical processing units (GPU). Naturally, the muti-core CPUs have many processing units that can work in parallel. Similarly, GPUs have many processing units as well but they work differenty than a CPU. If you look at the infrastructure of a modern HPC, you would find that it is a heterogeneous computing system since its computing workforce consists of several components.  Some of these components are built using multi-core CPUs only, others use GPUs, and others are made up using Xeon-Phi components, and there are many more.
 
-> ## Test
-> {{ site.exec_env_kokkos }}
-> 
-> `{{ site.exec_env_gpu }}`
-> 
-> ```
-> {{ site.exec_env_gpu }}
-> ```
-> {: .bash}
-{: .callout}
-
 # Workforces on a HPC
 HPC is a complex computing platform that has several hardware components and we often talk about its central processing units (cpu), primary and secondary memories and various interconnects. The processing units are the ones that actually do the calculations and if you study the evaluation of these processing units you would be quite amazed to see how many different types/generations they have. The most basic cpu has only one core. This means that it can do only one work at a time.
 
@@ -41,13 +30,7 @@ On any machine, with different components, they would work differently and there
 > ## Note
 > 
 > - This is the draft HPC Carpentry release. Comments and feedback are welcome.
->
-> `{{ site.exec_env_gpu }}`
 > 
-> ```
-> {{ site.exec_env_gpu }}
-> ```
-> {: .bash}
 {: .callout}
 
 > ## Prerequisites
