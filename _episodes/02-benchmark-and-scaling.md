@@ -252,13 +252,15 @@ This is very useful in the sense that it helps you to identify the performance b
   
 ## Scaling
 
+
 Scaling in computation is the effective use of resources. To explain this in more detail, lets head back to our chefs again from the previous episode
 
 Let us assume that they are all bound by secrecy, and are not allowed to reveal to you what their craft is, pastry, meat, fish, soup, etc. You have to find out what their specialities are, what do you do? Do a test run and assign a chef to each course. Having a worker set to each task is all well and good, but there are certain combinations which work and some which do not, you might get away with your starter chef preparing a fish course, or your lamb chef switching to cook beef and vice versa, but you wouldn't put your pastry chef in charge of the main meat dish, you leave that to someone more qualified and better suited to the job. Eventually after a few test meals, you find out the best combination and you apply that to all your future meals.
 
 Scaling in computing works in a similar way, thankfully not to that level of detail where one specific core is suited to one specific task, but finding the best combination is important and can hugely impact your code's performance. As ever with enhancing performance, you may have the resources, but the effective use of the resources is where the challenge lies. Having each chef cooking their specialised dishes would be good scaling, an effective use of your resources, but poor scaling is having your pastry chef doing the main dish, which is an ineffective use of resources.
 
-> ## Plotting performacne and number of cores
+
+> ## Plotting performanne and number of cores
 > 
 > Use the code template below to analyse how performance changes based on the setup (FIXME)
 > 
@@ -269,11 +271,11 @@ Scaling in computing works in a similar way, thankfully not to that level of det
 >
 {: .challenge}
 
-### How to perform a scaling analysis
+## How to perform a scaling analysis
 
 (FIXME)
 
-### Scaling data for LAMMPS run
+## Scaling data for LAMMPS run
 
 (FIXME)
 
@@ -281,29 +283,7 @@ Scaling in computing works in a similar way, thankfully not to that level of det
 >
 > Using the data given, run a simple LJ run for LAMMPS and perform a scaling analysis
 >
-> What is the speecup of the output?
->
-{: .challenge}
-
-> ## Wasting resources
-> 
-> There are many factors in getting the "optimal" performance, which is dependent on the system you are dealing with. Take the code below as an example (or use the code we had in the previous excrcise??).
->
-> ```
-> code
-> ```
-> {: .bash}
->
-> Which of this would be the best option to speed up performance?
-> 
-> 1. 
-> 2. 
-> 3. 
-> > ## Solution
-> > 
-> > 1. 
-> > 2. 
-> {: .solution}
+> What is the speedup of the output?
 {: .challenge}
 
 {% include links.md %}

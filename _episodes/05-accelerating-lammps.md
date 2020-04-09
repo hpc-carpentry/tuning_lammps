@@ -230,46 +230,20 @@ But to obtain the Kokkos accelartion, LAMMPS needs to be built using Kokkos for 
 
 The list of LAMMPS features that is supported by Kokkos is given below:
 
-* Atom styles:
-    * angle
-    * atomic
-    * bond
-    * charge
-    * full
-    * molecular
-* Pair styles:
-    * buck/coul/cut
-    * buck/coul/long
-    * etc.
-    * etc.
-* Fix styles:
-    * deform
-    * langevin
-    * momentum
-    * nph
-    * npt
-    * nve
-    * nvt
-    * qeq/relax
-    * reaxc/bonds
-    * reaxc/species
-    * setforce
-    * wall/reflect
-* Compute style:
-    * temp
-* Bond styles:
-    * fene
-    * harmonic
-* Angle styles:
-    * charmm
-    * harmonic
-* Dihedral styles:
-    * charmm
-    * opls
-* Improper style:
-    * harmonic
-* K-space style:
-    * pppm
+| Atom Styles | Pair Styles  | Fix Styles  | Compute Style | Bond Styles | Angle Styles | Dihedral Styles | Improper Styles | K-space Styles |
+|:----------- |:------------ |:----------- |:------------- |:----------- |:------------ |:--------------- |:--------------- |:-------------- |
+| Angle       |Buck/coul/cut | Deform      | Temp          | Fene        | Charm        | Charm           | Harmonic        | Pppm           |
+| Atomic      |Buck/coul/long| Langevin    |               | Harmonic    | Harmonic     | Opls            |                 |                |
+| Bond        |Etc           | Momentum    |               |             |              |                 |                 |                |
+| Charge      |Etc           | Nph         |               |             |              |                 |                 |                |
+| Full        |              | Npt         |               |             |              |                 |                 |                |
+| Molecular   |              | Nve         |               |             |              |                 |                 |                |
+|             |              | Nvt         |               |             |              |                 |                 |                |
+|             |              | Qeq/Relax   |               |             |              |                 |                 |                |
+|             |              | Reaxc/bonds |               |             |              |                 |                 |                |
+|             |              |Reaxc/species|               |             |              |                 |                 |                |
+|             |              | Setforce    |               |             |              |                 |                 |                |
+|             |              | Wall/reflect|               |             |              |                 |                 |                |
 
 > ## LAMMPS hardware compatibility
 > Which of these hardwares is LAMMPS compatible on?
