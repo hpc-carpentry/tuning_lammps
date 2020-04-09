@@ -37,11 +37,9 @@ keypoints:
 
 ## Scaling
 
-Good scaling vs poor scaling. How to choose no. of nodes, preventing waste of resources.
-
 (FIXME)
 
-> ## Plotting performacne and number of cores
+> ## Plotting performanne and number of cores
 > 
 > Use the code template below to analyse how performance changes based on the setup (FIXME)
 > 
@@ -52,11 +50,11 @@ Good scaling vs poor scaling. How to choose no. of nodes, preventing waste of re
 >
 {: .challenge}
 
-### How to perform a scaling analysis
+## How to perform a scaling analysis
 
 (FIXME)
 
-### Scaling data for LAMMPS run
+## Scaling data for LAMMPS run
 
 (FIXME)
 
@@ -64,29 +62,7 @@ Good scaling vs poor scaling. How to choose no. of nodes, preventing waste of re
 >
 > Using the data given, run a simple LJ run for LAMMPS and perform a scaling analysis
 >
-> What is the speecup of the output?
->
-{: .challenge}
-
-> ## Wasting resources
-> 
-> There are many factors in getting the "optimal" performance, which is dependent on the system you are dealing with. Take the code below as an example (or use the code we had in the previous excrcise??).
->
-> ```
-> code
-> ```
-> {: .bash}
->
-> Which of this would be the best option to speed up performance?
-> 
-> 1. 
-> 2. 
-> 3. 
-> > ## Solution
-> > 
-> > 1. 
-> > 2. 
-> {: .solution}
+> What is the speedup of the output?
 {: .challenge}
 
 {% include links.md %}

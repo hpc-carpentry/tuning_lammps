@@ -60,6 +60,32 @@ lc_post_survey: "https://www.surveymonkey.com/r/lcpostworkshopsurvey?workshop_id
 instructor_pre_survey: "https://www.surveymonkey.com/r/instructor_training_pre_survey?workshop_id="
 instructor_post_survey: "https://www.surveymonkey.com/r/instructor_training_post_survey?workshop_id="
 
+# Workshop specific values
+#########################################
+# 
+
+host_name: "Jureca"
+#host_login: "kay.ichec.ie"
+host_location: "JSC, Julich Supercomputing Centre"
+#host_homedir: "/ichec/home/course01"  # watch out due to course accounts
+host_prompt: "[user@laptop ~]$"
+sched_name: SLURM
+sched_submit: "sbatch"
+sched_submit_options: "-A course01" # check
+sched_flag_time: "--time "
+sched_flag_node: "--nodes "
+sched_status: "sstat"
+sched_flag_user: "-u yourUsername"
+sched_del: "scancel"
+sched_interactive: "srun --pty /bin/bash -i"
+sched_comment: "#SBATCH"
+sched_flag_name: "-N" # EDITME
+sched_hist: "" # EDITME
+sched_flag_histdetail: "" # EDITME 
+exec_env_kokkos: "module use /usr/local/software/jureca/OtherStages module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
+exec_env_gpu: " module use /usr/local/software/jureca/OtherStages && module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-cuda"
+run_openmp: "srun"
+run_mpi: "mpirun -n "
 
 # Start time in minutes (0 to be clock-independent, 540 to show a start at 09:00 am).
 start_time: 0
