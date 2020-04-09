@@ -28,7 +28,7 @@ In recent days, we talk about multi-core CPUs and graphical processing units (GP
 > ```
 > {{ site.exec_env_gpu }}
 > ```
-> {: bash}
+> {: .bash}
 {: .callout}
 
 # Workforces on a HPC
