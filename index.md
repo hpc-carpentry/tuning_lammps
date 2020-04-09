@@ -25,7 +25,10 @@ In recent days, we talk about multi-core CPUs and graphical processing units (GP
 > 
 > `{{ site.exec_env_gpu }}`
 > 
+> ```
 > {{ site.exec_env_gpu }}
+> ```
+> {: bash}
 {: .callout}
 
 # Workforces on a HPC
