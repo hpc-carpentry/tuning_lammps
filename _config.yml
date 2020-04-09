@@ -84,11 +84,11 @@ sched_hist: "" # EDITME
 sched_flag_histdetail: "" # EDITME 
 exec_env_kokkos: > 
   module use /usr/local/software/jureca/OtherStages
-  
+  \n
   module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos
 exec_env_gpu: > 
   module use /usr/local/software/jureca/OtherStages
-  
+  \n
   module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-cuda
 module_load: "module load LAMMPS/9Jan2020-cuda intel-para/2019a Stages/Devel-2019a"
 module_usage: "module use /usr/local/software/jureca/OtherStages"
