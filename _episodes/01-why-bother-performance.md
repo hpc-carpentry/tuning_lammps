@@ -110,6 +110,12 @@ The `{{ site.sched_flag_time }}` variable used in the exercise is the amount of 
 > ```
 > {: .bash}
 >
+> `{{ site.exec_env_gpu }}`
+> 
+> ```
+> {{ site.exec_env_gpu }}
+> ```
+>
 >> ## Solution
 >>
 >> 
