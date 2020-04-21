@@ -81,19 +81,19 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 >
 > | Bond styles ||||||
 > |------------------|
-> |fene|harmonic|||| |
+> |fene|harmonic| | | | | |
 >
 > |Angle styles ||||||
 > |------------------|
-> |charmm|harmonic|||||
+> |charmm|harmonic| | | | |
 >
 > |Improper styles ||||||
 > |---------------------|
-> |cvff|harmonic||||||
+> |cvff|harmonic| | | | |
 >
 > |Dihedral styles ||||||
 > |---------------------|
-> |charmm|fourier|harmonic|opls|
+> |charmm|fourier|harmonic|opls| | |
 >
 > |Fix styles ||||||
 > |----------------|
@@ -101,11 +101,11 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 >
 > |K-space styles||||||
 > |-------------------|
-> |pppm|pppm_disp|
+> |pppm|pppm_disp| | | |
 >
 > |Integrtator styles ||||||
 > |------------------------|
-> |verlet_lrt ||||||
+> |verlet_lrt | | | | | |
 >
 > 
 > * This packages supports *single*, *double* and *mixed* precision calculations.
@@ -170,11 +170,11 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > |nph|nph_sphere|npt_asphere|npt|npt_sphere|nve|
 > |nve_sphere|nvt_asphere|nvt|nvt_sllod|nvt_sphere|peri_neigh|
 > |qeq_comb|qeq_reax|rigid_nh|rigid_nph|rigid_npt|rigid_nve|
-> |rigid_nvt|rigid|rigid_small||||
+> |rigid_nvt|rigid|rigid_small| | | |
 > 
 > |Kspace styles ||||||
 > |-------------------|
-> |pppm_cg|pppm_disp|pppm_disp_tip4p|pppm|pppm_tip4p||
+> |pppm_cg|pppm_disp|pppm_disp_tip4p|pppm|pppm_tip4p| |
 >
 > Generally, one can expect 5-20% performance when using this package either in serial or parallel.
 > The optimal number of OpenMP threads to use is to be always tested for a problem. But, this gives better performance when used for less number of threads, generally 2-4.
