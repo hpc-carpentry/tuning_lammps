@@ -188,6 +188,22 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 
 > ## GPU package
 >
+> Using GPU package in LAMMPS one can achieve performance gain by coupling GPUs to one or many CPUS. 
+>
+> GPU package in LAMMPS provides supports for both NVIDIA and OpenCL and thus it helps to port GPU acceleration to variety of hardwares. This becomes possible since the codes in GPU packages call the generic GPU libraries present in the lib/gpu folder.
+>
+> Calculations that require access to atomic data like coordinates, velocities, forces may suffer bottlenecks since at every step these data are communicated back and forth between CPUs and GPUs.
+> 
+> In case of GPU packages, computations are shared between CPU and GPU unlike the Kokkos(GPU) package where primary aim is to offload all of the calculations to the GPUs only. For example, asynchronous force calculations like pair vs bond/angle/dihedral/improper can be done simultaneously on GPUs and CPUs respectively. Similarly, for PPPM calculations the charge assignement and the force computations are done on GPUs whereas the FFT calculations that require MPI communications are done on CPUs. Neighbour lists can be built on either CPUs or GPUs. You can control this using specific flags in commandline of your job submission script. Thus GPU package provides a balanced mix of GPU and CPU usage for a particular simulation to achieve a performance gain.
+>
+> Finally, you can do your calculation in single, double or mixed precision using this GPU package.
+>
+> Following routines are supported by the GPU package:
+{: .callout}
+ 
+> ## GPU package
+>
+> LAMMPS uses its GPU package to take advantage of any graphical processors available to it. In general, there exist three traditional ways to accelerate a computation. These are to use a processor with faster clock, doing more work per cycle and hiring more workers (processing units) for 
 > * Acceleration, in this case, is mainly achieved by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
 > 
 > * This also provides better vectorization operations as compared to its regular CPU version.
