@@ -231,11 +231,12 @@ Before starting, things to check for:
 
 > ## How to invoke a package in LAMMPS?
 >
-> In order to use these accelerator packages(OPT, USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to know a specific command called ```package```. You can learn about this command in detail from the [LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
+> This is quite important to learn In order to use these accelerator packages(USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to know a specific command called ```package```. You can learn about this command in detail from the [LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
 >
 > The most general syntax is: ```package style args```
 > > ```style``` describes what kind of package you will be using for your run. There are four different packages available currently (versdion 3Mar20): *gpu*, *intel*, *kokkos* and *omp*.
 > > It's quite obvious that you need to use ```gpu``` *style* for invoking GPU package.This style comes with many *arguments* as listed below:
+> > 
 > > | arguments | | | |
 > > |-----------------|
 > > |neigh|newton|binsize|split|
