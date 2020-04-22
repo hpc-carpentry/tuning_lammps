@@ -86,9 +86,6 @@ sched_flag_histdetail: "" # EDITME
 #exec_env_kokkos: "module use /usr/local/software/jureca/OtherStages module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
 #exec_env_gpu: " module use /usr/local/software/jureca/OtherStages && module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-cuda"
 no_edit: "module use /usr/local/software/jureca/OtherStages module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
-pipes_newline: |\n
-..module use /usr/local/software/jureca/OtherStages \n
-..module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos \n
 single_quotes: 'module use /usr/local/software/jureca/OtherStages \n
 \n
 module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos'
