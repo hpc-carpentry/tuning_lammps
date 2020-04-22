@@ -79,9 +79,9 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > |eam_alloy|eam_fs|eam|gayberne|lj_charmm_coul_charmm|lj_charmm_coul_long|
 > |lj_cut_coul_long|lj_cut|lj_long_coul_long|rebo|sw|tersoff|
 >
-> | Bond styles ||||||
+> | Bond styles | | | | | |
 > |------------------|
-> |fene|harmonic| | | | | |
+> |fene|harmonic| | | | |
 >
 > |Angle styles ||||||
 > |------------------|
@@ -186,20 +186,21 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > When you use multiple nodes for your job, you might experience communication overhead. In such case using a mix of MPI and OpenMP threads often may result in better performance than a pure MPI job
 {: .discussion}
 
+## GPU package
+
+Using GPU package in LAMMPS one can achieve performance gain by coupling GPUs to one or many CPUS. 
+
+GPU package in LAMMPS provides supports for both NVIDIA and OpenCL and thus it helps to port GPU acceleration to variety of hardwares. This becomes possible since the codes in GPU packages call the generic GPU libraries present in the lib/gpu folder.
+
+Calculations that require access to atomic data like coordinates, velocities, forces may suffer bottlenecks since at every step these data are communicated back and forth between CPUs and GPUs.
+
+In case of GPU packages, computations are shared between CPU and GPU unlike the Kokkos(GPU) package where primary aim is to offload all of the calculations to the GPUs only. For example, asynchronous force calculations like pair vs bond/angle/dihedral/improper can be done simultaneously on GPUs and CPUs respectively. Similarly, for PPPM calculations the charge assignement and the force computations are done on GPUs whereas the FFT calculations that require MPI communications are done on CPUs. Neighbour lists can be built on either CPUs or GPUs. You can control this using specific flags in commandline of your job submission script. Thus GPU package provides a balanced mix of GPU and CPU usage for a particular simulation to achieve a performance gain.
+
+Finally, you can do your calculation in single, double or mixed precision using this GPU package.
+
+Following routines are supported by the GPU package in the 3Mar20 version of LAMMPS:
+
 > ## GPU package
->
-> Using GPU package in LAMMPS one can achieve performance gain by coupling GPUs to one or many CPUS. 
->
-> GPU package in LAMMPS provides supports for both NVIDIA and OpenCL and thus it helps to port GPU acceleration to variety of hardwares. This becomes possible since the codes in GPU packages call the generic GPU libraries present in the lib/gpu folder.
->
-> Calculations that require access to atomic data like coordinates, velocities, forces may suffer bottlenecks since at every step these data are communicated back and forth between CPUs and GPUs.
-> 
-> In case of GPU packages, computations are shared between CPU and GPU unlike the Kokkos(GPU) package where primary aim is to offload all of the calculations to the GPUs only. For example, asynchronous force calculations like pair vs bond/angle/dihedral/improper can be done simultaneously on GPUs and CPUs respectively. Similarly, for PPPM calculations the charge assignement and the force computations are done on GPUs whereas the FFT calculations that require MPI communications are done on CPUs. Neighbour lists can be built on either CPUs or GPUs. You can control this using specific flags in commandline of your job submission script. Thus GPU package provides a balanced mix of GPU and CPU usage for a particular simulation to achieve a performance gain.
->
-> Finally, you can do your calculation in single, double or mixed precision using this GPU package.
->
-> Following routines are supported by the GPU package:
->
 > | Pair styles ||||||||
 > |--------------------|
 > |beck|born_coul_long_cs|born_coul_long|born_coul_wolf_cs|born_coul_wolf|born|
@@ -216,6 +217,24 @@ Before discussing on Kokkos, we'll touch a few key points about other accelerato
 > |K-space style ||||||
 > |-------------------|
 > |pppm | | | | | |
+{: .callout}
+
+### How much speedup do you expect for GPU package?
+Well, there is no 'one-line' answer for this. This can depend on many things starting from the hardware specification to the complexities involved with a specific problem that you are simulating. However, for a given problem one can tune in the run time parameters to extract most out of a hardware. In the following section, we'll discuss some of these tuning factor for the simplest LJ-systems.
+
+### Invoking GPU package 
+So, the first thing that we need to know is how can we invoke GPU package in a LAMMPS run. 
+
+Before starting, things to check for:
+ 1. You have access to a node with a GPU
+ 2. LAMMPS is built with the GPU package
+
+> ## How to invoke a package in LAMMPS?
+>
+> In order to use these accelerator packages(OPT, USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to know a specific command called ```package```. You can learn about this command in detail from the [LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
+>
+> The most general syntax is: ```package style args```
+>
 {: .callout}
 
 > ## Kokkos package
