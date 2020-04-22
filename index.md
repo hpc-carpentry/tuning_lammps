@@ -103,9 +103,16 @@ On any machine, with different components, they would work differently and there
 
 > ## Test Abstractions (single lines) 
 > 
+> For enabling KOKKOS
 > ```
-> {{ site.module_use }}
+> {{ site.module_usage }}
 > {{ site.kokkos_env }}
+> ```
+> {: .bash}
+>
+> For enabling GPU
+> ```
+> {{ site.module_usage }}
 > {{ site.gpu_env }}
 > ```
 > 
