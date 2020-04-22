@@ -67,6 +67,14 @@ On any machine, with different components, they would work differently and there
 > {: .bash} 
 {: .callout}
 
+> ## Test Abstractions (with \n)
+> 
+> ```
+> {{ site.with_newline }}
+> ```
+> 
+{: .callout}
+
 ## Test mid
 
 **Test Abstractions (with \n)**
