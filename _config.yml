@@ -82,8 +82,21 @@ sched_comment: "#SBATCH"
 sched_flag_name: "-N" # EDITME
 sched_hist: "" # EDITME
 sched_flag_histdetail: "" # EDITME 
-exec_env_kokkos: "module use /usr/local/software/jureca/OtherStages module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
-exec_env_gpu: " module use /usr/local/software/jureca/OtherStages && module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-cuda"
+# yml multi-line tests
+#exec_env_kokkos: "module use /usr/local/software/jureca/OtherStages module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
+#exec_env_gpu: " module use /usr/local/software/jureca/OtherStages && module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-cuda"
+no_edit: "module use /usr/local/software/jureca/OtherStages module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
+pipes_newline: |\n
+..module use /usr/local/software/jureca/OtherStages \n
+..module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos \n
+single_quotes: 'module use /usr/local/software/jureca/OtherStages \n
+\n
+module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos'
+pipe_no_quote: |
+    module use /usr/local/software/jureca/OtherStages 
+    module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos
+with_newline: "module use /usr/local/software/jureca/OtherStages \n\n module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
+# end tests
 run_openmp: "srun"
 run_mpi: "mpirun -n "
 
