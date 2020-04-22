@@ -92,9 +92,6 @@ module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos'
 pipe_no_quote: |
     module use /usr/local/software/jureca/OtherStages 
     module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos
-pipe_with_quote: |"
-    module use /usr/local/software/jureca/OtherStages 
-    module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
 pipe_with_code_1: |
     `module use /usr/local/software/jureca/OtherStages 
     module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos`
