@@ -33,50 +33,50 @@ On any machine, with different components, they would work differently and there
 > 
 {: .callout}
 
-> ## Test Abstractions 1
+> ## Test Abstractions (no_edit)
 > 
 > ```
 > {{ site.no_edit }}
 > ```
-> 
+> {: .bash}
 {: .callout}
 
-> ## Test Abstractions 1
+> ## Test Abstractions (single quote)
 > 
 > ```
 > {{ site.single_quotes }}
 > ```
-> 
+> {: .bash} 
 {: .callout}
 
-> ## Test Abstractions 1
+> ## Test Abstractions (pipe no quote)
 > 
 > ```
 > {{ site.pipe_no_quote }}
 > ```
-> 
+> {: .bash}
 {: .callout}
 
-> ## Test Abstractions 1
+> ## Test Abstractions (with \n)
 > 
 > ```
 > {{ site.with_newline }}
 > ```
-> 
+> {: .bash} 
 {: .callout}
 
-> ## Test Abstractions 1
+> ## Test Abstractions (pipe with `code` * 1) 
 > 
 > {{ site.pipe_with_code_1 }}
-> 
+> {: .bash} 
 {: .callout}
 
-> ## Test Abstractions 1
+> ## Test Abstractions (pipe without `code` * 1) 
 > 
 > ```
 > {{ site.pipe_with_code_1 }}
 > ```
->
+> {: .bash}
 {: .callout}
 
 > ## Test Formatting works
@@ -84,21 +84,21 @@ On any machine, with different components, they would work differently and there
 > ```
 > {{ site.no_edit }}
 > ```
-> 
+>  {: .bash}
 {: .callout}
 
-> ## Test Abstractions 1
+> ## Test Abstractions (pipe with `code` * 3) 
 > 
 > {{ site.pipe_with_code_3 }}
-> 
+> {: .bash} 
 {: .callout}
 
-> ## Test Abstractions 1
+> ## Test Abstractions 1 (pipe without `code` * 1) 
 > 
 > ```
 > {{ site.pipe_with_code_3 }}
 > ```
->
+> {: .bash}
 {: .callout}
 
 
