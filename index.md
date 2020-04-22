@@ -65,6 +65,43 @@ On any machine, with different components, they would work differently and there
 > 
 {: .callout}
 
+> ## Test Abstractions 1
+> 
+> {{ site.pipe_with_code_1 }}
+> 
+{: .callout}
+
+> ## Test Abstractions 1
+> 
+> ```
+> {{ site.pipe_with_code_1 }}
+> ```
+>
+{: .callout}
+
+> ## Test Formatting works
+> 
+> ```
+> {{ site.no_edit }}
+> ```
+> 
+{: .callout}
+
+> ## Test Abstractions 1
+> 
+> {{ site.pipe_with_code_3 }}
+> 
+{: .callout}
+
+> ## Test Abstractions 1
+> 
+> ```
+> {{ site.pipe_with_code_3 }}
+> ```
+>
+{: .callout}
+
+
 > ## Prerequisites
 >
 > - Command line experience is required to take this course as well as shell scripting.
