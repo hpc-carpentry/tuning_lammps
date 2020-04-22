@@ -201,6 +201,7 @@ Finally, you can do your calculation in single, double or mixed precision using 
 Following routines are supported by the GPU package in the 3Mar20 version of LAMMPS:
 
 > ## GPU package
+>
 > | Pair styles ||||||||
 > |--------------------|
 > |beck|born_coul_long_cs|born_coul_long|born_coul_wolf_cs|born_coul_wolf|born|
@@ -220,22 +221,37 @@ Following routines are supported by the GPU package in the 3Mar20 version of LAM
 {: .callout}
 
 ### How much speedup do you expect for GPU package?
-Well, there is no 'one-line' answer for this. This can depend on many things starting from the hardware specification to the complexities involved with a specific problem that you are simulating. However, for a given problem one can tune in the run time parameters to extract most out of a hardware. In the following section, we'll discuss some of these tuning factor for the simplest LJ-systems.
+Well, there is no 'one-line' answer for this. This can depend on many things starting from the hardware specification to the complexities involved with a specific problem that you are simulating. However, for a given problem one can always optimize the run-time parameters to extract most out of a hardware. In the following section, we'll discuss some of these tuning parameters for the simplest LJ-systems.
+
+The primary aim for this following exercise is:
+  * To get familiar with the methodology of calling an accelerator package in a LAMMPS run
+  * To get a primary understanding of the various commandline arguments that can control how a job is distributed among cpus/gpus, how to control cpu/gpu communications, etc. etc.
+  * To get an initial idea on how to play with different run-time parameters to get an optimum performance.
+  * Finally, one can also make a fair comparison of performance between a *regular* LAMMPS run, GPU package and a Kokkos implementation of GPU functionality.
+  * Moreover, this exercise will also help the users to extend the knowledge of using the *package* command so that they can figure out by themselves how to use other accelerator packages in LAMMPS. With help of the verbose LAMMPS manual, I believe that it won't be that difficult!
+  
+ In the following section, we'll leran to use GPU package in LAMMPS. 
 
 ### Invoking GPU package 
-So, the first thing that we need to know is how can we invoke GPU package in a LAMMPS run. 
+So, the first thing first! Before starting, you must ask the following questions:
+ 1. Do I have an access to a computing node having a GPU?
+ 2. Is my LAMMPS binary is built with GPU package?
+If the answer to these two questions is a *yes* then we you can proceed to the following section.
 
-Before starting, things to check for:
- 1. You have access to a node with a GPU
- 2. LAMMPS is built with the GPU package
-
-> ## How to invoke a package in LAMMPS?
+> ## How to invoke a package in LAMMPS run?
 >
-> This is quite important to learn In order to use these accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to know a specific command called ```package```. You can learn about this command in detail from the [LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
+>  To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to know a LAMMPS command called ```package```. You can learn about this command in detail from the [LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
 >
-> The syntax to use hte ```packagae``` command in a LAMMPS input file is: ```package style args```
-> > ```style``` describes what kind of package you will be using for your run. There are four different packages available currently (versdion 3Mar20): *gpu*, *intel*, *kokkos* and *omp*.
-> > It's quite obvious that you need to use ```gpu``` *style* for invoking GPU package.This style comes with many *arguments* as listed below:
+> The basic syntax of this command is: 
+> > *package style args*
+>
+> >  ```style``` provides you to choose the accelerator package for your run. There are four different packages available currently (versdion 3Mar20): 
+> >   * *gpu*: This calls the *GPU package*
+> >   * *intel*: This calls the *USER-INTEL* package
+> >   * *omp* : This calls the *USER-OMP* package
+> >   * *kokkos*: This calls the *Kokkos* package
+> >
+> > This is quite obvious that you need to use *gpu* as *style* for invoking the GPU package for your LAMMPS run.
 > > 
 > > | arguments | | | |
 > > |-----------------|
