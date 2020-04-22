@@ -57,6 +57,8 @@ On any machine, with different components, they would work differently and there
 > {: .bash}
 {: .callout}
 
+## Test start
+
 > ## Test Abstractions (with \n)
 > 
 > ```
@@ -64,6 +66,21 @@ On any machine, with different components, they would work differently and there
 > ```
 > {: .bash} 
 {: .callout}
+
+## Test mid
+
+**Test Abstractions (with \n)**
+
+```
+{{ site.with_newline }}
+```
+{: .bash} 
+
+```
+{{ site.with_newline }}
+```
+
+## Test end
 
 > ## Test Abstractions (pipe with `code` * 1) 
 > 
