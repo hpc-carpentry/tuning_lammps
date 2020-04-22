@@ -101,6 +101,15 @@ On any machine, with different components, they would work differently and there
 > {: .bash}
 {: .callout}
 
+> ## Test Abstractions (single lines) 
+> 
+> ```
+> {{ site.module_use }}
+> {{ site.kokkos_env }}
+> {{ site.gpu_env }}
+> ```
+> 
+{: .callout}
 
 > ## Prerequisites
 >
