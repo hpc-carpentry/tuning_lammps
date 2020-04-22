@@ -118,6 +118,93 @@ On any machine, with different components, they would work differently and there
 > 
 {: .callout}
 
+## Without formatting
+
+> ## Test Abstractions (no_edit)
+> 
+> ```
+> {{ site.no_edit }}
+> ```
+> {: .bash}
+{: .callout}
+
+**Test Abstractions (single quote)
+
+```
+{{ site.single_quotes }}
+```
+{: .bash} 
+
+
+**Test Abstractions (pipe no quote)
+
+```
+{{ site.pipe_no_quote }}
+```
+{: .bash}
+
+**Test Abstractions (with \n)
+
+```
+{{ site.with_newline }}
+```
+{: .bash} 
+
+
+**Test Abstractions (pipe with `code` * 1) 
+
+{{ site.pipe_with_code_1 }}
+{: .bash} 
+
+
+**Test Abstractions (pipe without `code` * 1) 
+
+```
+{{ site.pipe_with_code_1 }}
+```
+{: .bash}
+
+**Test Formatting works
+
+```
+{{ site.no_edit }}
+```
+
+{{ site.pipe_with_code_3 }}
+
+```
+{{ site.pipe_with_code_3 }}
+```
+
+**Test Abstractions (pipe with `code` * 3) 
+
+{{ site.pipe_with_code_3 }}
+{: .bash} 
+
+**Test Abstractions 1 (pipe without `code` * 1) 
+
+```
+{{ site.pipe_with_code_3 }}
+```
+{: .bash}
+
+
+**Test Abstractions (single lines)**
+
+For enabling KOKKOS
+```
+{{ site.module_usage }}
+{{ site.kokkos_env }}
+```
+{: .bash}
+
+For enabling GPU
+```
+{{ site.module_usage }}
+{{ site.gpu_env }}
+```
+
+
 > ## Prerequisites
 >
 > - Command line experience is required to take this course as well as shell scripting.
