@@ -243,20 +243,20 @@ If the answer to these two questions is a *yes* then we you can proceed to the f
 >  To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to know a LAMMPS command called ```package```. You can learn about this command in detail from the [LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
 >
 > The basic syntax of this command is: 
-> > *package style args*
+> *package style args*
 >
-> >  ```style``` provides you to choose the accelerator package for your run. There are four different packages available currently (versdion 3Mar20): 
-> >   * *gpu*: This calls the *GPU package*
-> >   * *intel*: This calls the *USER-INTEL* package
-> >   * *omp* : This calls the *USER-OMP* package
-> >   * *kokkos*: This calls the *Kokkos* package
-> >
-> > This is quite obvious that you need to use *gpu* as *style* for invoking the GPU package for your LAMMPS run.
-> > 
-> > | arguments | | | |
-> > |-----------------|
-> > |neigh|newton|binsize|split|
-> > |gpuID|tpa|device|blocksize|
+>  ```style``` provides you to choose the accelerator package for your run. There are four different packages available currently (versdion 3Mar20): 
+>   * *gpu*: This calls the *GPU package*
+>   * *intel*: This calls the *USER-INTEL* package
+>   * *omp* : This calls the *USER-OMP* package
+>   * *kokkos*: This calls the *Kokkos* package
+>
+> This is quite obvious that you need to use *gpu* as *style* for invoking the GPU package for your LAMMPS run.
+> 
+> | arguments | | | |
+> |-----------------|
+> |neigh|newton|binsize|split|
+> |gpuID|tpa|device|blocksize|
 >
 {: .callout}
 
