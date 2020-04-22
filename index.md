@@ -207,6 +207,11 @@ For enabling GPU
 {{ site.gpu_env }}
 ```
 
+> ## Test Abstractions (with \n)
+> 
+> {{ site.with_newline }}
+> 
+{: .callout}
 
 > ## Prerequisites
 >
