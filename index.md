@@ -33,6 +33,38 @@ On any machine, with different components, they would work differently and there
 > 
 {: .callout}
 
+> ## Test Abstractions 1
+> 
+> ```
+> {{ site.no_edit }}
+> ```
+> 
+{: .callout}
+
+> ## Test Abstractions 1
+> 
+> ```
+> {{ site.single_quotes }}
+> ```
+> 
+{: .callout}
+
+> ## Test Abstractions 1
+> 
+> ```
+> {{ site.pipe_no_quote }}
+> ```
+> 
+{: .callout}
+
+> ## Test Abstractions 1
+> 
+> ```
+> {{ site.with_newline }}
+> ```
+> 
+{: .callout}
+
 > ## Prerequisites
 >
 > - Command line experience is required to take this course as well as shell scripting.
