@@ -98,7 +98,7 @@ pipe_with_code_1: |
 pipe_with_code_3: |
     ```module use /usr/local/software/jureca/OtherStages 
     module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos```
-with_newline: "module use /usr/local/software/jureca/OtherStages \n\n module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
+with_newline: "module use /usr/local/software/jureca/OtherStages \nmodule load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
 # end tests
 # working version
 module_usage: "module use /usr/local/software/jureca/OtherStages"
