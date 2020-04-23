@@ -258,7 +258,7 @@ If the answer to these two questions is a *yes* then we you can proceed to the f
 > Each *argument* comes withs a number of *keyword* and their corresponding *values*. These *keyword/values* provides you enhanced flexibility to distribute your job among cpu and gpus in an optimum way. For a quick reference, the following table could be useful:
 >
 > | Keywords |what it does? |Default value |
-> |-----------------------------------------|
+> |----------|--------------|--------------|
 > |neigh|specifies where neighbor lists for pair style computation will be built: GPU or CPU | yes |
 > |newton|sets the Newton flags for pairwise (not bonded) interactions to off or on |off |
 > |binsize|sets the size of bins used to bin atoms in neighbor list builds performed on the GPU, if neigh = yes is set|0.0|
