@@ -240,7 +240,7 @@ If the answer to these two questions is a *yes* then we you can proceed to the f
 
 > ## How to invoke a package in LAMMPS run?
 >
->  To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to know a LAMMPS command called ```package```. You can learn about this command in detail from the [LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
+>  To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to know a LAMMPS command called ```package```. This command invokes package-specific settings for an accelerator. You can learn about this command in detail from the [LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
 >
 > The basic syntax of this command is: 
 > *package style args*
@@ -251,14 +251,30 @@ If the answer to these two questions is a *yes* then we you can proceed to the f
 >   * *omp* : This calls the *USER-OMP* package
 >   * *kokkos*: This calls the *Kokkos* package
 >
-> This is quite obvious that you need to use *gpu* as *style* for invoking the GPU package for your LAMMPS run.
-> 
-> | arguments | | | |
-> |-----------------|
-> |neigh|newton|binsize|split|
-> |gpuID|tpa|device|blocksize|
+> To use *GPU package* as an accelerator you need to select *gpu* as *style*. 
+> The next you need to choose proper *arguments* for the *gpu* style. The argument for *gpu* style is *ngpu*.
+>   * *ngpu*: This sets the number of GPUs per node. There must be at least as many MPI tasks per node as GPUs, as set by the mpirun or mpiexec command. If there are more MPI tasks (per node) than GPUs, multiple MPI tasks will share each GPU.
+>
+> Each *argument* comes withs a number of *keyword* and their corresponding *values*. These *keyword/values* provides you enhanced flexibility to distribute your job among cpu and gpus in an optimum way. For a quick reference, the following table could be useful:
+>
+> | Keywords |what it does? |Default value |
+> |-----------------------------------------|
+> |neigh|specifies where neighbor lists for pair style computation will be built: GPU or CPU | yes |
+> |newton|sets the Newton flags for pairwise (not bonded) interactions to off or on |off |
+> |binsize|sets the size of bins used to bin atoms in neighbor list builds performed on the GPU, if neigh = yes is set|0.0|
+> |split|used for load balancing force calculations between CPU and GPU cores in GPU-enabled pair styles| |
+> |gpuID|allows selection of which GPUs on each node will be used for a simulation | |
+> |tpa|sets the number of GPU thread per atom used to perform force calculations | 1|
+> |device|used to tune parameters optimized for a specific accelerator and platform when using OpenCL | |
+> |blocksize|allows you to tweak the number of threads used per thread block |minimum value should be 32 |
 >
 {: .callout}
+
+> ## *package* command: Restrictions
+>
+> If this command is specified in an input script, it must be near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined.
+{: .callout}
+
 
 > ## Kokkos package
 >
