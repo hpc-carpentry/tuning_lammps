@@ -33,52 +33,13 @@ On any machine, with different components, they would work differently and there
 > 
 {: .callout}
 
-## Test start
-
-> ## Test Abstractions (with \n)
-> 
-> ```
-> {{ site.with_newline }}
-> ```
-> {: .bash} 
-{: .callout}
-
-> ## Test Abstractions (with \n)
-> 
-> ```
-> {{ site.with_newline }}
-> ```
-> 
-{: .callout}
-
-## Test mid
-
-**Test Abstractions (with \n)**
-
-```
-{{ site.with_newline }}
-```
-{: .bash} 
-
-```
-{{ site.with_newline }}
-```
-
-## Test end
-
-
-**Test Abstractions (single lines)**
-
 For enabling KOKKOS
 ```
-{{ site.module_usage }}
 {{ site.kokkos_env }}
 ```
-{: .bash}
 
 For enabling GPU
 ```
-{{ site.module_usage }}
 {{ site.gpu_env }}
 ```
 
