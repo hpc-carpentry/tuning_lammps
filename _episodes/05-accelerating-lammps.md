@@ -262,96 +262,9 @@ If the answer to these two questions is a *yes* then we you can proceed to the f
 
 > ## Kokkos package
 >
-> * Acceleration, in this case, is mainly achieved by using templeted C++ library to reduce computational overheads due to if tests and other conditional code blocks.
-> 
-> * This also provides better vectorization operations as compared to its regular CPU version.
-> 
-> * Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. These are ```pair_eam_alloy```, ```pair_eam_fs```, ```pair_eam```, ```pair_lj_charmm_coul_long```, ```pair_lj_cut_coul_long```, ```pair_lj_cut```, ```pair_lj_cut_tip4p_long```, ```pair_lj_long_coul_long```, ```pair_morse``` and ```pair_ufm```.
-> 
-> * This generally offers 5-20% savings on computational cost on most of the machines
+> FIX ME!
 {: .callout}
 
 
-## Accelerating LAMMPS using KOKKOS
-
-## Knowing your hardware
-   
-## What is KOKKOS?
-
-* supports OpenMP and GPU
-* provide excellent scalability to many OpenMP threads
-* 1-to-1 GPU to CPU support
-* Minimal data transfer between the host and the device
-* everything runs on GPU
-* supports modern GPUs only
-* supports double precision only
-
-## Important features of LAMMPS Kokkos package
-
-Kokkos can be used in conjunction with LAMMPS to accelerate its performance. This package helps to optimize LAMMPS performances for specific hardware architectures.
-But to obtain the Kokkos accelartion, LAMMPS needs to be built using Kokkos for those specific hardwares and it also requires propoer choices of input parametres to get an optimal performance.
-
-The list of LAMMPS features that is supported by Kokkos is given below:
-
-| Atom Styles | Pair Styles  | Fix Styles  | Compute Style | Bond Styles | Angle Styles | Dihedral Styles | Improper Styles | K-space Styles |
-|:----------- |:------------ |:----------- |:------------- |:----------- |:------------ |:--------------- |:--------------- |:-------------- |
-| Angle       |Buck/coul/cut | Deform      | Temp          | Fene        | Charm        | Charm           | Harmonic        | Pppm           |
-| Atomic      |Buck/coul/long| Langevin    |               | Harmonic    | Harmonic     | Opls            |                 |                |
-| Bond        |Etc           | Momentum    |               |             |              |                 |                 |                |
-| Charge      |Etc           | Nph         |               |             |              |                 |                 |                |
-| Full        |              | Npt         |               |             |              |                 |                 |                |
-| Molecular   |              | Nve         |               |             |              |                 |                 |                |
-|             |              | Nvt         |               |             |              |                 |                 |                |
-|             |              | Qeq/Relax   |               |             |              |                 |                 |                |
-|             |              | Reaxc/bonds |               |             |              |                 |                 |                |
-|             |              |Reaxc/species|               |             |              |                 |                 |                |
-|             |              | Setforce    |               |             |              |                 |                 |                |
-|             |              | Wall/reflect|               |             |              |                 |                 |                |
-
-> ## LAMMPS hardware compatibility
-> Which of these hardwares is LAMMPS compatible on?
-> 
-> 1. 
-> 2. 
-> 3. 
-> ...
-> > ## Solution
-> > 
-> > 1. 
-> > 2. 
-> > 3. 
-> >
-> {: .solution}
-{: .challenge}
-
-
-> ## Software vs. Hardware compatibility
-> 
-> Which hardwares can the following software packages be used on? There can be multiple results for each software.
-> 
-> > ## Solution
-> > 
-> > solution
-> > 
-> {: .solution}
-{: .challenge}
-
-## Package options: some rules of thumb
-
-## How to compile and run Kokkos in LAMMPS?
-
-## Case study 1: for Skylake AVX-512 architecture
-
-> ##  Exercise 2: for users
-> 
-{: .challenge}
-
-## Case study 2: for KNL architecture
-
-## Case study 3: for GPU Volta70 acrhitecture
-
-> ## Exercise 3: for users
-> 
-{: .challenge}
 
 {% include links.md %}
