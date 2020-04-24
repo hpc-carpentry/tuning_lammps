@@ -275,8 +275,7 @@ One can use the *package* command in LAMMPS in two different ways:
   ```
   package         gpu 2 neigh yes newton off split 1.0
   ```
- Additionaly, you also need to append an extra "/gpu" suffix wherever applicable. For example, a pair potential with GPU optimization should be mentioned in the input file as:\
-
+ Additionaly, you also need to append an extra "/gpu" suffix wherever applicable. For example, a pair potential with GPU optimization should be mentioned in the input file as:
  ```
  pair_style      lj/cut/gpu 2.5
  ```
@@ -286,11 +285,6 @@ One can use the *package* command in LAMMPS in two different ways:
   ```
 The second method appears to be convenient since you don't need to take the hassle to edit the input file (and possibly in many places)!
 
-The input file for the LJ-system is given below: 
-```
-{% include /snippets/ep02/in.lj %}
-```
-{: .Input}
 
 > ## The First Example
 > Let us start with first example. Below is given a. LAMMPS input script for a LJ system. Can you modify this input file to call the GPU accelerator such that the run uses 4 GPUs initially and all other keywords with their values.
