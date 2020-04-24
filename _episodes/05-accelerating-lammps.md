@@ -293,15 +293,8 @@ The second method appears to be convenient since you don't need to take the hass
 > > {% include /snippets/ep02/in.lj %}
 > > ```
 > {: .Input}
->
-{: challenge}
+{: .challenge}
 
-
-
-> ## GPU package: challenge 1
-> 
-> Write down the full command for the package command to be used in a LAMMPS input file where you want to use 4 gpus for your calculation using the GPU package.
-> >
 
 > ## *package* command: Restrictions
 >
