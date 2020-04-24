@@ -194,7 +194,7 @@ GPU package in LAMMPS provides supports for both NVIDIA and OpenCL and thus it h
 
 Calculations that require access to atomic data like coordinates, velocities, forces may suffer bottlenecks since at every step these data are communicated back and forth between CPUs and GPUs.
 
-In case of GPU packages, computations are shared between CPU and GPU unlike the Kokkos(GPU) package where primary aim is to offload all of the calculations to the GPUs only. For example, asynchronous force calculations like pair vs bond/angle/dihedral/improper can be done simultaneously on GPUs and CPUs respectively. Similarly, for PPPM calculations the charge assignment and the force computations are done on GPUs whereas the FFT calculations that require MPI communications are done on CPUs. Neighbour lists can be built on either CPUs or GPUs. You can control this using specific flags in commandline of your job submission script. Thus GPU package provides a balanced mix of GPU and CPU usage for a particular simulation to achieve a performance gain.
+In case of GPU packages, computations are shared between CPU and GPU unlike the Kokkos(GPU) package where primary aim is to offload all of the calculations to the GPUs only. For example, asynchronous force calculations like pair vs bond/angle/dihedral/improper can be done simultaneously on GPUs and CPUs respectively. Similarly, for PPPM calculations the charge assignement and the force computations are done on GPUs whereas the FFT calculations that require MPI communications are done on CPUs. Neighbour lists can be built on either CPUs or GPUs. You can control this using specific flags in commandline of your job submission script. Thus GPU package provides a balanced mix of GPU and CPU usage for a particular simulation to achieve a performance gain.
 
 Finally, you can do your calculation in single, double or mixed precision using this GPU package.
 
@@ -230,7 +230,7 @@ The primary aim for this following exercise is:
   * Finally, one can also make a fair comparison of performance between a *regular* LAMMPS run, GPU package and a Kokkos implementation of GPU functionality.
   * Moreover, this exercise will also help the users to extend the knowledge of using the *package* command so that they can figure out by themselves how to use other accelerator packages in LAMMPS. With help of the verbose LAMMPS manual, I believe that it won't be that difficult!
   
- In the following section, we'll learn to use GPU package in LAMMPS. 
+ In the following section, we'll leran to use GPU package in LAMMPS. 
 
 ### Invoking GPU package 
 So, the first thing first! Before starting, you must ask the following questions:
@@ -255,7 +255,7 @@ If the answer to these two questions is a *yes* then we you can proceed to the f
 > The next you need to choose proper *arguments* for the *gpu* style. The argument for *gpu* style is *ngpu*.
 >   * *ngpu*: This sets the number of GPUs per node. There must be at least as many MPI tasks per node as GPUs, as set by the mpirun or mpiexec command. If there are more MPI tasks (per node) than GPUs, multiple MPI tasks will share each GPU.
 >
-> Each *argument* comes with a number of *keyword* and their corresponding *values*. These *keyword/values* provides you enhanced flexibility to distribute your job among cpu and gpus in an optimum way. For a quick reference, the following table could be useful:
+> Each *argument* comes withs a number of *keyword* and their corresponding *values*. These *keyword/values* provides you enhanced flexibility to distribute your job among cpu and gpus in an optimum way. For a quick reference, the following table could be useful:
 >
 > | Keywords |what it does? |Default value |
 > |----------|--------------|--------------|
@@ -269,6 +269,29 @@ If the answer to these two questions is a *yes* then we you can proceed to the f
 > |blocksize|allows you to tweak the number of threads used per thread block |minimum value should be 32 |
 >
 {: .callout}
+
+One can use the *package* command in LAMMPS in two different ways:
+  * Edit the input file and introduce  the line comprising the *package* command in it. This is perfectly fine, but always remember to use this near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. An example of calling the *GPU package* in a LAMMPS input file is given below:
+  ```
+  package         gpu 2 neigh yes newton off split 1.0
+  ```
+ Additionaly, you also need to append an extra "/gpu" suffix wherever applicable. For example, a pair potential with GPU optimization should be mentioned in the input file as:\
+
+```
+pair_style      lj/cut/gpu 2.5
+```
+  * A simpler way to do this is through the command-line when launching LAMMPS using the ```-pk``` command-line switch. The syntax would be exactly the same as when used in an input script:
+  ```
+srun lmp -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
+  ```
+The second method appears to be convenient since you don't need to take the hassle to edit the input file (and possibly in many places)!
+
+
+
+> ## GPU package: challenge 1
+> 
+> Write down the full command for the package command to be used in a LAMMPS input file where you want to use 4 gpus for your calculation using the GPU package.
+> >
 
 > ## *package* command: Restrictions
 >
