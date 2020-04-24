@@ -289,9 +289,9 @@ The second method appears to be convenient since you don't need to take the hass
 > ## The First Example
 > Let us start with first example. Below is given a. LAMMPS input script for a LJ system. Can you modify this input file to call the GPU accelerator such that the run uses 4 GPUs initially and all other keywords with their values.
 >
-> ```
-> {% include /snippets/ep02/in.lj %}
-> ```
+> > ```
+> > {% include /snippets/ep02/in.lj %}
+> > ```
 > {: .Input}
 >
 {: challenge}
