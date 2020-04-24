@@ -291,7 +291,7 @@ The second method appears to be convenient since you don't need to take the hass
 >
 > > ## Input
 > > ```
-> > {% include /snippets/ep05/in.lj %}
+> > {% include /snippets/ep05/in.lj_gpu_part1 %}
 > > ```
 > {: .Input}
 {: .challenge}
