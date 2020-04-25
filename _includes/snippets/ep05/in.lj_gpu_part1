@@ -1,14 +1,14 @@
 
-processors      * * * grid numa
-
-
-variable        x index 7
-variable        y index 7
-variable        z index 7
-
-variable        xx equal 20*$x
-variable        yy equal 20*$y
-variable        zz equal 20*$z
+> processors      * * * grid numa
+> 
+> 
+> variable        x index 7
+> variable        y index 7
+> variable        z index 7
+>
+> variable        xx equal 20*$x
+> variable        yy equal 20*$y
+> variable        zz equal 20*$z
 
 units           lj
 atom_style      atomic
