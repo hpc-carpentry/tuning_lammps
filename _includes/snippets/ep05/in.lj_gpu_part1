@@ -1,6 +1,3 @@
-# 3d Lennard-Jones melt
-
-variable ngpu index 1
 
 processors      * * * grid numa
 
