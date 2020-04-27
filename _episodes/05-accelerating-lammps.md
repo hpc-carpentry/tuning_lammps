@@ -284,14 +284,48 @@ One can use the *package* command in LAMMPS in two different ways:
  srun lmp -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
   ```
 The second method appears to be convenient since you don't need to take the hassle to edit the input file (and possibly in many places)!
+Well, note that there is an extra command-line switch in the above command-line. Do you know what is this for? To distinguish the various styles of these accelerator packages from its 'regular' non-accelerated variants, LAMMPS has introduces suffixes and the ```-sf``` switch  auto-appends these accelerator suffixes to various styles in the input script. Therefore, when an accelerator package is invoked through the ```-pk``` switch (for example, ```-pk gpu```), the ```-sf``` switch ensures that the appropriate style is also being invoked in the simulation (for example, it ensures that the ```lj/cut/gpu``` is used instead of ```lj/cut``` as ```pait_style```).  
+
+In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e. through the command-line.
 
 
 > ## The First Example
-> Let us start with first example. Below is given a. LAMMPS input script for a LJ system. Can you modify this input file to call the GPU accelerator such that the run uses 4 GPUs initially and all other keywords with their values.
+> Let us start with first example. Below is given a LAMMPS input script for a LJ system. Can you prepare a submission script to run a LAMMPS job with the follwoing input file using 2 gpus. For this run, make sure that the neighbour list is built on the cpus, and a dynamic load-balancing between the CPUs and GPUs.
 >
 > > ## Input
 > > ```
-> > {% include /snippets/ep05/in.lj_gpu_part1 %}
+> > processors      * * * grid numa
+> > 
+> > variable        x index 7
+> > variable        y index 7
+> > variable        z index 7
+> > 
+> > variable        xx equal 20*$x
+> > variable        yy equal 20*$y
+> > variable        zz equal 20*$z
+> > 
+> > units           lj
+> > atom_style      atomic
+> > 
+> > lattice         fcc 0.8442
+> > region          box block 0 ${xx} 0 ${yy} 0 ${zz}
+> > create_box      1 box
+> > create_atoms    1 box
+> > mass            1 1.0
+> > 
+> > velocity        all create 1.44 87287 loop geom
+> > 
+> > pair_style      lj/cut 2.5
+> > pair_coeff      1 1 1.0 1.0 2.5
+> > 
+> > neighbor        0.3 bin
+> > neigh_modify    delay 0 every 20 check no
+> > 
+> > fix             1 all nve
+> > 
+> > thermo 50
+> > thermo_style custom step time  temp press pe ke etotal density
+> > run             500
 > > ```
 > {: .Input}
 {: .challenge}
