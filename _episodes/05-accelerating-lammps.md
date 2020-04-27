@@ -289,7 +289,7 @@ Well, note that there is an extra command-line switch in the above command-line.
 In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e. through the command-line.
 
 
-> ## The First Example
+> ## Challenge 1: The First Exercise
 > Let us start with first example. Below is given a LAMMPS input script for a LJ system. Can you prepare a submission script to run a LAMMPS job with the follwoing input file using 2 gpus. For this run, make sure that the neighbour list is built on the cpus, and a dynamic load-balancing between the CPUs and GPUs.
 >
 >
@@ -334,6 +334,16 @@ In this tutorial, we'll stick to the second method of invoking the accelerator p
 > {: .solution}
 {: .challenge}
 
+Okay, now you learnt how to submit a LAMMPS job that uses GPU package as an accelerator. This is quite simple, though optimizing the run may not be that straight-forward. You can have numerous possibilities of choosing the *argument* and the *keywords*. Not only that, the host CPU might have multiple cores. More choices would arise from here. By rule of thumb, you must have at least same number of MPI processes as the number of GPU cores available to you. But often, using many MPI tasks per GPU gives you the best performance. As an example, if you have 4 physical GPUs, you must initiate 4 MPI processes for this job. But, assume that you have a CPU with 12 cores. This gives you flexibility to use at most 12 MPI processes and the possible combinations are 4gpu/4cpu, 4gpu/8cpu and 4gpu/12cpu. Though it may sound like that 4gpu/12cpu will provide the maximum speed-up, it may not be true as well! This entirely depends on the problem and also on other settiings which can in general be controlled by the *keywords* mentioned in the above table. Moreover, one may find that for a particular problem using 2 GPUs in stead of 4 GPUs may give better performance, and this why this is advisable to figure out the best possible set of run-time parameters following a thorough optimization before  starting the production runs. This might save your lot of resource and time!
+
+> ## Challenge 2
+> 
+> Assume that you have an access to a computing node having 4 GPUs and 24 CPU cores. You are also told that you need to find out whether building neighbour list on CPU or GPU is more beneficial. You should also look for which is best strategy for the force-calculations i.e. offloading the force-calculation job entirely to the GPUs or to find a balance between CPUs and GPUs.  This means that you need to submit several runs with various settings involving number of MPI tasks, number of GPUs, and relevant command-line switches. So many possibilities exist! Can you show 10 different command-line options that you might like to use for your run?
+>
+> > ## Solution
+> > srun lmp -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
+> {: .solution}
+{: .challenge}
 
 > ## *package* command: Restrictions
 >
