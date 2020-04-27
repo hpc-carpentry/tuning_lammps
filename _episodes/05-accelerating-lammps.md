@@ -369,6 +369,15 @@ Okay, now you learnt how to submit a LAMMPS job that uses GPU package as an acce
 > {: .solution}
 {: .challenge}
 
+> ## Challenge 3: Optimization
+> 
+> Use the above input file and submit as many jobs as required to optimize the run-time parameters for the best performance from 1 node. 
+> > 1. Make a plot of walltime (in sec) vs #gpu/#cpu for ```neigh yes newton off split -1.0```
+> > 2. Do the same for ```neigh yes newton off split 1.0```
+> > 3. Repeat it again for ```neigh no newton off split -1.0``` and ```neigh no newton off split 1.0```
+> > 4. Make 4 different plots and comment on which one is the best performing settings.
+{: .challenge}
+
 > ## *package* command: Restrictions
 >
 > If this command is specified in an input script, it must be near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined.
