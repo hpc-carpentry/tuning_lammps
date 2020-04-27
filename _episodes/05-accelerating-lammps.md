@@ -329,7 +329,7 @@ In this tutorial, we'll stick to the second method of invoking the accelerator p
 > ~~~
 > {: .Input}
 >
-> > ##Solution
+> > ## Solution
 > > Fix me!
 > {: .solution}
 {: .challenge}
