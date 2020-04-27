@@ -341,7 +341,29 @@ Okay, now you learnt how to submit a LAMMPS job that uses GPU package as an acce
 > Assume that you have an access to a computing node having 4 GPUs and 24 CPU cores. You are also told that you need to find out whether building neighbour list on CPU or GPU is more beneficial. You should also look for which is best strategy for the force-calculations i.e. offloading the force-calculation job entirely to the GPUs or to find a balance between CPUs and GPUs.  This means that you need to submit several runs with various settings involving number of MPI tasks, number of GPUs, and relevant command-line switches. So many possibilities exist! Can you show 10 different command-line options that you might like to use for your run?
 >
 > > ## Solution
-> > srun lmp -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
+> > 1. 2GPU/1 MPI task per GPU, Neighbour list building on GPU, force-calculation entirely on GPU
+> >    #SBATCH --ntasks-per-node=2 
+> >    srun lmp -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
+> > 2. 2 GPUs/12 MPI proc per GPU, Neighbour list building on CPUs, force-calculation optimum load-balancing
+> >    #SBATCH --ntasks-per-node=24 
+> >    srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split -1.0 
+> > 3. (needs modification for all the stuffs mentioned below)
+> >    #SBATCH --ntasks-per-node=4 
+> >    srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+> > 4. #SBATCH --ntasks-per-node=4 
+> >    srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+> > 5. #SBATCH --ntasks-per-node=4 
+> >    srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+> > 6. #SBATCH --ntasks-per-node=4 
+> >    srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+> > 7. #SBATCH --ntasks-per-node=4 
+> >    srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+> > 8. #SBATCH --ntasks-per-node=4 
+> >    srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+> > 9. #SBATCH --ntasks-per-node=4 
+> >    srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+> > 10. #SBATCH --ntasks-per-node=4 
+> >    srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
 > {: .solution}
 {: .challenge}
 
