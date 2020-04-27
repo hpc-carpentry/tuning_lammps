@@ -343,9 +343,11 @@ Okay, now you learnt how to submit a LAMMPS job that uses GPU package as an acce
 > > ## Solution
 > > 1. 2GPU/1 MPI task per GPU, Neighbour list building on GPU, force-calculation entirely on GPU
 > > >  #SBATCH --ntasks-per-node=2 
+> > >
 > > >  srun lmp -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
 > > 2. 2 GPUs/12 MPI proc per GPU, Neighbour list building on CPUs, force-calculation optimum load-balancing
 > > >  #SBATCH --ntasks-per-node=24 
+> > >
 > > >   srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split -1.0 
 > > 3. (needs modification for all the stuffs mentioned below)
 > > >  #SBATCH --ntasks-per-node=4 
