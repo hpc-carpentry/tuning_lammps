@@ -337,16 +337,16 @@ In this tutorial, we'll stick to the second method of invoking the accelerator p
 ## Know about the GPU package output
 At this stage, once you complete a job successfully, it is time to look for a few things in the LAMMPS output file. A few of them are for the sanity check to see if LAMMPS is doing the things that you asked for and a few of them tell you about the performances. 
 
-  1. ### Device information
+  ### 1. Device information
   It prints about the device information both in the screen-output and the log file. You would notice something like this:
   ![lammps-gpu-output-1](../fig/05/lammps-gpu-output-1.png)
   The first that you notice here is that it's using an *acceleration* for the pair potential lj/cut and fir this purpose it is using two  devices (Device 0 and Device 1) and 12 MPI-processes per device. That is what you asked for: 2 GPUs (```-pk gpu 2```) and ```#SBATCH --ntasks-per-node=24```. Number of tasks is shared equally by each GPU. The detail about the graphics card is also printed, *Tesla K80, 13 CU, etc. etc.* along with the * numerical precision* of the implemented *GPU package* is also printed. In this case, it is using *double precision*. Next it shows how the MPI-processes are spawned with a GPU core.
 
-  2. ### Accelerated version of pair-potential
+  ### 2. Accelerated version of pair-potential
   This section of the output shows you that it is actually using the *accelerated* version of the pair potential *lj/cut*. You can see that it is using *lj/cut/gpu* though in your input file you mentioned this as *pair_style  lj/cut 2.5*. This is what happens when you use the *-sf gpu* command-line switch. This automatically ensures that the correct accelerated version is called for this run.
   ![lammps-gpu-output-2](../fig/05/lammps-gpu-output-2.png)
   
-  3. ### Performance section
+  ### 3. Performance section
   The following screen-output tells you all about the performance. Some of these terms are already discussed in previous episode (episode 4). When you the *GPU package* you would see an extra block of information known as *Device Time Info (average)*. This gives you a total breakdown saying how the devices (GPUs) have been utilised to do various parts of the job.
   ![lammps-gpu-output-3](../fig/05/lammps-gpu-output-3.png)
 
@@ -394,15 +394,10 @@ Okay, now you learnt how to submit a LAMMPS job that uses GPU package as an acce
 > > 4. Make 4 different plots and comment on which one is the best performing settings.
 {: .challenge}
 
-> ## *package* command: Restrictions
->
-> If this command is specified in an input script, it must be near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined.
-{: .callout}
-
 
 > ## Kokkos package
 >
-> FIX ME!
+> The final accelerator package that we'll be discussing is the Kokkos package. This is very importnat and we'll be discusiing about the its main feature and learn to use it to get a performance boost. But, this will be done in the following chapter.
 {: .callout}
 
 
