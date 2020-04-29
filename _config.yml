@@ -60,9 +60,14 @@ lc_post_survey: "https://www.surveymonkey.com/r/lcpostworkshopsurvey?workshop_id
 instructor_pre_survey: "https://www.surveymonkey.com/r/instructor_training_pre_survey?workshop_id="
 instructor_post_survey: "https://www.surveymonkey.com/r/instructor_training_post_survey?workshop_id="
 
-# Workshop specific values
-#########################################
-# 
+
+# Workshop Specific Values
+##########################
+# SITE Specific configuration
+# Host and scheduler options
+#
+# Other options can be found in _extras/snippets_library
+
 
 host_name: "Jureca"
 #host_login: "kay.ichec.ie"
