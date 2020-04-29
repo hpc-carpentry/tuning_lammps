@@ -334,6 +334,13 @@ In this tutorial, we'll stick to the second method of invoking the accelerator p
 > {: .solution}
 {: .challenge}
 
+## Know about the GPU package output
+At this stage, once you complete a job successfully, it is time to look for a few things in the LAMMPS output file. A few of them are for the sanity check to see if LAMMPS is doing the things that you asked for and a few of them tell you about the performances. 
+
+### Device information
+It prints about the device information both in the screen-output and the log file. You would notice something like this:
+![lammps-gpu-output-1](../fig/05/lammps-gpu-output-1.png)
+
 Okay, now you learnt how to submit a LAMMPS job that uses GPU package as an accelerator. This is quite simple, though optimizing the run may not be that straight-forward. You can have numerous possibilities of choosing the *argument* and the *keywords*. Not only that, the host CPU might have multiple cores. More choices would arise from here. By rule of thumb, you must have at least same number of MPI processes as the number of GPU cores available to you. But often, using many MPI tasks per GPU gives you the best performance. As an example, if you have 4 physical GPUs, you must initiate 4 MPI processes for this job. But, assume that you have a CPU with 12 cores. This gives you flexibility to use at most 12 MPI processes and the possible combinations are 4gpu/4cpu, 4gpu/8cpu and 4gpu/12cpu. Though it may sound like that 4gpu/12cpu will provide the maximum speed-up, it may not be true as well! This entirely depends on the problem and also on other settiings which can in general be controlled by the *keywords* mentioned in the above table. Moreover, one may find that for a particular problem using 2 GPUs in stead of 4 GPUs may give better performance, and this why this is advisable to figure out the best possible set of run-time parameters following a thorough optimization before  starting the production runs. This might save your lot of resource and time!
 
 > ## Challenge 2
