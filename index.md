@@ -33,22 +33,6 @@ On any machine, with different components, they would work differently and there
 > 
 {: .callout}
 
-For enabling KOKKOS
-```
-{{ site.kokkos_env }}
-```
-
-For enabling GPU
-```
-{{ site.gpu_env }}
-```
-
-> ## Enabling KOKKOS
-> 
-> {{ site.with_newline }}
-> 
-{: .callout}
-
 > ## Prerequisites
 >
 > - Command line experience is required to take this course as well as shell scripting.
