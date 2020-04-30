@@ -168,32 +168,40 @@ Neighbor list builds = 5
 Dangerous builds not checked
 Total wall time: 0:00:01
 ```
+{: .output}
 
-## Useful keyword to search for
+Useful keywords to search for include:
+
   * **Loop time:** This shows the total wall-clock time for the simulation to run. (source: LAMMPS manual)
 The following command can be used to extract this from `log.lammps`:
+
 ```
 grep "Loop time" log.lammps| sed 's/|/ /' | awk '{print $4}'
 
 $ 1.76553
 ```
+{: .bash}
 
   * **Performance:** This is provided for convenience to help predict how long it will take to run a desired physical simulation. (source: LAMMPS manual)
-Use the following command line to extract the value in units of `tau/day` :
+Use the following command line to extract the value in units of `tau/day`:
+
 ```
 grep "Performance" log.lammps| sed 's/|/ /' | awk '{print $2}'
 
 $ 24468.549
 ```
+{: .bash}
 
   * **CPU use:** This provides the CPU utilization per MPI task; it should be close to 100% times the number of OpenMP threads (or 1 of not using OpenMP). Lower numbers correspond to delays due to file I/O or insufficient thread utilization. (source: LAMMPS manual)
 Use the following command line to extract the value in units of ```tau/day``` :
+
 ```
 grep "CPU use" log.lammps| sed 's/|/ /' | awk '{print $1}'
-```
-```
+
 $ 100.0%
 ```
+{: .bash}
+
 * Next, we'll discuss about the timing breakdown table for CPU runtime. If try the following command line
 ```
 grep -A 8 "breakdown" log.lammps 
