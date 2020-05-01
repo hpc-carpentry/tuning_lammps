@@ -1,11 +1,10 @@
 ---
-title: "Benchmarking, Scaling (and Load Balancing?)"
+title: "Benchmarking, Scaling (FIXME and Load Balancing?)"
 teaching: 0
 exercises: 0
 questions:
 - "What is benchmarking?"
-- "What factors affect benchmarking?"
-- "How do I perform a benchmarking analysis"
+- "How do I perform a benchmarking analysis in LAMMPS"
 - "What is scaling?"
 - "How do I perform a scaling analysis"
 - "!!! What is load-balancing? !!! (FIXME)"
@@ -50,17 +49,17 @@ The input file for the LJ-system is given below:
 ```
 {% include /snippets/ep02/in.lj %}
 ```
-{: .input}
+{: .bash}
 
 
 The timing information for this run with both 1 and 4 processors is also provided with LAMMPS distribution. So, to benchmark it would be wise to run the same job with same processor settings. Let us now create a batch file to submit this job. 
 
 
-> ## Batch file to submit a LAMMPS job
+> ## Editing a submission script for a LAMMPS job
 >
 > Here is shown the header of a job script to submit a LAMMPS job using 2 nodes and 48 processors. What modification is needed to submit the job using 4 processors?
 >
-> ~~~
+> ```
 > #!/bin/bash -x
 > {{ site.sched_comment }} {{ site.sched_flag_account }}=myAccount
 > {{ site.sched_comment }} {{ site.sched_flag_nodes }}=2
@@ -72,8 +71,8 @@ The timing information for this run with both 1 and 4 processors is also provide
 >
 > ... ... ...
 > ... ... ...
-> ~~~
-> {: .input}
+> ```
+> {: .bash}
 > 
 > > ## Solution
 > > ```
@@ -95,13 +94,13 @@ Now we'll invoke LAMMPS executable to do the job. This can be done using either;
 ```
 {{ site.run_openmp }} {{ site.sched_lammps_exec }} < in.lj
 ```
-{: .input}
+{: .bash}
 
 Or,
 ```
 {{ site.run_mpi }} -np 1 {{ site.sched_lammps_exec }} < in.lj
 ```
-{: .input}
+{: .bash}
 
 > ## Submission script: full view
 >
@@ -135,6 +134,8 @@ LAMMPS (18 Feb 2020)
 OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:94)
 using 1 OpenMP thread(s) per MPI task
 ```
+{: .output}
+
 Note that it tells you about the LAMMPS version, and `OMP_NUM_THREADS` which is one of the important environment variables required to set for obtaining a performance boost. This will be discussed at a later stage. But for now, we'll focus mainly on the timing information provided in this file.
 
 When the run concludes, LAMMPS prints the final thermodynamic state and a total run time for the simulation. It also appends statistics about the CPU time and storage requirements for the simulation. An example set of statistics is shown here:
@@ -202,11 +203,15 @@ $ 100.0%
 ```
 {: .bash}
 
-* Next, we'll discuss about the timing breakdown table for CPU runtime. If try the following command line
+* **Timing Breakdown** Next, we'll discuss about the timing breakdown table for CPU runtime. If we try the following command;
+
 ```
 grep -A 8 "breakdown" log.lammps 
 ```
+{: .bash}
+
 you should see the following output:
+
 ```
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
@@ -218,6 +223,8 @@ Output  | 7.2241e-05 | 7.2241e-05 | 7.2241e-05 |   0.0 |  0.00
 Modify  | 0.023852   | 0.023852   | 0.023852   |   0.0 |  1.35
 Other   |            | 0.005199   |            |       |  0.29
 ```
+{: .output}
+
 The above table shows the times taken by the major categories of a LAMMPS run. A brief description of these categories has been provided in [LAMMPS manual](https://lammps.sandia.gov/doc/Run_output.html):
 
   * Pair = non-bonded force computations
@@ -234,15 +241,14 @@ This is very useful in the sense that it helps you to identify the performance b
 > ## Now run a benchmark...
 >
 > Now submit a LAMMPS job for the above input file for a HPC that is available to you using both 1 and 4 processors. Extract the loop times for your runs and make a bar plot to see how the performance of your HPC for this particular job compares with LAMMPS standard benchmark and with the performance for two other HPCs.
-> ```
+> 
 > | HPC system | 1 proc (sec) | 4 proc (sec) |
 > |----------- | ------------ |------------- |
 > | LAMMPS     | 2.26185      | 0.635957     |
 > | HPC 1      | 2.24207      | 0.592148     |
 > | HPC 2      | 1.76553      | 0.531145     |
 > | HPC 3      |     ?        |     ?        |
-> ```
-> {: .input}
+> 
 {: .challenge}
   
 ## Scaling

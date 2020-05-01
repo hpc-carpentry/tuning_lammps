@@ -79,7 +79,7 @@ sched_submit: "sbatch"
 sched_submit_options: "-A course01" # check
 sched_flag_account: "--account"
 sched_flag_time: "--time "
-sched_flag_node: "--nodes "
+sched_flag_nodes: "--nodes "
 sched_flag_ntasks: "--ntasks-per-node"
 sched_flag_out: "--output"
 sched_flag_err: "--error"
