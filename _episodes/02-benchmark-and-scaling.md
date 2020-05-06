@@ -261,7 +261,7 @@ Scaling in computing works in a similar way, thankfully not to that level of det
 
 **FIX ALL BELOW**
 
-> ## Plotting performanne and number of cores
+> ## Plotting performance and number of cores
 > 
 > Use the code template below to analyse how performance changes based on the setup (FIXME)
 > 
