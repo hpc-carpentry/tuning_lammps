@@ -47,6 +47,7 @@ running on an HPC is very, very different.
 >   these types of systems we recommend participants to go through the
 >   [Introduction to High-Performance Computing](https://hpc-carpentry.github.io/hpc-intro/)
 >   from [HPC Carpentry](https://hpc-carpentry.github.io/).
-> - You should be familiar with working with LAMMPS and understand its input files and be able to run LAMMPS jobs in an HPC cluster.
+> - You should be familiar with working with LAMMPS, have a basic understand of its
+>   input files and be able to run a LAMMPS simulation.
 >
 {: .prereq}
