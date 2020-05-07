@@ -10,7 +10,7 @@
 carpentry: "swc"
 
 # Overall title for pages.
-title: "Lesson Title"
+title: "Running LAMMPS on HPC systems"
 
 # Life cycle stage of the lesson
 # possible values: "pre-alpha", "alpha", "beta", "stable"
@@ -92,7 +92,7 @@ sched_interactive: "srun --pty /bin/bash -i"
 sched_comment: "#SBATCH"
 sched_flag_name: "-N" # EDITME
 sched_hist: "" # EDITME
-sched_flag_histdetail: "" # EDITME 
+sched_flag_histdetail: "" # EDITME
 lammps_version: "LAMMPS/9Jan2020-cuda"
 lammps_exec: lmp
 kokkos_env: "module use /usr/local/software/jureca/OtherStages \nmodule load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
