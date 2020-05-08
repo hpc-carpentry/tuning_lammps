@@ -106,7 +106,7 @@ BREAK_METADATA_FIELDS = {
 
 # How long are lines allowed to be?
 # Please keep this in sync with .editorconfig!
-MAX_LINE_LEN = 100
+MAX_LINE_LEN = 120
 
 
 def main():

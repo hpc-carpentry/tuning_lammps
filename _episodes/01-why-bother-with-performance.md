@@ -152,6 +152,7 @@ run.
 >
 > See the following LAMMPS output log file and the submission script file. What is the
 > requested walltime, the requested CPU hours and the actual CPU hours?
+>
 > ```
 > run script
 > ```
@@ -167,6 +168,7 @@ run.
 > ```
 > {{ site.exec_env_gpu }}
 > ```
+> {: .bash}
 >
 >> ## Solution
 >>
