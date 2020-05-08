@@ -1,0 +1,50 @@
+Loop time of 7.56141 on 24 procs for 500 steps with 864000 atoms
+
+Performance: 28566.100 tau/day, 66.125 timesteps/s
+95.3% CPU use with 24 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 2.2045     | 2.3393     | 2.6251     |   6.1 | 30.94
+Neigh   | 2.8258     | 2.8665     | 3.0548     |   2.9 | 37.91
+Comm    | 1.6847     | 1.9257     | 2.0968     |   6.8 | 25.47
+Output  | 0.0089157  | 0.028466   | 0.051726   |   6.7 |  0.38
+Modify  | 0.26308    | 0.27673    | 0.29318    |   1.5 |  3.66
+Other   |            | 0.1247     |            |       |  1.65
+
+Nlocal:    36000 ave 36186 max 35815 min
+Histogram: 1 2 3 4 2 3 3 4 1 1
+Nghost:    21547.7 ave 21693 max 21370 min
+Histogram: 1 1 0 5 5 2 4 1 2 3
+Neighs:    0 ave 0 max 0 min
+Histogram: 24 0 0 0 0 0 0 0 0 0
+FullNghs:  2.69751e+06 ave 2.71766e+06 man 2.6776e+06 min
+Histogram: 1 1 4 4 3 2 3 4 1 1 
+
+Total # of neighbors = 64740192
+Ave neighs/atom = 74.9308
+Neighbor list builds = 25
+Dangerous builds not checked
+
+
+---------------------------------------------------------------
+      Device Time Info (average):
+---------------------------------------------------------------
+Data Transfer:   0.9243 s.
+Data Cast/Pack:  0.6464 s.
+Neighbor copy:   0.5009 s.
+Neighbor unpack: 0.0000 s.
+Force calc:      0.6509 s.
+Device Overhead: 0.5445 s.
+Average split:   0.9960.
+Threads / atom:  4.
+Max Mem / Proc:  53.12 MB.
+CPU Driver_Time: 0.5243 s.
+CPU Idle_Time:   0.9986 s.
+---------------------------------------------------------------
+
+
+Please see the log.cite file for references relevant to this simulation
+
+Total wall time: 0:00:15

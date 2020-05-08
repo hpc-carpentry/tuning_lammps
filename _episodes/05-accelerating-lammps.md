@@ -268,8 +268,175 @@ Each *argument* comes with a number of *keyword* and their corresponding *values
 |blocksize|allows you to tweak the number of threads used per thread block |minimum value should be 32 |
 
 ## *package* command: Restrictions
+
 If this command is specified in an input script, it must be near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined.
 
+One can use the *package* command in LAMMPS in two different ways:
+  * Edit the input file and introduce  the line comprising the *package* command in it. This is perfectly fine, but always remember to use this near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. An example of calling the *GPU package* in a LAMMPS input file is given below:
+  ```
+  package         gpu 2 neigh yes newton off split 1.0
+  ```
+ Additionally, you also need to append an extra "/gpu" suffix wherever applicable. For example, a pair potential with GPU optimization should be mentioned in the input file as:
+ ```
+ pair_style      lj/cut/gpu 2.5
+ ```
+  * A simpler way to do this is through the command-line when launching LAMMPS using the ```-pk``` command-line switch. The syntax would be exactly the same as when used in an input script:
+  ```
+ srun lmp -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
+  ```
+The second method appears to be convenient since you don't need to take the hassle to edit the input file (and possibly in many places)!
+Well, note that there is an extra command-line switch in the above command-line. Do you know what is this for? To distinguish the various styles of these accelerator packages from its 'regular' non-accelerated variants, LAMMPS has introduces suffixes and the ```-sf``` switch  auto-appends these accelerator suffixes to various styles in the input script. Therefore, when an accelerator package is invoked through the ```-pk``` switch (for example, ```-pk gpu```), the ```-sf``` switch ensures that the appropriate style is also being invoked in the simulation (for example, it ensures that the ```lj/cut/gpu``` is used instead of ```lj/cut``` as ```pait_style```).  
+
+In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e. through the command-line.
+
+
+> ## Challenge 1: The First Exercise
+> Let us start with first example. Below is given a LAMMPS input script for a LJ system. Can you prepare a submission script to run a LAMMPS job with the following input file using 2 gpus. For this run, make sure that the neighbour list is built on the cpus, and a dynamic load-balancing between the CPUs and GPUs.
+>
+>
+> ~~~
+> processors      * * * grid numa
+> 
+> variable        x index 7
+> variable        y index 7
+> variable        z index 7
+> 
+> variable        xx equal 20*$x
+> variable        yy equal 20*$y
+> variable        zz equal 20*$z
+>  
+> units           lj
+> atom_style      atomic
+> 
+> lattice         fcc 0.8442
+> region          box block 0 ${xx} 0 ${yy} 0 ${zz}
+> create_box      1 box
+> create_atoms    1 box
+> mass            1 1.0
+> 
+> velocity        all create 1.44 87287 loop geom
+> 
+> pair_style      lj/cut 2.5
+> pair_coeff      1 1 1.0 1.0 2.5
+> 
+> neighbor        0.3 bin
+> neigh_modify    delay 0 every 20 check no
+> 
+> fix             1 all nve
+> 
+> thermo 50
+> thermo_style custom step time  temp press pe ke etotal density
+> run             500
+> ~~~
+> {: .Input}
+>
+> > ## Solution
+> > Fix me!
+> {: .solution}
+{: .challenge}
+
+## Know about the GPU package output
+At this stage, once you complete a job successfully, it is time to look for a few things in the LAMMPS output file. A few of them are for the sanity check to see if LAMMPS is doing the things that you asked for and a few of them tell you about the performances. 
+
+## Device information
+It prints about the device information both in the screen-output and the log file. You would notice something like this:
+```
+{% include /snippets/ep05/lammps-gpu-output-1.txt}
+```
+{: .bash}
+
+The first that you notice here is that it's using an *acceleration* for the pair potential lj/cut and fir this purpose it is using two  devices (Device 0 and Device 1) and 12 MPI-processes per device. That is what you asked for: 2 GPUs (```-pk gpu 2```) and ```#SBATCH --ntasks-per-node=24```. Number of tasks is shared equally by each GPU. The detail about the graphics card is also printed, *Tesla K80, 13 CU, etc. etc.* along with the * numerical precision* of the implemented *GPU package* is also printed. In this case, it is using *double precision*. Next it shows how the MPI-processes are spawned with a GPU core.
+
+## Accelerated version of pair-potential
+This section of the output shows you that it is actually using the *accelerated* version of the pair potential *lj/cut*. You can see that it is using *lj/cut/gpu* though in your input file you mentioned this as *pair_style  lj/cut 2.5*. This is what happens when you use the *-sf gpu* command-line switch. This automatically ensures that the correct accelerated version is called for this run.
+```
+{% include /snippets/ep05/lammps-gpu-output-3.txt}
+```
+ 
+## Performance section
+The following screen-output tells you all about the performance. Some of these terms are already discussed in previous episode (episode 4). When you the *GPU package* you would see an extra block of information known as *Device Time Info (average)*. This gives you a total breakdown saying how the devices (GPUs) have been utilised to do various parts of the job.
+``` 
+{% include /snippets/ep05/lammps-gpu-output-3.txt}
+```
+
+Okay, now you learnt how to submit a LAMMPS job that uses GPU package as an accelerator. This is quite simple, though optimizing the run may not be that straight-forward. You can have numerous possibilities of choosing the *argument* and the *keywords*. Not only that, the host CPU might have multiple cores. More choices would arise from here. By rule of thumb, you must have at least same number of MPI processes as the number of GPU cores available to you. But often, using many MPI tasks per GPU gives you the best performance. As an example, if you have 4 physical GPUs, you must initiate 4 MPI processes for this job. But, assume that you have a CPU with 12 cores. This gives you flexibility to use at most 12 MPI processes and the possible combinations are 4gpu/4cpu, 4gpu/8cpu and 4gpu/12cpu. Though it may sound like that 4gpu/12cpu will provide the maximum speed-up, it may not be true as well! This entirely depends on the problem and also on other settiings which can in general be controlled by the *keywords* mentioned in the above table. Moreover, one may find that for a particular problem using 2 GPUs in stead of 4 GPUs may give better performance, and this why this is advisable to figure out the best possible set of run-time parameters following a thorough optimization before  starting the production runs. This might save your lot of resource and time!
+
+> ## Challenge 2
+> 
+> **Might not be generic enough** Assume that you have an access to a computing node having 4 GPUs and 24 CPU cores. You are also told that you need to find out whether building neighbour list on CPU or GPU is more beneficial. You should also look for which is best strategy for the force-calculations i.e. offloading the force-calculation job entirely to the GPUs or to find a balance between CPUs and GPUs.  This means that you need to submit several runs with various settings involving number of MPI tasks, number of GPUs, and relevant command-line switches. So many possibilities exist! Can you show 10 different command-line options that you might like to use for your run?
+>
+>> ## Solution
+>> 1. 2GPU/1 MPI task per GPU, Neighbour list building on GPU, force-calculation entirely on GPU
+>> ```
+>> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} = 2 
+>>
+>> srun lmp -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
+>> ```
+>> 2. 2 GPUs/12 MPI proc per GPU, Neighbour list building on CPUs, force-calculation optimum load-balancing
+>> ```
+>> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} = 24 
+>> 
+>> srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split -1.0 
+>> ```
+>> 3. (FIXME below!) **Do we really need 10?? Surely 3 or 4 is enough!)
+>> ```
+>> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
+>> 
+>> srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+>> ```
+>> 4. 
+>> ```
+>> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
+>> 
+>> srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+>> ```
+>> 5.
+>> ```
+>> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
+>> 
+>> srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+>> ```
+>> 6. 
+>> ```
+>> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
+>> 
+>> srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+>> ```
+>> 7. 
+>> ```
+>> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
+>> 
+>> srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+>> ```
+>> 8. 
+>> ```
+>> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
+>> 
+>> srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+>> ```
+>> 9. 
+>> ```
+>> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
+>> 
+>> srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+>> ```
+>> 10. 
+>> ```
+>> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
+>> 
+>> srun lmp -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+>> ```
+> {: .solution}
+{: .challenge}
+
+> ## Challenge 3: Optimization
+> 
+> Use the above input file and submit as many jobs as required to optimize the run-time parameters for the best performance from 1 node. 
+> > 1. Make a plot of walltime (in sec) vs #gpu/#cpu for ```neigh yes newton off split -1.0```
+> > 2. Do the same for ```neigh yes newton off split 1.0```
+> > 3. Repeat it again for ```neigh no newton off split -1.0``` and ```neigh no newton off split 1.0```
+> > 4. Make 4 different plots and comment on which one is the best performing settings.
+{: .challenge}
 
 
 > ## Kokkos package

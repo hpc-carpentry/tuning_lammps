@@ -1,0 +1,5 @@
+(1) pair lj/cut/gpu, perpetual
+    attributes: full, newton off
+    pair build: full/bin/anomaly
+    stencil: full/bin/3d
+    bin: standard

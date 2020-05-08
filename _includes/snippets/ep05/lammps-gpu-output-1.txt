@@ -1,0 +1,22 @@
+-------------------------------------------------------------------------------
+- Using accleration for lj/cut:
+-  with 12 proc(s) per device.
+-  with 1 thread(s) per proc.
+-------------------------------------------------------------------------------
+Device 0: Tesla K80, 13 CUs, 10/11 GB, 0.82 GHZ (Double Precision)
+Device 1: Tesla K80, 13 CUs, 0.82 GHZ (Double Precision)
+-------------------------------------------------------------------------------
+
+Initializing Device and compiling on process 0...Done.
+Initializing Devices 0-1 on core 0...Done.
+Initializing Devices 0-1 on core 1...Done.
+Initializing Devices 0-1 on core 2...Done.
+Initializing Devices 0-1 on core 3...Done.
+Initializing Devices 0-1 on core 4...Done.
+Initializing Devices 0-1 on core 5...Done.
+Initializing Devices 0-1 on core 6...Done.
+Initializing Devices 0-1 on core 7...Done.
+Initializing Devices 0-1 on core 8...Done.
+Initializing Devices 0-1 on core 9...Done.
+Initializing Devices 0-1 on core 10...Done.
+Initializing Devices 0-1 on core 10...Done.
