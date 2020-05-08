@@ -93,13 +93,14 @@ sched_comment: "#SBATCH"
 sched_flag_name: "-N" # EDITME
 sched_hist: "" # EDITME
 sched_flag_histdetail: "" # EDITME
+mpi_runtime_single_core_flags: "-n 1"
 lammps_version: "LAMMPS/9Jan2020-cuda"
 lammps_exec: lmp
 kokkos_env: "module use /usr/local/software/jureca/OtherStages \nmodule load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
 gpu_env: "module use /usr/local/software/jureca/OtherStages \nmodule load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-cuda"
 
 run_openmp: "srun"
-run_mpi: "mpirun"
+run_mpi: "srun"
 
 # Start time in minutes (0 to be clock-independent, 540 to show a start at 09:00 am).
 start_time: 0
