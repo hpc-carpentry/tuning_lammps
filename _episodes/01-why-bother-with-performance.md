@@ -76,25 +76,8 @@ This lesson is about taking a well-informed, systematic approach on how to do th
 ## How is performance measured?
 
 There are a number of key terms in computing when it comes to understanding performance
-and expected duration of tasks. The most important of these are **flops**, **walltime**
+and expected duration of tasks. The most important of these are **walltime**, **flops**
 and **CPU hours**.
-
-> ## Flops
->
-> Flops (of flop/s) stands for floating point operations per second and they are
-> typically used to measure the (theoretical) performance of a computer's processor.
->
-> The theoretical peak flops is given by
->
-> `Number of cores * Average frequency * Operations per cycle`
->
-{: .callout}
-
-> ## Calculate Flops
->
-> Can you find how many flops your computer is capable of at maximum efficiency?
->
-{: .challenge}
 
 > ## Walltime
 >
@@ -105,11 +88,40 @@ and **CPU hours**.
 >
 {: .callout}
 
+> ## Flops
+>
+> Flops (of flop/s) stands for floating point operations per second and they are
+> typically used to measure the (theoretical) performance of a computer's processor.
+>
+> The theoretical peak flops is given by
+>
+> `Number of cores * Average frequency * Operations per cycle`
+>
+> What a software program can *achieve* in terms of flops is usually a surprisingly
+> small percentage of this value (e.g., 10% efficiency is not a bad number!).
+>
+> Since in our case we don't develop or compile the code, the only influence we have
+> on the flops achieved by the application is by dictating the choices it makes during
+> execution (sometimes called telling it what *code path* to walk).
+>
+{: .callout}
+
+> ## Calculate Flops
+>
+> Can you find how many flops your computer is capable of at maximum efficiency?
+>
+{: .challenge}
+
 > ## CPU Hours
 >
 > CPU hours is the amount of CPU time spent processing. For example, if I execute for a
 > walltime of 1 hour on 10 CPUs, then I will have used up 10 CPU hours.
 >
+> Maximising the flops of our application will help minimise the CPU hours, since we
+> will squeeze more calculations out of the same CPU time. However, you can achieve much
+> greater influence on the CPU hours by using a better algorithm to get to your result.
+> The best algorithm choice is usually heavily dependent on your particular use case
+> (and you are always limited by what algorithm options are available in the software).
 >
 {: .callout}
 
@@ -133,8 +145,9 @@ and **CPU hours**.
 >{: .solution}
 {: .challenge}
 
-The `{{ site.sched_flag_time }}` variable used in the exercise is the maximum amount of
-walltime requested, which will differ from the actual walltime the code spends to run.
+The `{{ site.sched_flag_time }}` variable used in the exercise is the **maximum** amount
+of walltime requested, which will differ from the actual walltime the code spends to
+run.
 
 > ## Requested CPU vs. Actual CPU
 >
@@ -167,7 +180,7 @@ walltime requested, which will differ from the actual walltime the code spends t
 
 You are the code *users*, not code *developers*, to enhance the code performance you
 need to trigger behaviour in the software that the *developers* will have put in place
-to *potentially* improve performance. To do that you need to know what the triggers are
+to *potentially* improve performance. To do that, you need to know what the triggers are
 and then try them out with your use case to see if they really do improve performance.
 
 Some triggers will be hardware related, like the use of OpenMP, MPI, or GPUs. Others
@@ -189,11 +202,18 @@ application.
 >>    distributed across those cores...but you need to ensure they are being used!
 >> 2. No, increasing simulation walltime only increases the possible duration the code
 >     will run for. It does not improve the code performance.
->> 3. Yes, IO is a very common *bottleneck* in software, it can be very expensive in
->>    terms of time to write files. Reducing the frequency of file writing can have a
+>> 3. Yes, IO is a very common *bottleneck* in software, it can be very expensive (in
+>>    terms of time) to write files. Reducing the frequency of file writing can have a
 >>    surprisingly large impact.
 >> 4. Yes, the faster the computer, the faster the code can run. However, you may not be
->>    able to find a computer with higher flops.
+>>    able to find a computer with higher flops, since higher individual CPU flops need
+>>    disproportionately more power to run (so are not well suited to an HPC system).
+>>
+>>    In an HPC system, you will usually find a *lot* of lower flop cores because they
+>>    make sense in terms of the use of electrical energy. This surprises people because
+>>    when they move to an HPC system, they may initially find that their code is slower
+>>    rather than faster. However, this is usually not about the resources but managing
+>>    their understanding and expectations of them.
 >>
 >> As you can see, there are a lot of right answers, however some methods work better
 >> than others, and it can entirely depend on the problem you are trying to solve.
