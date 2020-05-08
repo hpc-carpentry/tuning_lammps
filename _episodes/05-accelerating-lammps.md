@@ -281,14 +281,13 @@ One can use the *package* command in LAMMPS in two different ways:
  pair_style      lj/cut/gpu 2.5
  ```
   * A simpler way to do this is through the command-line when launching LAMMPS using the ```-pk``` command-line switch. The syntax would be exactly the same as when used in an input script:
-  ```
+```
  srun lmp -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
-  ```
+```
 The second method appears to be convenient since you don't need to take the hassle to edit the input file (and possibly in many places)!
-Well, note that there is an extra command-line switch in the above command-line. Do you know what is this for? To distinguish the various styles of these accelerator packages from its 'regular' non-accelerated variants, LAMMPS has introduces suffixes and the ```-sf``` switch  auto-appends these accelerator suffixes to various styles in the input script. Therefore, when an accelerator package is invoked through the ```-pk``` switch (for example, ```-pk gpu```), the ```-sf``` switch ensures that the appropriate style is also being invoked in the simulation (for example, it ensures that the ```lj/cut/gpu``` is used instead of ```lj/cut``` as ```pait_style```).  
+Well, note that there is an extra command-line switch in the above command-line. Do you know what is this for? To distinguish the various styles of these accelerator packages from its 'regular' non-accelerated variants, LAMMPS has introduces suffixes and the ```-sf``` switch  auto-appends these accelerator suffixes to various styles in the input script. Therefore, when an accelerator package is invoked through the ```-pk``` switch (for example, ```-pk gpu```), the ```-sf``` switch ensures that the appropriate style is also being invoked in the simulation (for example, it ensures that the ```lj/cut/gpu``` is used instead of ```lj/cut``` as ```pair_style```).  
 
 In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e. through the command-line.
-
 
 > ## Challenge 1: The First Exercise
 > Let us start with first example. Below is given a LAMMPS input script for a LJ system. Can you prepare a submission script to run a LAMMPS job with the following input file using 2 gpus. For this run, make sure that the neighbour list is built on the cpus, and a dynamic load-balancing between the CPUs and GPUs.
