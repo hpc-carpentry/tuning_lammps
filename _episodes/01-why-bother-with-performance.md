@@ -129,8 +129,7 @@ and **CPU hours**.
 > ## Calculate CPU hours
 >
 > In the following example, assume that you are utilising all the available core in a
-> node. Calculate the CPU hours requested to run the following job. Each node has 40
-> cores.
+> node. Calculate the CPU hours requested to run the following job.
 >
 > ```
 > {{ site.sched_comment }} {{ site.sched_flag_nodes }} = 2
@@ -140,7 +139,7 @@ and **CPU hours**.
 >
 >> ## Solution
 >>
->> 400 CPUh.
+>> 400 CPU hours.
 >>
 >{: .solution}
 {: .challenge}
