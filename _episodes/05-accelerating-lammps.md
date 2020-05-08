@@ -289,5 +289,49 @@ Well, note that there is an extra command-line switch in the above command-line.
 
 In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e. through the command-line.
 
+> ## Challenge 1: The First Exercise
+> Let us start with first example. Below is given a LAMMPS input script for a LJ system. Can you prepare a submission script to run a LAMMPS job with the following input file using 2 gpus. For this run, make sure that the neighbour list is built on the cpus, and a dynamic load-balancing between the CPUs and GPUs.
+>
+>
+> ~~~
+> processors      * * * grid numa
+> 
+> variable        x index 7
+> variable        y index 7
+> variable        z index 7
+> 
+> variable        xx equal 20*$x
+> variable        yy equal 20*$y
+> variable        zz equal 20*$z
+>  
+> units           lj
+> atom_style      atomic
+> 
+> lattice         fcc 0.8442
+> region          box block 0 ${xx} 0 ${yy} 0 ${zz}
+> create_box      1 box
+> create_atoms    1 box
+> mass            1 1.0
+> 
+> velocity        all create 1.44 87287 loop geom
+> 
+> pair_style      lj/cut 2.5
+> pair_coeff      1 1 1.0 1.0 2.5
+> 
+> neighbor        0.3 bin
+> neigh_modify    delay 0 every 20 check no
+> 
+> fix             1 all nve
+> 
+> thermo 50
+> thermo_style custom step time  temp press pe ke etotal density
+> run             500
+> ~~~
+> {: .Input}
+>
+> > ## Solution
+> > Fix me!
+> {: .solution}
+{: .challenge}
 
 {% include links.md %}
