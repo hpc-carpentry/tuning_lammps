@@ -117,7 +117,7 @@ and **CPU hours**.
 > CPU hours is the amount of CPU time spent processing. For example, if I execute for a
 > walltime of 1 hour on 10 CPUs, then I will have used up 10 CPU hours.
 >
-> Maximising the flops of our application will help minimise the CPU hours, since we
+> Maximising the flops of our application will help reduce the CPU hours, since we
 > will squeeze more calculations out of the same CPU time. However, you can achieve much
 > greater influence on the CPU hours by using a better algorithm to get to your result.
 > The best algorithm choice is usually heavily dependent on your particular use case
