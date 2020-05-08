@@ -152,7 +152,7 @@ run.
 > ## Requested CPU vs. Actual CPU
 >
 > See the following LAMMPS output log file and the submission script file. What is the
-> requested CPU hours and the actual CPU hours?
+> requested walltime, the requested CPU hours and the actual CPU hours?
 > ```
 > run script
 > ```
