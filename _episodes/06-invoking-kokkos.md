@@ -18,10 +18,6 @@ Kokkos is probably an answer to this portability issue. The primary objective of
 2. It also provides data abstractions to adjust (at compile time) the memory layout of data structures like 2d and 3d arrays to optimize performance on different hardware. 
 
 
-
-
-In modern times, HPC industry has witnessed dramatic evolutions and we don’t know yet where will it end up! Starting from the diversifying architecture, we have also also seen a paradigm shift in accelerating code from a pure MPI -based approach. Naturally the question arises how well and how fast can we cope with such a rapid evolution? The answer “probably” lies in Kokkos that targets to ease these complexities by blending performance, portability and productivity. This is in principle done in Kokkos through abstractions targeting both parallel execution of code and data management. It supports complex node architectures with N-level memory hierarchies and multiple types of execution resources. It currently can use OpenMP, Pthreads and CUDA as backend programming models. (Most recent release: v2.8.00, February 2019).
-
 ## Methodologies and checklists
 
 ## Accelerating LAMMPS using KOKKOS
