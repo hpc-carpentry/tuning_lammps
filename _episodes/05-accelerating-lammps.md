@@ -51,7 +51,7 @@ In the meantime, we'll touch a few key points about other accelerator packages t
 
 * Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. 
 
-[test]({{page.root}}/reference/)
+[test]({{page.root}}/01-why-bother-performance/)
 
 | pair styles ||||||
 |------------------|
