@@ -16,36 +16,39 @@ keypoints:
 ## How can I accelerate LAMMPS performance?
 There are two basic approaches to speed-up LAMMPS. One is to use better algorithms for certain types of calculation, and the other is to use highly optimized codes via various "accelerator packages" deviced for hardware specific platforms. 
 
-One popular example of the first approach is to use the Wolf summation method instead of the Ewald summation method for calculating long range Coulomb interactions effectively using a short-range potential. Similarly there are a few FFT schemes offered by LAMMPS and a user has to make a trade-off between accuracy and performance depending on their computational needs. The current tutorial is not aimed to discuss such types of algorithm based speed-up of LAMMPS and instead we'll focus on a few accelerator packages that is used to extract the most out of the available hardware of a HPC system.
+One popular example of the first approach is to use the Wolf summation method instead of the Ewald summation method for calculating long range Coulomb interactions effectively using a short-range potential. Similarly there are a few FFT schemes offered by LAMMPS and a user has to make a trade-off between accuracy and performance depending on their computational needs. This lesson is not aimed to discuss such types of algorithm based speed-up of LAMMPS, instead we'll focus on a few accelerator packages that is used to extract the most out of the available hardware of a HPC system.
 
 There are five accelerator packages currently offered by LAMMPS. These are 
-- **OPT**
-- **USER-INTEL**
-- **USER-OMP** 
-- **GPU** 
-- **Kokkos** 
+1. **OPT**
+2. **USER-INTEL**
+3. **USER-OMP** 
+4. **GPU** 
+5. **Kokkos** 
 
 Specialized codes contained in these packages help LAMMPS to perform well on modern HPC platforms which could have different hardware partitions. Therefore, the very next question that arises that what are these hardwares that are supported by these packages?
 
-Supported hardwares
-
-| Hardware | Accelarators |
-| -------- | ------------ |
-| Multi-core CPUs | OPT, USER-INTEL, USER-OMP, Kokkos |
-| Intel Xeon Phi | USER-INTEL, Kokkos |
-| NVIDIA GPU | GPU, Kokkos |
-
-Within the limited scope of this tutorial, this is almost impossible to discuss all of the above packages here. The key point to understand here is that the acceleration is achieved by multithreading either through OpenMP or GPU. The **ONLY** accelerator package that supports both kinds of hardwares is **Kokkos**. Kokkos is a templated C++ library developed in Sandia National Laboratory and this helps to create an abstraction that allows a *single implementation* of a software application on different kinds of hardwares by simply mapping C++ kernel onto various backend languages. This will be discussed more later in this course
-
-In the meantime, we'll touch a few key points about other accelerator packages to give you a feel about what these packages offer and in many cases these pakckages outperform Kokkos in its current form! 
-
-> ## Kokkos: a developing library
+> ## Supported hardwares
 >
-> Most of the accelerator packages offered by LAMMPS may outperform Kokkos. So... why should we bother to learn about using Kokkos?
+> | Hardware        | Accelerators                      |
+> | --------------- | --------------------------------- |
+> | Multi-core CPUs | OPT, USER-INTEL, USER-OMP, Kokkos |
+> | Intel Xeon Phi  | USER-INTEL, Kokkos                |
+> | NVIDIA GPU      | GPU, Kokkos                       |
+> 
+{: .callout}
+
+Within the limited scope of this tutorial, this is almost impossible to discuss all of the above packages here in detail. The key point to understand is that the acceleration is achieved by multithreading either through OpenMP or GPU. The **ONLY** accelerator package that supports both kinds of hardwares is **Kokkos**. Kokkos is a templated C++ library developed in Sandia National Laboratory and this helps to create an abstraction that allows a *single implementation* of a software application on different kinds of hardwares by simply mapping C++ kernel onto various backend languages. This will be discussed more later in the [next lesson]({{page.root}}/06-invoking-kokkos).
+
+In the meantime, we'll touch a few key points about other accelerator packages to give you a feel about what these packages offer and in many cases these packages outperform Kokkos in its current form!
+
+> ## Kokkos: A developing library
+>
+>  Most of the accelerator packages offered by LAMMPS may outperform Kokkos. So... why should we bother to learn about using Kokkos?
 {: .discussion}
 
 ## OPT package
-* Acceleration, in this case, is mainly achieved by using templeted C++ library to reduce computational overheads due to `if` tests and other conditional code blocks.
+
+* Acceleration, in this case, is achieved by using templeted C++ library to reduce computational overheads due to `if` tests and other conditional code blocks.
 
 * This also provides better vectorization operations as compared to its regular CPU version.
 
@@ -64,34 +67,26 @@ In the meantime, we'll touch a few key points about other accelerator packages t
 
 ## USER-INTEL package
 
-* Acceleration, in this case, is mainly achieved in two different ways. One of them is to use vectorisation on multi-core CPUs and the other one is to offload calculations of neighbour list and non-bonded interactions to Phi co-processors.
+The USER-INTEL package supports *single*, *double* and *mixed* precision calculations. Acceleration, in this case, is achieved in two different ways. 
+  * Use vectorisation on multi-core CPUs 
+  * Offload calculations of neighbour list and non-bonded interactions to Phi co-processors.
 
-* For using offload feature, we need Intel Xeon Phi coprocessors
+There are, however, a number of conditions;
+  * For using the offload feature, the Intel Xeon Phi coprocessors are required.
+  * For using vectorization feature, Intel compiler with version 14.0.1.106 or versions 15.0.2.044 and higher is required on both multi-core CPUs and Phi systems.
 
-* For using vectorization feature, Intel compiler with version 14.0.1.106 or versions 15.0.2.044 and higher is required on both multi-core CPUs and Phi systems.
+There are many LAMMPS features that are supported by this accelerator package, which can be found [here]({{page.root}}/reference/#package-USER-INTEL).
 
-* The LAMMPS features that are supported by this accelerator package can be found [here]({{page.root}}/reference/#package-USER-INTEL).
- 
-* This packages supports *single*, *double* and *mixed* precision calculations.
-
-* Performance enhancemnt using this package depends on many considerations like the hardware that is available to you, various styles that you are using in the input, size of your problem, and precision. For example, if you are using a pair style (say, reax) for which this is not implemented, its obvious that you are not going to have a performance gain for the *Pair* part of the calculation. Now, if majority of the computation time is coming from the *Pair* part then you are in trouble. If you would like to know how much speedup you can achieve using USER-INTEL, you can look [here](https://lammps.sandia.gov/doc/Speed_intel.html) 
+Performance enhancement using this package depends on many considerations, such as the hardware that is available to you, various styles that you are using in the input, the size of your problem, and precision. For example, if you are using a pair style (say, `reax`) for which this is not implemented, its obvious that you are not going to have a performance gain for the *Pair* part of the calculation. Now, if the majority of the computation time is coming from the *Pair* part then you are in trouble. If you would like to know how much speedup you can achieve using USER-INTEL, you can look [here](https://lammps.sandia.gov/doc/Speed_intel.html) 
 
 
 ## USER-OMP package
 
-* This accelerator package offers performance gain through otimisation and multi-threading via OpenMP interface. 
-* In order to make the multi-threading functional, you need multi-core CPUs and a compiler that supports multithreading.
-* If your compiler does not support multithreading then also you can use it as an optimized serial code.
-* Considerably a big sub-set of the LAMMPS routines can be used with this accelerator.
-* A list of functionalities enabled with this package can be found [here]({{page.root}}/reference/#package-USER-OMP).
+This accelerator package offers performance gain through otimisation and multi-threading via OpenMP interface. In order to make the multi-threading functional, you need multi-core CPUs and a compiler that supports multithreading. If your compiler does not support multithreading then also you can use it as an optimized serial code. Considerably a big sub-set of the LAMMPS routines can be used with this accelerator.
 
-A list of functionalities enabled with this packages (as of 3Mar20 version) is given below.
+A list of functionalities enabled with this package can be found [here]({{page.root}}/reference/#package-USER-OMP).
 
-Generally, one can expect 5-20% performance when using this package either in serial or parallel.
-
-The optimal number of OpenMP threads to use is to be always tested for a problem. But, this gives better performance when used for less number of threads, generally 2-4.
-
-It is important to remember that MPI implementation in LAMMPS is so robust that you may always expect this to be more effective than using OpenMP on multi-core CPUs.
+Generally, one can expect 5-20% performance when using this package either in serial or parallel. The optimal number of OpenMP threads to use is to be always tested for a problem. But, this gives better performance when used for less number of threads, generally 2-4. It is important to remember that MPI implementation in LAMMPS is so robust that you may always expect this to be more effective than using OpenMP on multi-core CPUs.
 
 > ## Why is MPI+OpenMP is preferred over pure MPI sometimes?
 > 
@@ -100,18 +95,13 @@ It is important to remember that MPI implementation in LAMMPS is so robust that 
 
 ## GPU package
 
-Using GPU package in LAMMPS one can achieve performance gain by coupling GPUs to one or many CPUS. 
+Using the GPU package in LAMMPS, one can achieve performance gain by coupling GPUs to one or many CPUS. It provides supports for both NVIDIA and OpenCL and thus it helps to port GPU acceleration to variety of hardwares. This becomes possible since the codes in GPU packages call the generic GPU libraries present in the lib/gpu folder.
 
-GPU package in LAMMPS provides supports for both NVIDIA and OpenCL and thus it helps to port GPU acceleration to variety of hardwares. This becomes possible since the codes in GPU packages call the generic GPU libraries present in the lib/gpu folder.
+Calculations that require access to atomic data like coordinates, velocities, forces may suffer bottlenecks since at every step these data are communicated back and forth between CPUs and GPUs. Calculations can be done in single, double or mixed precisions.
 
-Calculations that require access to atomic data like coordinates, velocities, forces may suffer bottlenecks since at every step these data are communicated back and forth between CPUs and GPUs.
-
-In case of GPU packages, computations are shared between CPU and GPU unlike the Kokkos(GPU) package where primary aim is to offload all of the calculations to the GPUs only. For example, asynchronous force calculations like pair vs bond/angle/dihedral/improper can be done simultaneously on GPUs and CPUs respectively. Similarly, for PPPM calculations the charge assignment and the force computations are done on GPUs whereas the FFT calculations that require MPI communications are done on CPUs. Neighbour lists can be built on either CPUs or GPUs. You can control this using specific flags in commandline of your job submission script. Thus GPU package provides a balanced mix of GPU and CPU usage for a particular simulation to achieve a performance gain.
-
-Finally, you can do your calculation in single, double or mixed precision using this GPU package.
+In case of GPU packages, computations are shared between CPU and GPU unlike the Kokkos(GPU) package where the primary aim is to offload all of the calculations to the GPUs only. For example, asynchronous force calculations like **pair** vs **bond/angle/dihedral/improper** can be done simultaneously on GPUs and CPUs respectively. Similarly, for PPPM calculations the charge assignment and the force computations are done on GPUs whereas the FFT calculations that require MPI communications are done on CPUs. Neighbour lists can be built on either CPUs or GPUs. You can control this using specific flags in the command line of your job submission script. Thus GPU package provides a balanced mix of GPU and CPU usage for a particular simulation to achieve a performance gain.
 
 A list of functionalities enabled with this package can be found [here]({{page.root}}/reference/#package-GPU).
-
 
 A question that you may be asking is how much speed-up would you expect from the GPU package. Unfortunately there is no 'one-line' answer for this. This can depend on many things starting from the hardware specification to the complexities involved with a specific problem that you are simulating. However, for a given problem one can always optimize the run-time parameters to extract most out of a hardware. In the following section, we'll discuss some of these tuning parameters for the simplest LJ-systems.
 
@@ -133,15 +123,15 @@ To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMM
 The basic syntax of this command is: 
 *package style args*
 
-```style``` provides you to choose the accelerator package for your run. There are four different packages available currently (versdion 3Mar20): 
-* *gpu*: This calls the *GPU package*
-* *intel*: This calls the *USER-INTEL* package
-* *omp* : This calls the *USER-OMP* package
-* *kokkos*: This calls the *Kokkos* package
+```style``` provides you to choose the accelerator package for your run. There are four different packages available currently (version 3Mar20): 
+* `gpu`: This calls the *GPU* package
+* `intel`: This calls the *USER-INTEL* package
+* `omp` : This calls the *USER-OMP* package
+* `kokkos`: This calls the *Kokkos* package
 
-To use *GPU package* as an accelerator you need to select *gpu* as *style*. Next you need to choose proper *arguments* for the *gpu* style. The argument for *gpu* style is *ngpu*.
+To use *GPU package* as an accelerator you need to select `gpu` as *style*. Next you need to choose proper *arguments* for the *gpu* style. The argument for *gpu* style is *ngpu*.
 
-* *ngpu*: This sets the number of GPUs per node. There must be at least as many MPI tasks per node as GPUs, as set by the mpirun or mpiexec command. If there are more MPI tasks (per node) than GPUs, multiple MPI tasks will share each GPU.
+* `ngpu`: This sets the number of GPUs per node. There must be at least as many MPI tasks per node as GPUs, as set by the mpirun or mpiexec command. If there are more MPI tasks (per node) than GPUs, multiple MPI tasks will share each GPU.
 
 Each *argument* comes with a number of *keyword* and their corresponding *values*. These *keyword/values* provides you enhanced flexibility to distribute your job among cpu and gpus in an optimum way. For a quick reference, the following table could be useful:
 

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-- Using accleration for lj/cut:
+- Using acceleration for lj/cut:
 -  with 12 proc(s) per device.
 -  with 1 thread(s) per proc.
 -------------------------------------------------------------------------------
