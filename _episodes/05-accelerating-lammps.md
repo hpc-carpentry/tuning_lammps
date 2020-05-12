@@ -70,7 +70,7 @@ In the meantime, we'll touch a few key points about other accelerator packages t
 
 * For using vectorization feature, Intel compiler with version 14.0.1.106 or versions 15.0.2.044 and higher is required on both multi-core CPUs and Phi systems.
 
-The following LAMMPS features are supported by this accelerator package:
+* The LAMMPS features that are supported by this accelerator package can be found [here]({{page.root}}/reference/#package-USER-INTEL).
 
 | Pair styles ||||||
 |------------------|
