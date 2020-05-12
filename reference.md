@@ -7,8 +7,8 @@ root: ..
 ## Glossary
 
 {:auto_ids}
-OPT
-:   test
+package-OPT
+:   As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this package.
 
 | pair styles       |
 | :---------------: |
@@ -24,10 +24,6 @@ OPT
 |ufm                |
 
 
-
-```
-{% include /snippets/reference/OPT.txt %}
-```
 
 
 {% include links.md %}

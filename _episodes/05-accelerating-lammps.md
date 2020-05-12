@@ -49,14 +49,7 @@ In the meantime, we'll touch a few key points about other accelerator packages t
 
 * This also provides better vectorization operations as compared to its regular CPU version.
 
-* Only a handful of pair styles can be accelerated using this package. As of *3Mar20* version of LAMMPS, 10 pair styles are supported by this accelerator package. 
-
-[test]({{page.root}}/reference/)
-
-| pair styles ||||||
-|------------------|
-|eam_alloy|eam_fs|eam|lj_charmm_coul_long|lj_cut_coul_long|lj_cut|
-|lj_cut_tip4p_long|lj_long_coul_long|morse|ufm| | |
+* Only a handful of pair styles can be accelerated using this package, which can be found [here]({{page.root}}/reference/#package-OPT).
 
 * This generally offers 5-20% savings on computational cost on most of the machines
 
