@@ -71,41 +71,6 @@ In the meantime, we'll touch a few key points about other accelerator packages t
 * For using vectorization feature, Intel compiler with version 14.0.1.106 or versions 15.0.2.044 and higher is required on both multi-core CPUs and Phi systems.
 
 * The LAMMPS features that are supported by this accelerator package can be found [here]({{page.root}}/reference/#package-USER-INTEL).
-
-| Pair styles ||||||
-|------------------|
-|airebo|airebo_morse|buck_coul_cut|buck_coul_long|buck|dpd|
-|eam_alloy|eam_fs|eam|gayberne|lj_charmm_coul_charmm|lj_charmm_coul_long|
-|lj_cut_coul_long|lj_cut|lj_long_coul_long|rebo|sw|tersoff|
-
-| Bond styles | | | | | |
-|------------------|
-|fene|harmonic| | | | |
-
-|Angle styles ||||||
-|------------------|
-|charmm|harmonic| | | | |
-
-|Improper styles ||||||
-|---------------------|
-|cvff|harmonic| | | | |
-
-|Dihedral styles ||||||
-|---------------------|
-|charmm|fourier|harmonic|opls| | |
-
-|Fix styles ||||||
-|----------------|
-|nve|nvt|npt|nh|nve_asphere|nvt_sllod|
-
-|K-space styles||||||
-|-------------------|
-|pppm|pppm_disp| | | |
-
-|Integrtator styles ||||||
-|------------------------|
-|verlet_lrt | | | | | |
-
  
 * This packages supports *single*, *double* and *mixed* precision calculations.
 
@@ -118,6 +83,7 @@ In the meantime, we'll touch a few key points about other accelerator packages t
 * In order to make the multi-threading functional, you need multi-core CPUs and a compiler that supports multithreading.
 * If your compiler does not support multithreading then also you can use it as an optimized serial code.
 * Considerably a big sub-set of the LAMMPS routines can be used with this accelerator.
+* A list of functionalities enabled with this package can be found [here]({{page.root}}/reference/#package-USER-OMP).
 
 A list of functionalities enabled with this packages (as of 3Mar20 version) is given below.
 
