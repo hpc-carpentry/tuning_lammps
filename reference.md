@@ -72,37 +72,40 @@ package-USER-OMP
     |tip4p_long           |tip4p_long_soft        |umf                            |vashishta               |vashishta_table       |yukawa_colloid           |
     |yukawa               |zbl                    |                               |                        |                      |                         |
 
-    | Bond styles        | Angle styles     | Improper styles | Dihedral styles  | Fix styles    | K-space styles   |
-    | :----------------- | :--------------- | :-------------- | :--------------- | :------------ | :--------------- | 
-    | class2             | charmm           | class2          | charmm           | gravity       | pppm_cg          |
-    | fene_expand        | class2           | cossq           | class2           | neigh_history | pppm_disp        |
-    | fene               | cosine_delta     | cvff            | cosine_shift_exp | nh_asphere    | pppm_disp_tip4p  |
-    | gromos             | cosine           | fourier         | fourier          | nh            | pppm             |
-    | harmonic           | cosine_periodic  | harmonic        | harmonic         | nh_sphere     | pppm_tip4p       |
-    | harmonic_shift_cut | cosine_shift_exp | ring            | helix            | nph_asphere   |                  |
-    | harmonic_shift     | cosine_shift     | umbrella        | multi_harmonic   | nph           |                  |
-    | morse              | cosine_squared   |                 | nharmonic        | nph_sphere    |                  |
-    | nonlinear          | dipole           |                 | opls             | npt_asphere   |                  |
-    | quartic            | fourier          |                 | quadratic        | npt           |                  |
-    | table              | fourier_simple   |                 | table            | npt_sphere    |                  |
-    |                    | harmonic         |                 |                  | nve           |                  |
-    |                    | quartic          |                 |                  | nve_sphere    |                  |
-    |                    | sdk              |                 |                  | nvt_asphere   |                  |
-    |                    | table            |                 |                  | nvt           |                  |
-    |                    |                  |                 |                  | nvt_sllod     |                  |
-    |                    |                  |                 |                  | nvt_sphere    |                  |
-    |                    |                  |                 |                  | peri_neigh    |                  |
-    |                    |                  |                 |                  | qeq_comb      |                  |
-    |                    |                  |                 |                  | qeq_reax      |                  |
-    |                    |                  |                 |                  | rigid_nh      |                  |
-    |                    |                  |                 |                  | rigid_nph     |                  |
-    |                    |                  |                 |                  | rigid_npt     |                  |
-    |                    |                  |                 |                  | rigid_nve     |                  |
-    |                    |                  |                 |                  | rigid_nvt     |                  |
-    |                    |                  |                 |                  | rigid         |                  |
-    |                    |                  |                 |                  | rigid_small   |                  |
+    | Bond styles        | Angle styles     | Improper styles | Dihedral styles  | Fix styles    |             | K-space styles  |
+    | :----------------- | :--------------- | :-------------- | :--------------- | :------------ | :---------- |:--------------- | 
+    | class2             | charmm           | class2          | charmm           | gravity       | nvt_sllod   | pppm_cg         |
+    | fene_expand        | class2           | cossq           | class2           | neigh_history | nvt_sphere  | pppm_disp       |
+    | fene               | cosine_delta     | cvff            | cosine_shift_exp | nh_asphere    | peri_neigh  | pppm_disp_tip4p |
+    | gromos             | cosine           | fourier         | fourier          | nh            | qeq_comb    | pppm            |
+    | harmonic           | cosine_periodic  | harmonic        | harmonic         | nh_sphere     | qeq_reax    | pppm_tip4p      |
+    | harmonic_shift_cut | cosine_shift_exp | ring            | helix            | nph_asphere   | rigid_nh    |                 |
+    | harmonic_shift     | cosine_shift     | umbrella        | multi_harmonic   | nph           | rigid_nph   |                 |
+    | morse              | cosine_squared   |                 | nharmonic        | nph_sphere    | rigid_npt   |                 |
+    | nonlinear          | dipole           |                 | opls             | npt_asphere   | rigid_nve   |                 |
+    | quartic            | fourier          |                 | quadratic        | npt           | rigid_nvt   |                 |
+    | table              | fourier_simple   |                 | table            | npt_sphere    | rigid       |                 |
+    |                    | harmonic         |                 |                  | nve           | rigid_small |                 |
+    |                    | quartic          |                 |                  | nve_sphere    |             |                 |
+    |                    | sdk              |                 |                  | nvt_asphere   |             |                 |
+    |                    | table            |                 |                  | nvt           |             |                 |
 
 package-GPU
 :   As of *3Mar20* version of LAMMPS, the following list of functionalities are available with the GPU package
+
+    |                    |                     |    Pair styles   |                     |                    | K-space style |
+    | :----------------- | :------------------ | :--------------- | :------------------ | :----------------- | :------------ |
+    | beck               | born_coul_long_cs   |born_coul_long    | born_coul_wolf_cs   |born_coul_wolf      | pppm          |
+    | born               | buck_coul_cut       |buck_coul_long    | buck                |colloid             |               |
+    | coul_cut           | coul_debye          |coul_dsf          | coul_long_cs        |coul_long           |               |
+    | dpd                | dpd_tstat           |eam_alloy         | eam_fs              |eam                 |               |
+    | gauss              | gayberne            |lj96_cut          | lj_charmm_coul_long |lj_class2_coul_long |               |
+    | lj_class2          | lj_cubic            |lj_cut_coul_cut   | lj_cut_coul_deby    |lj_cut_coul_dsf     |               |
+    | lj_cut_coul_long   | lj_cut_coul_msm     |lj_cut_dipole_cut | lj_cut_dipole_long  |lj_cut              |               |
+    | lj_cut_tip4p_long  | lj_expand_coul_long |lj_expand         | lj_gromacs          |lj_sdk_coul_long    |               |
+    | lj_sdk             | lj_sf_dipole_sf     |mie_cut           | morse               |resquared           |               |
+    | soft               | sw                  |table             | tersoff             |tersoff_mod         |               |
+    | tersoff_zbl        | ufm                 |vashishta         | yukawa_colloid      |yukawa              |               |
+    | zbl                |                     |                  |                     |                    |               |
 
 {% include links.md %}

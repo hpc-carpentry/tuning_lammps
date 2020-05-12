@@ -110,26 +110,7 @@ In case of GPU packages, computations are shared between CPU and GPU unlike the 
 
 Finally, you can do your calculation in single, double or mixed precision using this GPU package.
 
-Following routines are supported by the GPU package in the 3Mar20 version of LAMMPS:
-
-## GPU package
-
-| Pair styles ||||||||
-|--------------------|
-|beck|born_coul_long_cs|born_coul_long|born_coul_wolf_cs|born_coul_wolf|born|
-|buck_coul_cut|buck_coul_long|buck|colloid|coul_cut|coul_debye|
-|coul_dsf|coul_long_cs|coul_long|dpd|dpd_tstat|eam_alloy|
-|eam_fs|eam|gauss|gayberne|lj96_cut|lj_charmm_coul_long|
-|lj_class2_coul_long|lj_class2|lj_cubic|lj_cut_coul_cut|lj_cut_coul_deby|lj_cut_coul_dsf|
-|lj_cut_coul_long|lj_cut_coul_msm|lj_cut_dipole_cut|lj_cut_dipole_long|lj_cut|lj_cut_tip4p_long|
-|lj_expand_coul_long|lj_expand|lj_gromacs|lj_sdk_coul_long|lj_sdk|lj_sf_dipole_sf|
-|mie_cut|morse|resquared|soft|sw|table|
-|tersoff|tersoff_mod|tersoff_zbl|ufm|vashishta|yukawa_colloid|
-|yukawa|zbl| | | | |
-
-|K-space style ||||||
-|-------------------|
-|pppm | | | | | |
+A list of functionalities enabled with this package can be found [here]({{page.root}}/reference/#package-GPU).
 
 
 A question that you may be asking is how much speed-up would you expect from the GPU package. Unfortunately there is no 'one-line' answer for this. This can depend on many things starting from the hardware specification to the complexities involved with a specific problem that you are simulating. However, for a given problem one can always optimize the run-time parameters to extract most out of a hardware. In the following section, we'll discuss some of these tuning parameters for the simplest LJ-systems.
