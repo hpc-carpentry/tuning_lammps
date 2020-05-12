@@ -87,64 +87,11 @@ In the meantime, we'll touch a few key points about other accelerator packages t
 
 A list of functionalities enabled with this packages (as of 3Mar20 version) is given below.
 
-| Pair styles ||||||||
-|--------------------|
-|adp|agni|airebo_morse|airbo|beck|born_coul_long|
-|born_coul_msm|born_coul_wolf|born|brownian|brownian_poly|buck_coul_cut|
-|buck_coul_long|buck_coul_msm|buck_long_coul_long|buck|colloid|comb|
-|coul_cut|coul_cut_soft|coul_debye|coul_diel|coul_dsf|coul_long|
-|coul_long_soft|coul_msm|coul_wolf|dpd|dpd_tstat|eam_alloy|
-|eam_cd|eam_fs|eam|edip|eim|gauss_cut|
-|gauss|gayberne|gran_hertz_history|gran_hooke_history|gran_hooke|hbond_dreiding_lj|
-|hbond_dreiding_morse|lj96_cut|lj_charmm_coul_charmm_implicit|lj_charmm_coul_charmm|lj_charmm_coul_long|lj_charmm_coul_long_soft|
-|lj_charmm_coul_msm|lj_class2_coul_cut|lj_class2_coul_long|lj_class2|lj_cubic|lj_cut_coul_cut|
-|lj_cut_coul_cut_soft|lj_cut_coul_debye|lj_cut_coul_dsf|lj_cut_coul_long|lj_cut_coul_long_soft|lj_cut_coul_msm|
-|lj_cut_coul_wolf|lj_cut_dipole_cut|lj_cut|lj_cut_soft|lj_cut_thole_long|lj_cut_tip4p_cut|
-|lj_cut_tip4p_long|lj_cut_tip4p_long_soft|lj_expand|lj_gromacs_coul_gromacs|lj_gromacs|lj_long_coul_long|
-|lj_long_tip4p_long|lj_sdk_coul_long|lj_sdk_coul_msm|lj_sdk|lj_sf_dipole_sf|lj_smooth_linear|
-|lj_smooth_linear|lj_smooth|lubricate|lubricate_poly|meam_spline|morse|
-|morse_smooth_linear|nm_cut_coul_cut|nm_cut_coul_long|nm_cut|peri_lps|peri_pmb|
-|reaxc|rebo|resquared|soft|sw|table|
-|tersoff_mod_c|tersoff_mod|tersoff|tersoff_table|tersoff_zbl|tip4p_cut|
-|tip4p_long|tip4p_long_soft|umf|vashishta|vashishta_table|yukawa_colloid|
-|yukawa|zbl| | | | |
- 
-|Bond styles ||||||
-|-----------------|
-|class2|fene_expand|fene|gromos|harmonic|harmonic_shift_cut|
-|harmonic_shift|morse|nonlinear|quartic|table||
-
-|Angle styles  ||||||
-|-------------------|
-|charmm|class2|cosine_delta|cosine|cosine_periodic|cosine_shift_exp|
-|cosine_shift|cosine_squared|dipole|fourier|fourier_simple|harmonic|
-|quartic|sdk|table||||
-
-|Improper styles. |||||||
-|-----------------------|
-|class2|cossq|cvff|fourier|harmonic|ring|umbrella|
-
-|Dihedral styles ||||||
-|---------------------|
-|charmm|class2|cosine_shift_exp|fourier|harmonic|helix|
-|multi_harmonic|nharmonic|opls|quadratic|table| |
-
-|Fix styles |||||||
-|-----------------|
-|gravity|neigh_history|nh_asphere|nh|nh_sphere|nph_asphere|
-|nph|nph_sphere|npt_asphere|npt|npt_sphere|nve|
-|nve_sphere|nvt_asphere|nvt|nvt_sllod|nvt_sphere|peri_neigh|
-|qeq_comb|qeq_reax|rigid_nh|rigid_nph|rigid_npt|rigid_nve|
-|rigid_nvt|rigid|rigid_small| | | |
- 
-|Kspace styles ||||||
-|-------------------|
-|pppm_cg|pppm_disp|pppm_disp_tip4p|pppm|pppm_tip4p| |
-
 Generally, one can expect 5-20% performance when using this package either in serial or parallel.
-The optimal number of OpenMP threads to use is to be always tested for a problem. But, this gives better performance when used for less number of threads, generally 2-4.
- Remember that MPI implementation in LAMMPS is so robust that you may always expect this to be more effective than using OpenMP on multi-core CPUs.
 
+The optimal number of OpenMP threads to use is to be always tested for a problem. But, this gives better performance when used for less number of threads, generally 2-4.
+
+It is important to remember that MPI implementation in LAMMPS is so robust that you may always expect this to be more effective than using OpenMP on multi-core CPUs.
 
 > ## Why is MPI+OpenMP is preferred over pure MPI sometimes?
 > 
