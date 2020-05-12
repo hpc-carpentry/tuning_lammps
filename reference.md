@@ -1,11 +1,15 @@
 ---
 layout: reference
+permalink: /reference/
+root: ..
 ---
 
 ## Glossary
 
+{:auto_ids}
 OPT
-:
+:   test
+
 | pair styles       |
 | :---------------: |
 |eam_alloy          |
@@ -18,6 +22,8 @@ OPT
 |lj_long_coul_long  |
 |morse              |
 |ufm                |
+
+
 
 ```
 {% include /snippets/ep05/lammps-gpu-output-3.txt %}
