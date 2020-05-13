@@ -47,6 +47,32 @@ The list of LAMMPS features that is supported by Kokkos is given below:
 |             |              | Setforce    |               |             |              |                 |                 |                |
 |             |              | Wall/reflect|               |             |              |                 |                 |                |
 
+
+## How to invoke Kokkos package in a LAMMPS run?
+
+ You already know how to call an accelerator package in LAMMPS. It was discussed in the previous chapter. The basic syntax of this command is: *package style args*
+Obviously, you need to use *kokkos* as *style* with suitable arguments/keywords.
+
+srun lmp -in in.lj -k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off
+
+ The next you need to choose proper *keywords* and *value* pairs. These *keyword/values* provides you enhanced flexibility to distribute your job among cpu and gpus in an optimum way. For a quick reference, the following table could be useful:
+
+ | Keywords |what it does? |Default value |
+ |----------|--------------|--------------|
+ |neigh|This keyword determines how a neighbour list is built. Possible values are *half*, *full*  | *full* |
+ |neigh/qeq|  |  |
+ |neigh/thread|  |  |
+ |newton|sets the Newton flags for pairwise and bonded interactions to off or on |*off* for GPU and *on* for CPU |
+ |binsize|sets the size of bins used to bin atoms in neighbor list builds|0.0 for CPU and 2x larger binsize equal to the pairwise+neighbour skin|
+ |comm|It determines whether the cpu or gpu performs the packing and unpacking of data  when communicating per-atom data between processors. values could be *no*, *host* or *device*. *no* means pack/unpack will be done in non-kokkos mode| |
+ |comm/exchange|This defines 'exchange' communication which happens only when neighbour lists are rebuilt. Values could be *no*, *host* or *device* | |
+ |comm/forward|This defines forward communication and it occurs at every timestep. Values could be *no*, *host* or *device* | |
+ |comm/reverse| If the *newton* option is set to *on*, this occurs at every timestep. Values could be *no*, *host* or *device*| |
+ |cuda/aware|This keyword is used to choose whether CUDA-aware MPI will be used. In cases where CUDA-aware MPI is not available, you must explicitly set it to *off* value otherwise it will result is an error.|off |
+ 
+ 
+ 
+
 > ## LAMMPS hardware compatibility
 > Which of these hardwares is LAMMPS compatible on?
 > 
