@@ -18,26 +18,17 @@ Kokkos is probably an answer to this portability issue. The primary objective of
 2. It also provides data abstractions to adjust (at compile time) the memory layout of data structures like 2d and 3d arrays to optimize performance on different hardware. 
 
 
-## Methodologies and checklists
+ ## What is KOKKOS package in LAMMPS?
+ Kokkos package in LAMMPS is implemented to gain performance with portability. Various pair styles, fixes and atom styles have been updated in LAMMPS to use the data structures and macros as provided by the Kokkos C++ library so that when LAMMPS is built with Kokkos feature enabled for a particular hardware, it can provide optimal performance for that hardware when all the runtime parameters are choosen sensibly. What are the things that it supports currently? 
 
-## Accelerating LAMMPS using KOKKOS
-
-## Knowing your hardware
-   
-## What is KOKKOS?
-
-* supports OpenMP and GPU
-* provide excellent scalability to many OpenMP threads
-* 1-to-1 GPU to CPU support
-* Minimal data transfer between the host and the device
-* everything runs on GPU
-* supports modern GPUs only
-* supports double precision only
-
-## Important features of LAMMPS Kokkos package
-
-Kokkos can be used in conjunction with LAMMPS to accelerate its performance. This package helps to optimize LAMMPS performances for specific hardware architectures.
-But to obtain the Kokkos accelartion, LAMMPS needs to be built using Kokkos for those specific hardwares and it also requires propoer choices of input parametres to get an optimal performance.
+* It can be run on multi-core CPUs, manycore CPUS and Intel Phis and NVIDIA GPUs.
+* It provides three modes of execution: Serial (MPI-only for CPUs and Phi), OpenMP (via threading for manycore CPUs and Phi), and CUDA (for NVIDIA GPUs)
+* It provides reasonable scalability to many OpenMP threads.
+* This is specifically designed for one-to-one CPU to GPU ratio
+* Care has been taken to minimize performance overhead due to cpu-gpu communication. This can be achieved by ensuring that most of the codes can be run on GPUs once assigned by the CPU and when all the jobs are done, it is communicated back to CPU, thus minimising the amount of data transfer between CPU and GPU.
+* supports modern GPUs only (an extensive list of supported hardwares are given in LAMMPS [website]().
+* Currently supports double precision only. 
+* Still in developmental stage, so more features and flexibilities are expected in future versions of LAMMPS.
 
 The list of LAMMPS features that is supported by Kokkos is given below:
 
