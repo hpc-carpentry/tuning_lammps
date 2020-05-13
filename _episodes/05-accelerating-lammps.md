@@ -316,7 +316,7 @@ something like this:
 The first that you notice here is that it's using an *acceleration* for the pair potential lj/cut
 and fir this purpose it is using two  devices (Device 0 and Device 1) and 12 MPI-processes per
 device. That is what you asked for: 2 GPUs (```-pk gpu 2```) and 
-`{{ site.sched_comment } {{ site.sched_flag_ntasks }}=24`. Number of tasks is shared equally by
+`{{ site.sched_comment }} {{ site.sched_flag_ntasks }}=24`. Number of tasks is shared equally by
 each GPU. The detail about the graphics card is also printed, *Tesla K80, 13 CU, etc. etc.* along
 with the *numerical precision* of the implemented *GPU package* is also printed. In this case, it
 is using *double precision*. Next it shows how the MPI-processes are spawned with a GPU core.
