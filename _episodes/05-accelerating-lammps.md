@@ -229,7 +229,7 @@ optimum way. For a quick reference, the following table could be useful:
 > |`gpuID`     | allows selection of which GPUs on each node will be used for a simulation                                    |              |
 > |`tpa`       | sets the number of GPU thread per atom used to perform force calculations                                    | 1            |
 > |`device`    | used to tune parameters optimized for a specific accelerator and platform when using OpenCL                  |              |
-> |`blocksize` | allows you to tweak the number of threads used per thread block |minimum value should be 32                  | minimum = 32 |
+> |`blocksize` | allows you to tweak the number of threads used per thread block                                              | minimum = 32 |
 >
 {: .callout}
 
