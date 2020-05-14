@@ -199,6 +199,7 @@ application.
 > 4. Having a computer with higher flops
 >
 >> ## Solution
+>>
 >> 1. Yes, potentially, the more cores and nodes you have, the more work can be
 >>    distributed across those cores...but you need to ensure they are being used!
 >> 2. No, increasing simulation walltime only increases the possible duration the code
