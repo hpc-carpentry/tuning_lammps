@@ -17,8 +17,7 @@ Kokkos is probably an answer to this portability issue. The primary objective of
 1. It maps a C++ kernel to different backend languages like Cuda, OpenMP, Pthreads.
 2. It also provides data abstractions to adjust (at compile time) the memory layout of data structures like 2d and 3d arrays to optimize performance on different hardware. 
 
-
- ## What is KOKKOS package in LAMMPS?
+## What is KOKKOS package in LAMMPS?
  Kokkos package in LAMMPS is implemented to gain performance with portability. Various pair styles, fixes and atom styles have been updated in LAMMPS to use the data structures and macros as provided by the Kokkos C++ library so that when LAMMPS is built with Kokkos feature enabled for a particular hardware, it can provide optimal performance for that hardware when all the runtime parameters are choosen sensibly. What are the things that it supports currently? 
 
 * It can be run on multi-core CPUs, manycore CPUS and Intel Phis and NVIDIA GPUs.
