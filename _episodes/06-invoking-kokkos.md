@@ -49,8 +49,7 @@ The list of LAMMPS features that is supported by Kokkos is given below:
 
 
 ## How to invoke Kokkos package in a LAMMPS run?
-
- You already know how to call an accelerator package in LAMMPS. It was discussed in the previous chapter. The basic syntax of this command is: *package style args*
+You already know how to call an accelerator package in LAMMPS. It was discussed in the previous chapter. The basic syntax of this command is: *package style args*
 Obviously, you need to use *kokkos* as *style* with suitable arguments/keywords.
 
 srun lmp -in in.lj -k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off
@@ -63,17 +62,20 @@ srun lmp -in in.lj -k on g 4 -sf kk -pk kokkos newton off neigh full comm device
  |neigh/qeq|  |  |
  |neigh/thread|  |  |
  |newton|sets the Newton flags for pairwise and bonded interactions to off or on |*off* for GPU and *on* for CPU |
- |binsize|sets the size of bins used to bin atoms in neighbor list builds|0.0 for CPU and 2x larger binsize equal to the pairwise+neighbour skin|
+ |binsize|sets the size of bins used to bin atoms in neighbor list builds|*0.0* for CPU and 2x larger binsize equal to the pairwise+neighbour skin|
  |comm|It determines whether the cpu or gpu performs the packing and unpacking of data  when communicating per-atom data between processors. values could be *no*, *host* or *device*. *no* means pack/unpack will be done in non-kokkos mode| |
  |comm/exchange|This defines 'exchange' communication which happens only when neighbour lists are rebuilt. Values could be *no*, *host* or *device* | |
  |comm/forward|This defines forward communication and it occurs at every timestep. Values could be *no*, *host* or *device* | |
  |comm/reverse| If the *newton* option is set to *on*, this occurs at every timestep. Values could be *no*, *host* or *device*| |
  |cuda/aware|This keyword is used to choose whether CUDA-aware MPI will be used. In cases where CUDA-aware MPI is not available, you must explicitly set it to *off* value otherwise it will result is an error.|off |
- 
- ## Rules of thumb
+
+## Rules of thumb
+
+## Rules of thumb
   1. *neigh*: For GPU, a value of *full* for *neigh* keyword is often more efficient, and in case of CPU a value of *half* is often faster.
   2. *newton*: Using this keyword you can turn Newton’s 3rd law *on* or *off* for pairwise and bonded interactions. Turning this *on* means less computation and more communication, and setting it *off* means interactions will be calculated by both processors if these interacting atoms are being handled by these two different processors. This results in more computation and less communication. Definitely for GPUs, less communication is often a winsome situation. Therefore, a value of *off* for GPUs is efficient while a value of *on* could be faster for CPUs.
-  3. *binsize*: 
+  3. *binsize*: Default value is given in the above Table. But there could be exception. For example, if you use a larger cutoff for the pairwise potential than the normal, you need to override the default value of *binsize* with a smaller value.
+  4. *comm*, *comm/exchange*, *comm/forward*, *comm/reverse*: You already know what it does (from the above Table). 
   
  
 
