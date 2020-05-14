@@ -30,4 +30,11 @@ keypoints:
 > {: .bash}
 {: .challenge}
 
+## Case study 1: for Skylake AVX-512 architecture
+
+> ##  Exercise 2: for users
+> 
+{: .challenge}
+
+
 {% include links.md %}
