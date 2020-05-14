@@ -59,7 +59,7 @@ srun lmp -in in.lj -k on g 4 -sf kk -pk kokkos newton off neigh full comm device
 
  | Keywords |what it does? |Default value |
  |----------|--------------|--------------|
- |neigh|This keyword determines how a neighbour list is built. Possible values are *half*, *full*  | *full* |
+ |neigh|This keyword determines how a neighbour list is built. Possible values are *half*, *full*  | *full* for GPUs and *half* for CPUs|
  |neigh/qeq|  |  |
  |neigh/thread|  |  |
  |newton|sets the Newton flags for pairwise and bonded interactions to off or on |*off* for GPU and *on* for CPU |
@@ -70,54 +70,12 @@ srun lmp -in in.lj -k on g 4 -sf kk -pk kokkos newton off neigh full comm device
  |comm/reverse| If the *newton* option is set to *on*, this occurs at every timestep. Values could be *no*, *host* or *device*| |
  |cuda/aware|This keyword is used to choose whether CUDA-aware MPI will be used. In cases where CUDA-aware MPI is not available, you must explicitly set it to *off* value otherwise it will result is an error.|off |
  
+ ## Rules of thumb
+  1. *neigh*: For GPU, a value of *full* for *neigh* keyword is often more efficient, and in case of CPU a value of *half* is often faster.
+  2. *newton*: Using this keyword you can turn Newton’s 3rd law *on* or *off* for pairwise and bonded interactions. Turning this *on* means less computation and more communication, and setting it *off* means interactions will be calculated by both processors if these interacting atoms are being handled by these two different processors. This results in more computation and less communication. Definitely for GPUs, less communication is often a winsome situation. Therefore, a value of *off* for GPUs is efficient while a value of *on* could be faster for CPUs.
+  3. *binsize*: 
+  
  
- 
-
-> ## LAMMPS hardware compatibility
-> Which of these hardwares is LAMMPS compatible on?
-> 
-> 1. 
-> 2. 
-> 3. 
-> ...
-> > ## Solution
-> > 
-> > 1. 
-> > 2. 
-> > 3. 
-> >
-> {: .solution}
-{: .challenge}
-
-
-> ## Software vs. Hardware compatibility
-> 
-> Which hardwares can the following software packages be used on? There can be multiple results for each software.
-> 
-> > ## Solution
-> > 
-> > solution
-> > 
-> {: .solution}
-{: .challenge}
-
-## Package options: some rules of thumb
-
-## How to compile and run Kokkos in LAMMPS?
-
-## Case study 1: for Skylake AVX-512 architecture
-
-> ##  Exercise 2: for users
-> 
-{: .challenge}
-
-## Case study 2: for KNL architecture
-
-## Case study 3: for GPU Volta70 acrhitecture
-
-> ## Exercise 3: for users
-> 
-{: .challenge}
 
 
 > ## Modifying input and submission script
