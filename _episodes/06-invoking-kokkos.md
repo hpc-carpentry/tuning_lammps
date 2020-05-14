@@ -68,7 +68,6 @@ srun lmp -in in.lj -k on g 4 -sf kk -pk kokkos newton off neigh full comm device
  |comm/reverse| If the *newton* option is set to *on*, this occurs at every timestep. Values could be *no*, *host* or *device*| |
  |cuda/aware|This keyword is used to choose whether CUDA-aware MPI will be used. In cases where CUDA-aware MPI is not available, you must explicitly set it to *off* value otherwise it will result is an error.|off |
 
-## Rules of thumb
 
 ## Rules of thumb
   1. *neigh*: For GPU, a value of *full* for *neigh* keyword is often more efficient, and in case of CPU a value of *half* is often faster.
