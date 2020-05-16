@@ -18,6 +18,17 @@ In this episode, we'll learn to use Kokkos package with OpenMP for multicore CPU
  To invoke the OpenMP execution mode with Kokkos, we need an additional command-line switch just following the ```-k on``` switch as shown below:
   4. ```-k on t Nt```: Using this switch you can specify the number of OpenMP threads that you want to use per node. You might also also need to set a proper value for the OMP_NUM_THREAD environment variables. You can do this as: ```export OMP_NUM_THREADS=4``` if you like to use 4 threads per node. 
   
+> ## Get the full command-line
+>
+> Derive a command-line to submit a LJ simulation in LAMMPS such that it invokes the Kokkos OpenMP threading to accelarte the job using 2 nodes, 4 MPI ranks per nodes, 6 OpenMP threads per rank with default package options.
+> > Soloution
+> > export OMP_NUM_THREADS=6
+> > srun --nodes=2 --ntasks=4 --cpus-per-task=6 lmp -k on -sf kk -in in.lj 
+> {: .solution}
+{: .challenge}
+
+
+
 
   
 
