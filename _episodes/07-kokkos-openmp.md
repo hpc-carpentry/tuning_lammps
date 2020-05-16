@@ -22,16 +22,14 @@ In this episode, we'll learn to use Kokkos package with OpenMP for multicore CPU
 >
 > Derive a command-line to submit a LJ simulation in LAMMPS such that it invokes the Kokkos OpenMP threading to accelarte the job using 2 nodes, 4 MPI ranks per nodes, 6 OpenMP threads per rank with default package options.
 > > ## Soloution
+> > ~~~
 > > export OMP_NUM_THREADS=6
-> > 
 > > srun --nodes=2 --ntasks=4 --cpus-per-task=6 lmp -k on -sf kk -in in.lj 
+> > ~~~
+> > {: .input}
 > {: .solution}
 {: .challenge}
 
-
-
-
-  
 
 > ## KOKKOS and OpenMP run
 >
