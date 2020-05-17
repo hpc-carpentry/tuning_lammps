@@ -20,15 +20,22 @@ In this episode, we'll learn to use Kokkos package with OpenMP for multicore CPU
   
 > ## Get the full command-line
 >
-> Derive a command-line to submit a LJ simulation in LAMMPS such that it invokes the Kokkos OpenMP threading to accelarte the job using 2 nodes, 4 MPI ranks per nodes, 6 OpenMP threads per rank with default package options.
+> Derive a command-line to submit a LJ simulation in LAMMPS such that it invokes the Kokkos OpenMP threading to accelarte the job using 2 nodes having 24 cores each, 4 MPI ranks per nodes, 6 OpenMP threads per rank with default package options.
 > > ## Soloution
 > > ~~~
 > > export OMP_NUM_THREADS=6
-> > srun --nodes=2 --ntasks=4 --cpus-per-task=6 lmp -k on -sf kk -in in.lj 
+> > srun --nodes=2 --ntasks=4 --cpus-per-task=6 lmp -k on t 6 -sf kk -in in.lj 
 > > ~~~
 > > {: .input}
 > {: .solution}
 {: .challenge}
+
+> ## Rules for performance
+> 
+> 1. Know your hardware: get the number of physical cores per node available to you. Take care such that (number of MPI tasks x OpenMP threads per task) <= Total number of physical cores per node.
+> 2. Check for hyperthreading: Sometimes a CPU splits its each physical cores into multiple virtual cores known as threads. In Intel's term, this is called hyperthreads (HT). When hyperthreading is enabled, each physical core appears as two logical CPU units to the OS and thus allows these logical cores to share the physical execution space. This may result in a 'slight' performance gain. So, a node with 24 physical cores appears as 48 logical cores to the OS if HT is enabled. In this case, (number of MPI tasks x OpenMP threads per task) <= (Total number of physical cores per node x hardware threads).
+> 3. Fix CPU affinity: fix me!
+{: .callout}
 
 
 > ## KOKKOS and OpenMP run
