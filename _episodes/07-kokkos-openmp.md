@@ -38,6 +38,54 @@ In this episode, we'll learn to use Kokkos package with OpenMP for multicore CPU
 > 4. **Set OpenMP Environment variables:** OMP_NUM_THREADS, OMP_PROC_BIND, OMP_PLACES
 {: .callout}
 
+> ## First working example
+>
+> Let us do the following to get a feel for this package:
+> 1. First, run a LAMMPS job for the given LJ-system using all the cores available to a node and without any accelerator package. Make a note of the walltime (loop time) for the completion of the job.
+> 2. Second, we now want to use thread-parallelization using Kokkos for the above example. You know that you can have several MPI+OpenMP settings. Make a note of the number of physical cores that is available to you per node. Now write down a list of probable MPI+OpenMP combinations, e.g. 10 MPI tasks and 4 OpenMP threads if a node has 40 physical cores, keeping in mind of the following relation: (number of MPI tasks x OpenMP threads per task) <= Total number of physical cores per node.
+> 3. Prepare job submission scripts for the above choices and submit the jobs. Make notes for the walltime (loop time) of the all runs.
+> 4. Prepare a table to make a comparison of walltime (loop time) for the non-Kokkos and Kokkos runs and comment on your observation.
+> ~~~
+> variable	x index 7 
+> variable	y index 7
+> variable	z index 7
+>
+> variable	xx equal 20*$x
+> variable	yy equal 20*$y
+> variable	zz equal 20*$z
+> 
+> units		lj
+> atom_style	atomic
+> 
+> lattice		fcc 0.8442
+> region		box block 0 ${xx} 0 ${yy} 0 ${zz}
+> create_box	1 box
+> create_atoms	1 box
+> mass		1 1.0
+>
+> velocity	all create 1.44 87287 loop geom
+>
+> pair_style      lj/cut 2.5
+> pair_coeff      1 1 1.0 1.0 2.5
+>
+> neighbor	0.3 bin
+> neigh_modify	delay 0 every 20 check no
+> 
+> fix		1 all nve
+>
+> thermo 50
+> thermo_style custom step time  temp press pe ke etotal density
+> run		500
+> ~~~
+> {: .input}
+> > ## Solution
+> > module load lmp_SKX
+> > export OMP_NUM_THREADS=4
+> > export OMP_PROC_BIND=spread
+> > export OMP_PLACES=threads
+> > mpirun -np 10 -ppn 10 --bind-to socket --map-by socket lmp -k on t 4 -sf kk -pk kokkos neigh half newton on comm device binsize 2.8 -i in.lj
+> {: .solution}
+{: .challenge}
 
 > ## KOKKOS and OpenMP run
 >
