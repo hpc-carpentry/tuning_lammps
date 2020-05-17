@@ -94,7 +94,7 @@ In this episode, we'll learn to use Kokkos package with OpenMP for multicore CPU
 > I ran the above example in an Intel system having Skylake AVX512 architecture. A comparison of the walltime is given in the following table:
 > > ## Timing data
 > > | Run type | walltime (loop time) in sec |
-> > | ---------|--------------------- |
+> > | -------------------------------------- |
 > > |MPI-only (non-Kokkos) 40 MPI tasks|129 (128.455)|
 > > |Kokkos (40 tasks/1 thread) | 158 (153.624)  |
 > > |Kokkos (20 tasks/2 threads) |   |
