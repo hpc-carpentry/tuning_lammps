@@ -79,11 +79,13 @@ In this episode, we'll learn to use Kokkos package with OpenMP for multicore CPU
 > ~~~
 > {: .input}
 > > ## Solution
+> > ~~~
 > > module load lmp_SKX
 > > export OMP_NUM_THREADS=4
 > > export OMP_PROC_BIND=spread
 > > export OMP_PLACES=threads
 > > mpirun -np 10 -ppn 10 --bind-to socket --map-by socket lmp -k on t 4 -sf kk -pk kokkos neigh half newton on comm device binsize 2.8 -i in.lj
+> > ~~~
 > {: .solution}
 {: .challenge}
 
