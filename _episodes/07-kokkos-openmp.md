@@ -32,10 +32,10 @@ In this episode, we'll learn to use Kokkos package with OpenMP for multicore CPU
 
 > ## Rules for performance
 > 
-> **1. Know your hardware:** get the number of physical cores per node available to you. Take care such that (number of MPI tasks x OpenMP threads per task) <= Total number of physical cores per node.
-> **2. Check for hyperthreading:** Sometimes a CPU splits its each physical cores into multiple virtual cores known as threads. In Intel's term, this is called hyperthreads (HT). When hyperthreading is enabled, each physical core appears as two logical CPU units to the OS and thus allows these logical cores to share the physical execution space. This may result in a 'slight' performance gain. So, a node with 24 physical cores appears as 48 logical cores to the OS if HT is enabled. In this case, (number of MPI tasks x OpenMP threads per task) <= (Total number of physical cores per node x hardware threads).
-> **3a. Fix CPU affinity:** fix me!
-> **3b. Set OpenMP Environment variables:** OMP_NUM_THREADS, OMP_PROC_BIND, OMP_PLACES
+> 1. **Know your hardware:** get the number of physical cores per node available to you. Take care such that (number of MPI tasks x OpenMP threads per task) <= Total number of physical cores per node.
+> 2. **Check for hyperthreading:** Sometimes a CPU splits its each physical cores into multiple virtual cores known as threads. In Intel's term, this is called hyperthreads (HT). When hyperthreading is enabled, each physical core appears as two logical CPU units to the OS and thus allows these logical cores to share the physical execution space. This may result in a 'slight' performance gain. So, a node with 24 physical cores appears as 48 logical cores to the OS if HT is enabled. In this case, (number of MPI tasks x OpenMP threads per task) <= (Total number of physical cores per node x hardware threads).
+> 3a. **Fix CPU affinity:** fix me!
+> 3b. **Set OpenMP Environment variables:** OMP_NUM_THREADS, OMP_PROC_BIND, OMP_PLACES
 {: .callout}
 
 
