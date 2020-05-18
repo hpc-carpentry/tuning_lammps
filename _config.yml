@@ -10,7 +10,7 @@
 carpentry: "swc"
 
 # Overall title for pages.
-title: "Lesson Title"
+title: "Running LAMMPS on HPC systems"
 
 # Life cycle stage of the lesson
 # possible values: "pre-alpha", "alpha", "beta", "stable"
@@ -77,20 +77,30 @@ host_prompt: "[user@laptop ~]$"
 sched_name: SLURM
 sched_submit: "sbatch"
 sched_submit_options: "-A course01" # check
+sched_flag_account: "--account"
 sched_flag_time: "--time "
-sched_flag_node: "--nodes "
+sched_flag_nodes: "--nodes "
+sched_flag_ntasks: "--ntasks-per-node"
+sched_flag_out: "--output"
+sched_flag_err: "--error"
+sched_flag_partition: "--partition"
 sched_status: "sstat"
 sched_flag_user: "-u yourUsername"
+sched_queue: "batch"
 sched_del: "scancel"
 sched_interactive: "srun --pty /bin/bash -i"
 sched_comment: "#SBATCH"
 sched_flag_name: "-N" # EDITME
 sched_hist: "" # EDITME
-sched_flag_histdetail: "" # EDITME 
-exec_env_kokkos: "module use /usr/local/software/jureca/OtherStages module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
-exec_env_gpu: " module use /usr/local/software/jureca/OtherStages && module load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-cuda"
+sched_flag_histdetail: "" # EDITME
+mpi_runtime_single_core_flags: "-n 1"
+lammps_version: "LAMMPS/9Jan2020-cuda"
+lammps_exec: lmp
+kokkos_env: "module use /usr/local/software/jureca/OtherStages \nmodule load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-kokkos"
+gpu_env: "module use /usr/local/software/jureca/OtherStages \nmodule load Stages/Devel-2019a intel-para/2019a LAMMPS/9Jan2020-cuda"
+
 run_openmp: "srun"
-run_mpi: "mpirun -n "
+run_mpi: "srun"
 
 # Start time in minutes (0 to be clock-independent, 540 to show a start at 09:00 am).
 start_time: 0
