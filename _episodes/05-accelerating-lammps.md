@@ -313,8 +313,8 @@ something like this:
 ```
 {: .output}
 
-The first that you notice here is that it's using an *acceleration* for the pair potential lj/cut
-and fir this purpose it is using two  devices (Device 0 and Device 1) and 12 MPI-processes per
+The first thing that you should notice here is that it's using an *acceleration* for the pair potential lj/cut
+and fir this purpose it is using two devices (Device 0 and Device 1) and 12 MPI-processes per
 device. That is what you asked for: 2 GPUs (```-pk gpu 2```) and 
 `{{ site.sched_comment }} {{ site.sched_flag_ntasks }}=24`. Number of tasks is shared equally by
 each GPU. The detail about the graphics card is also printed, *Tesla K80, 13 CU, etc. etc.* along

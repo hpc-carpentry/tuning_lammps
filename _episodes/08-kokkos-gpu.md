@@ -32,5 +32,12 @@ FIXME
 > {: .bash}
 {: .challenge}
 
+## Case study 2: for NVIDIA GPU architecture
+
+
+> ## Exercise 3: for users
+> 
+{: .challenge}
+
 {% include links.md %}
 

@@ -10,28 +10,24 @@ keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
 ## Kokkos
-In modern times, HPC industry has witnessed dramatic evolutions and we don’t know yet where will it end up! Starting from the diversifying architecture, we have also also seen a paradigm shift in accelerating code from a pure MPI -based approach. Naturally the question arises how well and how fast can we cope with such a rapid evolution? The answer “probably” lies in Kokkos that targets to ease these complexities by blending performance, portability and productivity. This is in principle done in Kokkos through abstractions targeting both parallel execution of code and data management. It supports complex node architectures with N-level memory hierarchies and multiple types of execution resources. It currently can use OpenMP, Pthreads and CUDA as backend programming models. (Most recent release: v2.8.00, February 2019).
+In recent times, the HPC industry has witnessed a dramatic architectural revolution. Modern HPC architecture not only includes the conventional multi-core cpus, but also manycore systems like Xeon Phis or Nvidia GPUs, and we don't know yet where this revolution will end up! With the availability of so many cores for computing, one would naturally expect a 'scalable' speedup in performance. However, this scalability does not come free-of-cost, this may require several man-years to modify an existing code to make it compatible for new hardware architectures. Why do we need to modify a code for new architectures? This is because these different hardwres were designed keeping in mind different philosophies of parallelization and these philosophies keep updating at more finer levels to enhance the performance. Some of the architectures prefer data-paralleliztion, while some of them work better for task-level parallelization. So to access the finer levels of parallisation offered by modern day architectures, we often need to use parallizing approaches other than the old classic MPI-based approach. For example, on a shared memory platform one can use OpenMP, or, on a mixed CPU+GPU platform, one can use CUDA or OpenACC to parallize their codes. The major issue with all these approaches is the performance portability which arises due to complex and varying memory access pattern across devices. So, the question arises: Is there any way to ease this difficulty?  
 
-## Methodologies and checklists
+Kokkos is probably an answer to this portability issue. The primary objective of Kokkos is to maximize the amount of user code that can be compiled for various devices but obtaing comparable performance if the code was written in a  native language specific to that particular device. How does Kokkos achieve this goal? 
 
-## Accelerating LAMMPS using KOKKOS
+1. It maps a C++ kernel to different backend languages like Cuda, OpenMP, Pthreads.
+2. It also provides data abstractions to adjust (at compile time) the memory layout of data structures like 2d and 3d arrays to optimize performance on different hardware. 
 
-## Knowing your hardware
-   
-## What is KOKKOS?
+## What is KOKKOS package in LAMMPS?
+ Kokkos package in LAMMPS is implemented to gain performance with portability. Various pair styles, fixes and atom styles have been updated in LAMMPS to use the data structures and macros as provided by the Kokkos C++ library so that when LAMMPS is built with Kokkos feature enabled for a particular hardware, it can provide optimal performance for that hardware when all the runtime parameters are choosen sensibly. What are the things that it supports currently? 
 
-* supports OpenMP and GPU
-* provide excellent scalability to many OpenMP threads
-* 1-to-1 GPU to CPU support
-* Minimal data transfer between the host and the device
-* everything runs on GPU
-* supports modern GPUs only
-* supports double precision only
-
-## Important features of LAMMPS Kokkos package
-
-Kokkos can be used in conjunction with LAMMPS to accelerate its performance. This package helps to optimize LAMMPS performances for specific hardware architectures.
-But to obtain the Kokkos accelartion, LAMMPS needs to be built using Kokkos for those specific hardwares and it also requires propoer choices of input parametres to get an optimal performance.
+* It can be run on multi-core CPUs, manycore CPUS and Intel Phis and NVIDIA GPUs.
+* It provides three modes of execution: Serial (MPI-only for CPUs and Phi), OpenMP (via threading for manycore CPUs and Phi), and CUDA (for NVIDIA GPUs)
+* It provides reasonable scalability to many OpenMP threads.
+* This is specifically designed for one-to-one CPU to GPU ratio
+* Care has been taken to minimize performance overhead due to cpu-gpu communication. This can be achieved by ensuring that most of the codes can be run on GPUs once assigned by the CPU and when all the jobs are done, it is communicated back to CPU, thus minimising the amount of data transfer between CPU and GPU.
+* supports modern GPUs only (an extensive list of supported hardwares are given in LAMMPS [website]().
+* Currently supports double precision only. 
+* Still in developmental stage, so more features and flexibilities are expected in future versions of LAMMPS.
 
 The list of LAMMPS features that is supported by Kokkos is given below:
 
@@ -50,51 +46,58 @@ The list of LAMMPS features that is supported by Kokkos is given below:
 |             |              | Setforce    |               |             |              |                 |                 |                |
 |             |              | Wall/reflect|               |             |              |                 |                 |                |
 
-> ## LAMMPS hardware compatibility
-> Which of these hardwares is LAMMPS compatible on?
-> 
-> 1. 
-> 2. 
-> 3. 
-> ...
-> > ## Solution
-> > 
-> > 1. 
-> > 2. 
-> > 3. 
-> >
-> {: .solution}
-{: .challenge}
+
+## How to invoke Kokkos package in a LAMMPS run?
+You already know how to call an accelerator package in LAMMPS. It was discussed in the previous chapter. The basic syntax of this command is: *package style args*
+Obviously, you need to use *kokkos* as *style* with suitable arguments/keywords.
+
+The next you need to choose proper *keywords* and *value* pairs. These *keyword/values* provides you enhanced flexibility to distribute your job among cpu and gpus in an optimum way. For a quick reference, the following table could be useful:
+
+ | Keywords |what it does? |Default value |
+ |----------|--------------|--------------|
+ |neigh|This keyword determines how a neighbour list is built. Possible values are *half*, *full*  | *full* for GPUs and *half* for CPUs|
+ |neigh/qeq|  |  |
+ |neigh/thread|  |  |
+ |newton|sets the Newton flags for pairwise and bonded interactions to off or on |*off* for GPU and *on* for CPU |
+ |binsize|sets the size of bins used to bin atoms in neighbor list builds|*0.0* for CPU and 2x larger binsize equal to the pairwise+neighbour skin|
+ |comm|It determines whether the cpu or gpu performs the packing and unpacking of data  when communicating per-atom data between processors. values could be *no*, *host* or *device*. *no* means pack/unpack will be done in non-kokkos mode| |
+ |comm/exchange|This defines 'exchange' communication which happens only when neighbour lists are rebuilt. Values could be *no*, *host* or *device* | |
+ |comm/forward|This defines forward communication and it occurs at every timestep. Values could be *no*, *host* or *device* | |
+ |comm/reverse| If the *newton* option is set to *on*, this occurs at every timestep. Values could be *no*, *host* or *device*| |
+ |cuda/aware|This keyword is used to choose whether CUDA-aware MPI will be used. In cases where CUDA-aware MPI is not available, you must explicitly set it to *off* value otherwise it will result is an error.|off |
 
 
-> ## Software vs. Hardware compatibility
-> 
-> Which hardwares can the following software packages be used on? There can be multiple results for each software.
-> 
-> > ## Solution
-> > 
-> > solution
-> > 
-> {: .solution}
-{: .challenge}
+### Rules of thumb
+  1. ***neigh***: For GPU, a value of *full* for *neigh* keyword is often more efficient, and in case of CPU a value of *half* is often faster.
+  2. ***newton***: Using this keyword you can turn Newton’s 3rd law *on* or *off* for pairwise and bonded interactions. Turning this *on* means less computation and more communication, and setting it *off* means interactions will be calculated by both processors if these interacting atoms are being handled by these two different processors. This results in more computation and less communication. Definitely for GPUs, less communication is often a winsome situation. Therefore, a value of *off* for GPUs is efficient while a value of *on* could be faster for CPUs.
+  3. ***binsize***: Default value is given in the above Table. But there could be exception. For example, if you use a larger cutoff for the pairwise potential than the normal, you need to override the default value of *binsize* with a smaller value.
+  4. ***comm*, *comm/exchange*, *comm/forward*, *comm/reverse***: You already know what it does (from the above Table). Three possible values are *no*, *host* and *device*. For GPUs, *device* is faster if all the styles used in your calculation is Kokkos-enabled. But, if not, it may results in communication overhead due to cpu-gpu communication. For CPU-only systems, *host* is the fastest. For Xeon Phi and CPU-only systems, *host* and *device* work identically. 
+  5. ***cuda/aware***: When we use regular MPI, multiple instances of an application is launched and distributed to many nodes in a cluster using the MPI application launcher known as *mpirun*. This passes pointers to host memory to MPI calls. But, when we want to use CUDA and MPI together, it is often required to send GPU buffers instead of CPU buffers. CUDA-aware MPI allows GPU buffers to pass directly through MPI send/receive calls without using ```cudaMemcpy```which copies data from device to host, and thus CUDA-aware MPI helps to eliminate the overhead due to this copying process. But, not all HPC systems have the CUDA-aware MPI available. It results in a *Segmentation Fault* error at runtime. We can avoid this error by setting its value to *off* (i.e. ```cuda/aware off```). But, whenever a CUDA-aware MPI is available to you, try to exploit it for a Kokkos/GPU run to get the speedup. 
+  
 
-## Package options: some rules of thumb
+## Ivoking Kokkos through input file or through command-line?
 
-## How to compile and run Kokkos in LAMMPS?
+We have already discussed this aspect in previous episode while discussing about invoking GPU package in LAMMPS. The ultimate essence remains same even for invoking Kokkos package. We can invoke this using the *package* command in two different ways:
+  * Edit the input file and introduce  the line comprising the *package* command in it. This is perfectly fine, but always remember to use this near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. An example of calling Kokkos package in a LAMMPS input file is given below:
+  ```
+  package kokkos neigh full newton off comm no
+  ```
+ Additionally, you also need to append an extra "/kokkos" suffix wherever applicable. For example, a pair potential with Kokkos optimization should be mentioned in the input file as:
+ ```
+ pair_style      lj/cut/kk 2.5
+ ```
+  * A simpler way to do this is through the command-line when launching LAMMPS using the ```-pk``` command-line switch. The syntax would be exactly the same as when used in an input script:
+  ```
+ srun lmp -in in.lj -k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off
+  ```
+The second method appears to be convenient since you don't need to take the hassle to edit the input file (and possibly in many places)!
+Well, note that there is an extra command-line switch in the above command-line. Do you know what is this for? To distinguish the various styles of these accelerator packages from its 'regular' non-accelerated variants, LAMMPS has introduces suffixes and the ```-sf``` switch  auto-appends these accelerator suffixes to various styles in the input script. Therefore, when an accelerator package is invoked through the ```-pk``` switch (for example, ```-pk kokkos```), the ```-sf``` switch ensures that the appropriate style is also being invoked in the simulation (for example, it ensures that the ```lj/cut/kk``` is used instead of ```lj/cut``` as ```pait_style```).  
 
-## Case study 1: for Skylake AVX-512 architecture
+In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e. through the command-line.
 
-> ##  Exercise 2: for users
-> 
-{: .challenge}
-
-## Case study 2: for KNL architecture
-
-## Case study 3: for GPU Volta70 acrhitecture
-
-> ## Exercise 3: for users
-> 
-{: .challenge}
+### Invoking different modes of execution
+If you note the above example of commandline call of Kokkos, you can see ```-k on g 4```. I have not yet told anything about this till now. Well, this is used to invoke different modes of execution. In the above example, we are calling the GPU mode and it will be run with 4 physical GPUs. Similarly, we can call the OpenMP mode (threaded), using something like this:
+``` -k on t 24```. In this case we are invoking Kokkos package to use the OpenMP optimization with 24 threads.
 
 
 > ## Modifying input and submission script
