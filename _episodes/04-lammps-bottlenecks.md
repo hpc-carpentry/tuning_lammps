@@ -10,6 +10,11 @@ keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
 
+In the previous episode, you have learnt the basic philosophies behind various parallel computing methods. LAMMPS is a massively-parallel molecular dynamics package where one can get performance benefits from these parallelization techniques using appropriate accelerator packages on the top of MPI-based parallelization. LAMMPS is primarily designed with MPI-based domain decomposition (DD) as its main parallelization strategy. This technique has a  deep integration with the code and in most cases one can expect considerable gain from this on modern computers where cache efficiency plays an important role. When you use DD, it helps you to work with smaller data sets that can be fitted in a cache. This is efficient since CPUs now can read data directly from cache instead of going to much slower main memory.  
+
+
+
+
 ## Analysing timing data in LAMMPS output
 
 > ## Breakdown of a LAMMPS run
