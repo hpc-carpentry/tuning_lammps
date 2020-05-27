@@ -93,13 +93,20 @@ Other   |            | 0.003803   |            |       |  0.77
 > Other   |            | 12.03      |            |       |  0.92
 > ~~~
 > > ## Solution
-> > In this case, the system size is enormous. Each core will have enough atoms to deal with so it remains busy in computing and the time taken for the communication is still much smaller as compared to the "real" calculation time. In such cases, using many cores is actually beneficial.
+> > In this case, the system size is enormous. Each core will have enough atoms to deal with so it remains busy in computing and the time taken for the communication is still much smaller as compared to the "real" calculation time. In such cases, using many cores is actually beneficial. One more thing to note here is the second last column '*%varavg*'. This is the percentage by which the max or min varies from the average value. A value near to zero implies perfect load balance, while a large value indicated load imbalance. So, in this case, there is a considerable amount of load imbalance specially for the *Comm* and *Pair* part. To improve the performance, one may like to explore a way to minimize load imablance. Two commands could be helpful for this: *processor* and *balance*. 
 > {: .solution}
 {: .challenge}
 
+> ## Discussion 3
+> 
+> FixMe! (To discuss the Chain problem which is very sparse)
+{: .challenge}
 
-
-
+> ## Handson on Rhodopsin system
+>
+> Fix Me! (Rhodopsin system)
+> Discussing about scaling, python scripts for plotting needed
+{: .challenge}
 
 
 
