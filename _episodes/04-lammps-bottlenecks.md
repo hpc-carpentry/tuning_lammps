@@ -78,7 +78,26 @@ Other   |            | 0.003803   |            |       |  0.77
 > {: .solution}
 {: .challenge}
 
-> 
+> ## Discussion 2
+>
+> Now consider the following breakdown table for 1million atom system with 40 MPI-processes. You can see that in this case, still *Pair* term is dominating the table. Discuss about the rationale behind this.
+> ~~~
+> MPI task timing breakdown:
+> Section |  min time  |  avg time  |  max time  |%varavg| %total
+> ---------------------------------------------------------------
+> Pair    | 989.3      | 1039.3     | 1056.7     |  55.6 | 79.56
+> Neigh   | 124.72     | 127.75     | 131.11     |  10.4 |  9.78
+> Comm    | 47.511     | 67.997     | 126.7      | 243.1 |  5.21
+> Output  | 0.0059468  | 0.015483   | 0.02799    |   6.9 |  0.00
+> Modify  | 52.619     | 59.173     | 61.577     |  25.0 |  4.53
+> Other   |            | 12.03      |            |       |  0.92
+> ~~~
+> > ## Solution
+> > In this case, the system size is enormous. Each core will have enough atoms to deal with so it remains busy in computing and the time taken for the communication is still much smaller as compared to the "real" calculation time. In such cases, using many cores is actually beneficial.
+> {: .solution}
+{: .challenge}
+
+
 
 
 
