@@ -15,7 +15,7 @@ In the previous episode, you have learnt the basic philosophies behind various p
 > ## Load balancing
 >
 > Is there any way to deal with load imbalance in LAMMPS?
-> > Yes, you can deal it upto a certain extent using ```processors``` and ```balance``` commands in LAMMPS. Detail usage cis given in LAMMPS manual. (Fix Me: Might be discussed to some extent in later episodes)
+> > Yes, you can deal it up to a certain extent using ```processors``` and ```balance``` commands in LAMMPS. Detail usage cis given in LAMMPS manual. (Fix Me: Might be discussed to some extent in later episodes)
 {: .callout}
 
 ## Identify bottlenecks
