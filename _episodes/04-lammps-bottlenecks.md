@@ -23,7 +23,9 @@ Identifying performance bottleneck is important as this could save you a lot of 
 
 The very first thing  to do is running the simulation with just one 1 MPI rank and no threads and find a way to optimally balance between Pair, Neigh, Comm and the rest. To get a feeling for this process, let us start with a LJ-system. We'll study two systems: the first one is with 4,000 atoms only and the other one would be quite large, almost 10 million atoms. The input file for the small LJ system (i.e. with 4,000 atoms) is given below, and we can run either serially or with 1 MPI rank (no OpenMP threading).
 
+```
 {% include /snippets/ep02/in.lj %}
+```
 {: .bash}
 
 Now let us have a look at the timing breakdown table:
