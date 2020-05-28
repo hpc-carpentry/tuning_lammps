@@ -99,7 +99,7 @@ Other   |            | 0.003803   |            |       |  0.77
 
 > ## Discussion 3
 > 
-> Let us now work on another example from LAMMPS *bench* directory. Input file and the corresponding timing breakdown table from the screen is given below. We ran it using 1 core (serial) and *x = y = z = 1, and t = 10,000*). 
+> Let us now work on another example from LAMMPS *bench* directory. Input file and the corresponding timing breakdown table from the screen is given below. We ran it using 1 core (serial) and *x = y = z = 1, and t = 10,000*). Note that, in this case, the time spent in solving the *Pair* part is quite less as compared to the *Neigh* part. What do you thank about that may have caused such an outcome?
 > ~~~
 > {% include /snippets/ep04/in.chain %}
 > ~~~
@@ -117,6 +117,9 @@ Other   |            | 0.003803   |            |       |  0.77
 > > Other   |            | 1.838      |            |       |  1.62
 > > ~~~
 > {: .output}
+> > ## Solution
+> > This kind of timing breakdown generally indicated either there is something wrong with the input or a very, very unusual system geometry. This is a system with very low density and a very short cutoff (1.12 sigma) resulting in on average less than 5 neighbors per atoms and thus spending very little time on computing non-bonded forces. This is a bit of an extreme system, which is why it is included in the benchmarks folder as a contrast to the in.lj test, which is the extreme opposite (and has only 10% time spent in building neighbor lists, in part because they need to rebuilt less frequently for a denser system). We can check this even on the fly if we modify the input file as shown below. (Fix Me!) So, here your system geometry is the bottleneck that causes the neighbour list building too frequent and taking a significant part of the entire simulation time.
+> {: .solution}
 {: .challenge}
 
 
