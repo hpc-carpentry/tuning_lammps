@@ -99,8 +99,24 @@ Other   |            | 0.003803   |            |       |  0.77
 
 > ## Discussion 3
 > 
-> FixMe! (To discuss the Chain problem which is very sparse)
+> Let us now work on another example from LAMMPS *bench* directory. Input file and the corresponding timing breakdown table from the screen is given below. We ran it using 1 core (serial) and *x = y = z = 1, and t = 10,000*). 
+> ~~~
+> {% include /snippets/ep04/in.lj %}
+> ~~~
+> {: .bash}
+> > ## Timing breakdown:
+> > Section |  min time  |  avg time  |  max time  |%varavg| %total
+> > ---------------------------------------------------------------
+> > Pair    | 20.665     | 20.665     | 20.665     |   0.0 | 18.24
+> > Bond    | 6.9126     | 6.9126     | 6.9126     |   0.0 |  6.10
+> > Neigh   | 57.247     | 57.247     | 57.247     |   0.0 | 50.54
+> > Comm    | 4.3267     | 4.3267     | 4.3267     |   0.0 |  3.82
+> > Output  | 0.000103   | 0.000103   | 0.000103   |   0.0 |  0.00
+> > Modify  | 22.278     | 22.278     | 22.278     |   0.0 | 19.67
+> > Other   |            | 1.838      |            |       |  1.62
+> {: .output}
 {: .challenge}
+
 
 > ## Handson on Rhodopsin system
 >
