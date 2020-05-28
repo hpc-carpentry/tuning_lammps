@@ -101,7 +101,7 @@ Other   |            | 0.003803   |            |       |  0.77
 > 
 > Let us now work on another example from LAMMPS *bench* directory. Input file and the corresponding timing breakdown table from the screen is given below. We ran it using 1 core (serial) and *x = y = z = 1, and t = 10,000*). 
 > ~~~
-> {% include /snippets/ep04/in.lj %}
+> {% include /snippets/ep04/in.chain %}
 > ~~~
 > {: .bash}
 > > ## Timing breakdown:
