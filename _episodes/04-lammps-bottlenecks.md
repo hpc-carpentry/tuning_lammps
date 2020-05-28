@@ -57,7 +57,7 @@ Other   |            | 43.95      |            |       |  0.53
 ```
 {: .Timing breakdown for 10M atoms LJ-system}
 
-Now run, the same systems using all the cores availabe in a single and then run with more nodes with full capacity and note how this timing breakdown varies rapidly. While running with multiple cores, we'll using only MPI only as paralleliztion method. Below we have shown the table for the small system when run with 40 MPI ranks.
+Now run, the same systems using all the cores available in a single and then run with more nodes with full capacity and note how this timing breakdown varies rapidly. While running with multiple cores, we'll using only MPI only as paralleliztion method. Below we have shown the table for the small system when run with 40 MPI ranks.
 
 ```
 MPI task timing breakdown:
@@ -74,7 +74,7 @@ Other   |            | 0.003803   |            |       |  0.77
 >
 > Can you write down the observation that you can make from the above table? What could be the rationale behind such a change of the *%total* distribution among various categories?
 > > ## Solution
-> > The first thing that we notice in this table is that when we use 40 MPI processes instead of 1 process, percentage contribution of the *Pair* part to the toatl looptime has come down to about ~52% from 84%, similarly for the *Neigh* part also the percentage contribution reduced considerably. The striking feature is that the *Comm* is now taking considerable part of the total looptime. It has increased from ~1% to nearly 36%. But why? We have 4000 total atoms. When we run this with 1 core, this handles calculations (i.e. calculating pair terms, building neighbour list etc.) for all 4000 atoms. Now when you run this with 40 MPI processes, job will be distributed among these 40 cores "ideally" equally if there is no load imbalance. These cores do the calculations parallely, and hence the speedup. But this comes at a cost of communication between these MPI processes. So, communication becomes a bottlencesk for such systems where you have less number of atoms to handle and many workers to do the job. This implies that you really don't need to waste your resource for such a small system.
+> > The first thing that we notice in this table is that when we use 40 MPI processes instead of 1 process, percentage contribution of the *Pair* part to the toatl looptime has come down to about ~52% from 84%, similarly for the *Neigh* part also the percentage contribution reduced considerably. The striking feature is that the *Comm* is now taking considerable part of the total looptime. It has increased from ~1% to nearly 36%. But why? We have 4000 total atoms. When we run this with 1 core, this handles calculations (i.e. calculating pair terms, building neighbour list etc.) for all 4000 atoms. Now when you run this with 40 MPI processes, job will be distributed among these 40 cores "ideally" equally if there is no load imbalance. These cores do the calculations parallelly, and hence the speedup. But this comes at a cost of communication between these MPI processes. So, communication becomes a bottlencesk for such systems where you have less number of atoms to handle and many workers to do the job. This implies that you really don't need to waste your resource for such a small system.
 > {: .solution}
 {: .challenge}
 
