@@ -122,12 +122,13 @@ Other   |            | 0.003803   |            |       |  0.77
 > {: .solution}
 {: .challenge}
 
+## MPI vs OpenMP
+ By now probably you have developed some understanding on how can you iuse the timing breakdown table to identify performance bottlenecks in a LAMMPS run. But identifying the bottleneck is not enough, you need to decide what startegy would 'probably' be more sensible to apply in order to unblock the bottlenecks. The basic perception of speeding up a calculation is to employ parallel workforce. But, as we have already discussed in Episode 3, there are many ways to implement parallelism in a code. LAMMPS has been constructed from the ground up to do MPI parallel calculations very efficiently using domain decomposition. All other parallelization (being on a device or a host CPU) cannot be as efficient unless you have conditions where the domain decompositions is not as efficient anymore.
 
-> ## Handson on Rhodopsin system
->
-> Fix Me! (Rhodopsin system)
-> Discussing about scaling, python scripts for plotting needed
-{: .challenge}
+## Handson on Rhodopsin system
+Fix Me! (Rhodopsin system)
+Discussing about scaling, python scripts for plotting needed
+
 
 
 
