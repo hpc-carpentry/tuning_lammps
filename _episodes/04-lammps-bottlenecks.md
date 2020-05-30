@@ -154,10 +154,10 @@ mpirun -np 4 lmp -var x 1 -var y 1 -var z 1 -var t 20000 -in in.rhodo
 
 > ## Decide a strategy
 >
-> 1. Using the above input and for a fixed system size (e.g. 32,000 atoms), run multiple jobs with varying processor counts starting with 1 core. For example, I did this study in Intel Xeon Gold 6148 (Skylake) processor with 2x20 core 2.4 GHz having 192 GiB of RAM. This means each node has 40 physical cores. So, you can run jobs with 1, 4, 8, 16, 32, 40 processors first and then run with 80, 120, 160, 200, 240, 280, 320, 360, 400 cores, and so on. (depending on the availability). 
-> 2. For each of these jobs, you will get timing breakdown from the screen/log file. Plot the *speedup factor* versus *number of cores* for the *Pair*, *Bond*, *Kspace*, *Neigh*, *Comm* and *total wall time*. A python script is provided in this folder (Fix Me) to do the plotting. *Speedup factor* = *average time taken by n processor* / *average time taken by 1 processor*
-> 3. Write down your observations about how different parts of the job (i.e. pair calculation, long range solver, communication, etc.) scales with increasing number of cores.
-> 4. Discuss with you neighbour about the bottlenecks in this calculation and device a strategy to unblock the bottleneck.
+>> 1. Using the above input and for a fixed system size (e.g. 32,000 atoms), run multiple jobs with varying processor counts starting with 1 core. For example, I did this study in Intel Xeon Gold 6148 (Skylake) processor with 2x20 core 2.4 GHz having 192 GiB of RAM. This means each node has 40 physical cores. So, you can run jobs with 1, 4, 8, 16, 32, 40 processors first and then run with 80, 120, 160, 200, 240, 280, 320, 360, 400 cores, and so on. (depending on the availability). 
+>> 2. For each of these jobs, you will get timing breakdown from the screen/log file. Plot the *speedup factor* versus *number of cores* for the *Pair*, *Bond*, *Kspace*, *Neigh*, *Comm* and *total wall time*. A python script is provided in this folder (Fix Me) to do the plotting. *Speedup factor* = *average time taken by n processor* / *average time taken by 1 processor*
+>> 3. Write down your observations about how different parts of the job (i.e. pair calculation, long range solver, communication, etc.) scales with increasing number of cores.
+>> 4. Discuss with you neighbour about the bottlenecks in this calculation and device a strategy to unblock the bottleneck.
 > > ## Solution
 > > 1. In this calculation we used Intel Skylake processor with 40 physical cores. The job was run with 1, 4, 8, 16, 32, 40, 80, 120, 160, 200, 240, 280, 320, 360 and 400 cores.
 > > 2. Speedup factors were calculated and plotted. Plot is shown below.
