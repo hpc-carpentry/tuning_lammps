@@ -140,9 +140,16 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 ## Situation practice: Rhodopsin system
 The input file (given below) is prepared following the inputs provided in the *bench* directory of the LAMMPS distribution (version 7Aug2019). Using this you do a simulation of all-atom rhodopsin protein in solvated lipid bilayer with CHARMM force field, long-range Coulombics interaction via PPPM (particle-particle particle mesh), SHAKE constraints. The box contains counter-ions and a reduced amount of water to make a 32000 atom system. The force cutoff for LJ force-field is 10.0 Angstroms, neighbor skin cutoff is 1.0 sigma, number of neighbors per atom is 440. NPT time integration is performed for 20,000 timesteps.
 
+![Rhodopsin_in_lipid_bilayer](../fig/ep04/rhodo.png)
+
 ```
 {% include /snippets/ep04/in.rhodo %}
 ```
 {: .bash}
+
+The commandline to submit this job would be similar to this, if you want to submit the job using 4 processors:
+```
+mpirun -np 4 lmp -var x 1 -var y 1 -var z 1 -var t 20000 -in in.rhodo
+```
 
 
