@@ -41,6 +41,7 @@ Output  | 7.4148e-05 | 7.4148e-05 | 7.4148e-05 |   0.0 |  0.00
 Modify  | 0.20477    | 0.20477    | 0.20477    |   0.0 |  1.41
 Other   |            | 0.04296    |            |       |  0.30
 ```
+{: .Timing breakdown for 4000 atoms LJ-system}
 
 Fix Me! (here comes the table for 1M atom system and discuss the features)
 
@@ -123,28 +124,21 @@ Other   |            | 0.003803   |            |       |  0.77
 {: .challenge}
 
 ## MPI vs OpenMP
- By now probably you have developed some understanding on how can you iuse the timing breakdown table to identify performance bottlenecks in a LAMMPS run. But identifying the bottleneck is not enough, you need to decide what startegy would 'probably' be more sensible to apply in order to unblock the bottlenecks. The basic perception of speeding up a calculation is to employ parallel workforce. We have already discussed in Episode 3 that there are many ways to implement parallelism in a code. MPI based parallelism using domain decomposition lies at the core of LAMMPS. Atoms in each domain is looked by 1 MPI task (=core). Due to having better cache locality with less number of  atoms per processor and the way memory access pattern is designed in LAMMPS, it is usually faster to use MPI-based parallelization only. Every good thing comes at a cost of something. Similar is the case for domain decomposition. DD offers enhanced cache efficiency but due to keeping track among these domains it suffers from communication overhead. It could lead to significant drop in performance if you have limited communication bandwidth, or load imbalance, or if you like to scale to a very large number of cores. 
+By now probably you have developed some understanding on how can you use the timing breakdown table to identify performance bottlenecks in a LAMMPS run. But identifying the bottleneck is not enough, you need to decide what startegy would 'probably' be more sensible to apply in order to unblock the bottlenecks. The basic perception of speeding up a calculation is to employ parallel workforce. We have already discussed in Episode 3 that there are many ways to implement parallelism in a code. MPI based parallelism using domain decomposition lies at the core of LAMMPS. Atoms in each domain is looked by 1 MPI task (=core). Due to having better cache locality with less number of  atoms per processor and the way memory access pattern is designed in LAMMPS, it is usually faster to use MPI-based parallelization only. Every good thing comes at a cost of something. Similar is the case for domain decomposition. DD offers enhanced cache efficiency but due to keeping track among these domains it suffers from communication overhead. It could lead to significant drop in performance if you have limited communication bandwidth, or load imbalance, or if you like to scale to a very large number of cores. 
 
-While MPI offers domain based parallelization, one can also use paralleization over particles. This can be done using OpenMP which is different parallelization paradigm based on threading. This multithreading is easy to implement. Moreover, OpenMP parallelization is orthogonal to MPI parallelization which means you can use them together. One importnat issue with multithreading is that you need to be very careful about probable race conditions and false sharings. It can be done either by making extra copies of data or by enforcing atomic operations. These add to overhead and lead to performance loss. Remember that any device based or host based parallelization cannot be as efficient as MPI unless you have situations where DD is not as efficient anymore.
+While MPI offers domain based parallelization, one can also use paralleization over particles. This can be done using OpenMP which is a different parallelization paradigm based on threading. This multithreading is easy to implement. Moreover, OpenMP parallelization is orthogonal to MPI parallelization which means you can use them together. One importnat issue with multithreading is that you need to be very careful about probable race conditions and false sharings. It can be done either by making extra copies of data for each thread or by enforcing atomic operations. These add to overhead and lead to performance loss. Remember that a threaded parallelization method may not be as efficient as MPI unless you have situations where DD is not as efficient anymore.
 
-
- 
+Let us discuss a few situations:
+  1. The LJ-system with 4000 atoms (discussed above): Communication bandwidth with more MPI processes. ("when you have too few atoms per domain. at some point LAMMPS will scale out and not run faster or even run slower, if you use more processors via MPI only. with a pair style like lj/cut this will happen at a rather small number of atoms")
+  2. The LJ-system with with 10M atoms (discussed above): More atoms per processor, still communication is not a big deal in this case. 
+("This happens because you have a dense, homogeneous, well behaved system with a sufficient number of atoms, so that the MPI parallelization can be at its most efficient.")
+  3. For inhomogeneous system or slab systems where there could be lots of empty spaces in the simulation cell, the number of atoms handled across these domains will vary a lot resulting in severe load balancing issue. While some of the domains will be over-subscribed, some of them will remain under-subscribed causing these domains (cores) less efficient in terms of performance. Often this could be improved by using the *processor*s keyword in a smart fashion, beyond that, there are the load balancing commands (*balance* command) and changing the communication using recusive bisecting and decomposition strategy. This might not help always since some of the systems are pathological. In such cases, a combination of MPI and OpenMP/Threading parallelization could often provide better parallel efficiency as this will result in larger subdomains for the same number of total processors and usually then will reduce the load imbalance (especially with the help of the balance command). This works because the parallelization over individual atoms in the multi-thread parallelization does not cause (much) load imbalance. That is not to say that the situation cannot be improved. e.g. it would benefit from alternative, per-thread neighbor lists, that would be optimized for reducing the overhead associated with the current multi-thread schemes. (Need to change text description Fix Me)
+  4. "If you have long-range electrostatic (via ewald or pppm), then the scaling of kspace will reach its limit much earlier and you will lose performance overall as the extra overhead from the 3d-FFTs in pppm or the bad O(N^(3/2)) scaling of ewald will drag you down (despite the O(N) scaling of the pair style). At that point using MPI plus a some threads will give you better performance and particularly allows you to scale (i.e. improve total speed) to more total CPUs."
+  
+ For this episode, let us choose an example that resembles this last situation. 
 
 ## Handson on Rhodopsin system
 Fix Me! (Rhodopsin system)
 Discussing about scaling, python scripts for plotting needed
 
-
-
-
-## Analysing timing data in LAMMPS output
-
-> ## Breakdown of a LAMMPS run
-> 
-> Examine the following output / Using the LAMMPS run previously used, analyse where the main bottlenecks are in the output.
-> 
-> How would you consider speeding this up? Discuss with your peers for a few minutes on the feasible options.
-{: .challenge}
-
-{% include links.md %}
 
