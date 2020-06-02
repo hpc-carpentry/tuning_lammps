@@ -130,9 +130,7 @@ could be useful:
 
 ## Invoking Kokkos through input file or through command-line?
 
-We have already discussed this aspect in previous episode while discussing about invoking GPU package in LAMMPS.
-The ultimate essence remains same even for invoking Kokkos package. We can invoke this using the *package* command
-in two different ways:
+In episode 5, we learnt how to use USER-OMP or  the GPU package in a LAMMPS run using the *package* command. In this episode, we want to use the *Kokkos* package as an accelerator and the basic syntax to use the *package* remains same. We can invoke this in two alternate ways:
 
 * Edit the input file and introduce  the line comprising the *package* command in it. This is perfectly fine, but
   always remember to use this near the top of the script, before the simulation box has been defined. This is because
@@ -176,15 +174,17 @@ command-line.
 If you note the above example of commandline call of Kokkos, you can see `-k on g 4`. This has not been discussed
 prior to this point. It is used to invoke different modes of execution. In the above example, we are calling the
 GPU mode and it will be run with 4 physical GPUs. Similarly, we can call the OpenMP mode (threaded), using something
-like: ` -k on t 24`. In this case we are invoking Kokkos package to use the OpenMP optimization with 24 threads.
+like: `-k on t 4`. In this case we are invoking Kokkos package to use the OpenMP optimization with 4 threads. In this episode, we'll be discussing about using Kokkos to invoke mixed MPI and OpenMP runs.
 
+## Using OpenMP threading through the Kokkos package
+For this exercise also we'll take the rhodopsin system as mentioned in episodes 4 and 5. We shall take the same input file and repeat the same scalability study for the mixed MPI/OpenMP settings as we did it for the USER-OMP package. Well, there is some extra things to do before this when we use the Kokkos OpenMP settings. OpenMP with Kokkos comes with a few extra keywords (refer to the above table). These are *neigh*, *newton*, *comm* and *binsize*.  First thing here that we need to do is to find what values of these keywords offer fastest runs. Once we get to kknow these values, we can use them for all the runs needed to perform the scalability studies.
 
-> ## Modifying input and submission script
-> 
-> Analyse the input file `input.lj` and the submission script `run.sh`
-> 
-> What additional modifications need to be made to make them run under (FIXME) conditions
->
-{: .challenge}
+### Find out the optimum values of the keywords
+Take the rhodopsin input files, and run this in 1 node for the following set of parameters as given in the table below. Fill in the blank spaces in the table with the walltimes (in seconds) required for this run. Comment on which set of values give you the fastest runs.
+
+|neigh|newton|comm|binsize|1MPI/40t|2MPI/40t|1MPI/20t|4MPI/10t|5MPI/8t|8MPI/5t|10MPI/4t|20MPI/2t|40MPI/1t|
+|-----|------|----|-------|--------|--------|--------|--------|-------|-------|--------|--------|--------|
+|full | off  | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |    ?   |
+
 
 {% include links.md %}
