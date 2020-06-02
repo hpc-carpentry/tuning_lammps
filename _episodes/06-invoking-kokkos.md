@@ -33,6 +33,12 @@ was written in a  native language specific to that particular device. How does K
 1. It maps a C++ kernel to different backend languages like Cuda, OpenMP, Pthreads.
 2. It also provides data abstractions to adjust (at compile time) the memory layout of data structures like 2D
    and 3D arrays to optimize performance on different hardware.
+   
+> ## Kokkos: A developing library
+>
+> Why should we bother to learn about using Kokkos?
+> (Fix Me! "The primary reason for Kokkos being developed is that it allows you to write a *single* pair style in C++ where and without (much) understanding of GPU programming, that will then work on both GPUs (or Xeon Phi) and CPUs with or without multi-threading. It cannot fully reach the performance of USER-INTEL or the GPU package on CPUs and GPUs, but adding new code to those for a pair style, for which something similar already exists, is *significantly* less effort with Kokkos and requires significantly less programming expertise in vectorization and directive based SIMD programming or CPU computing. Also support for a new kind of computing hardware will primarily need additional code in the Kokkos library and just a little bit of programming setup/management in LAMMPS."
+{: .discussion}
 
 ## What is KOKKOS package in LAMMPS?
 
