@@ -182,7 +182,7 @@ For this exercise also we'll take the rhodopsin system as mentioned in episodes 
 ### Find out the optimum values of the keywords
 Take the rhodopsin input files, and run this in 1 node for the following set of parameters as given in the table below. Fill in the blank spaces in the table with the walltimes (in seconds) required for this run. Comment on which set of values give you the fastest runs.
 
-|neigh|newton|comm|binsize|1MPI/40t|2MPI/40t|4MPI/10t|5MPI/8t|8MPI/5t|10MPI/4t|20MPI/2t|40MPI/1t|
+|neigh|newton|comm|binsize|1MPI/40t|2MPI/40t|4MPI/10t|5MPI/8t |8MPI/5t|10MPI/4t|20MPI/2t|40MPI/1t|
 |-----|------|----|-------|--------|--------|--------|--------|-------|-------|--------|--------|
 |full | off  | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |
 |full | off  |host|default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |
@@ -192,13 +192,14 @@ Take the rhodopsin input files, and run this in 1 node for the following set of 
 
 For the Skylake (AVX 512) system with 40 cores, the results for this input is given below:
 
-|neigh|newton|comm|binsize|1MPI/40t|2MPI/40t|4MPI/10t|5MPI/8t|8MPI/5t|10MPI/4t|20MPI/2t|40MPI/1t|
+|neigh|newton|comm|binsize|1MPI/40t|2MPI/40t|4MPI/10t|5MPI/8t |8MPI/5t|10MPI/4t|20MPI/2t|40MPI/1t|
 |-----|------|----|-------|--------|--------|--------|--------|-------|-------|--------|--------|
 |full | off  | no |default|  172   |  139   |  123   |  125   |  120  |  117  |  116   |  118   |
 |full | off  |host|default|  172   |  139   |  123   |  125   |  120  |  117  |  116   |  118   |
 |full | off  |dev |default|  172   |  139   |  123   |  125   |  120  |  117  |  116   |  119   |
 |full | on   | no |default|  176   |  145   |  125   |  128   |  120  |  119  |  116   |  118   |
 |half | on   | no |default|  190   |  135   |  112   |  119   |  103  |  102  |  97    |  94    |
+
 Comments: 
   1. The choice of *comm* not making practical difference.
   2. Switching on *newton* and using *neigh* equals to *half* make the runs faster for most of the settings.
