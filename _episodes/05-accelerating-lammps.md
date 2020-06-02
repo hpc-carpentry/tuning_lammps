@@ -186,7 +186,12 @@ Calculate *parallel efficiency* for each of these jobs. To get the total time ta
 5. Write down your observation and make comments on any performance enhancement when you compare these results with the pure MPI runs.
 
 ### Solution
-The plot for the HPC system that used (i.e. Kay@ICHEC) is shown below. You can see that I am getting about 15% performance enhancement due to using MPI+OpenMP hybrid approach over the pure MPI-based approach. 
+For a perfectly scalable system, parallel efficiency should be qual to 100%, and as it approaches zero we say that the paralle performance is poor.
+A few observations from the following plot:
+1. As we increase number of nodes, the parallel efficiency decreases considerably for all the runs. This decrease in performance could be associated to the poor scalability of the *Kspace* and *Neigh* computations. We have discussed about this in episode 2.
+2. Parallel efficency is increased by about 10-15% when we use mixed MPI+OpenMP approach.
+3. The performance of hybrid runs are better than or comparable to pure MPI runs only when the number of OpenMP threads are less than or equals to five. This implies that USER-OMP package shows scalability only when number of threads are less in number.
+4. Though we are seeing about 10-15% increase in parallel efficiency of hybrid MPI+OpenMP runs (using 2 threads) over pure MPI runs, still it is important to note that trends in loss of performance with increasing core number is similar in both of these types of runs thus indicating that this increase in performance might not be due to threading but rather due to better SIMD vectorization. Specially, for Skylake processor the vectorization capability is great.  In fact, in LAMMPS, MPI-based parallelization almost always win over OpenMP until thousands of MPI ranks are being used where communication overheads very much significant. There are overheads to making the kernels thread-safe. 
 
 ![scaling_rhodo_user_omp](../fig/05/scaling_rhodo_user_omp.png)
 
