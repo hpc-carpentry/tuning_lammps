@@ -114,12 +114,11 @@ Generally, one can expect 5-20% performance when using this package either in se
 Let us now come back to the *Rhodopsin* example for which we did a thorough scaling study in the previous episode. We found that the *Kspace* and *Neigh* calculations suffer fron poor scalability as you increase number of cores to do the calculations. In such situation a hybrid approach combining parallelizing over domains (i.e. MPI-based) and parallelizing over atoms (i.e. thread based OpenMP) could be more beneficial to improve scalability than a pure MPI-based approach. To test this, in the following exercise, we'll do a set of calculations to mix MPI and OpenMP using the USER-OMP package. Additionally, this exercise will also help us to learn the basic principles of invoking accelerator packages in a LAMMPS run. Before strating our runs, let us now discuss the syntax of the *package* command in LAMMPS, as outlined below. 
 
 ## How to invoke a package in LAMMPS run?
-
 To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to know a LAMMPS command called `package`. This command invokes package-specific settings for an accelerator. You can learn about this command in detail from the
 [LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
 
 The basic syntax of this command is:
-*package style args*
+*package style args keywords values*
 
 ```style``` provides you to choose the accelerator package for your run. There are four different
 packages available currently (version 3Mar20):
@@ -129,8 +128,67 @@ packages available currently (version 3Mar20):
 * `omp` : This calls the *USER-OMP* package
 * `kokkos`: This calls the *Kokkos* package
 
-## How to invoke the UDSER-OMP package?
-(Fix Me) Discuss about the syntax.
+## How to invoke the USER-OMP package?
+There are two alternate ways to fo this, either you can edit the LAMMPS input file to add the extra 'stuffs' corresponsing to the *package* command, or invoke it through command-line keeping the input files unchanged.
+
+If the `package` command is specified in an input script, it must be near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. This command can be used in LAMMPS in two different ways:
+
+* Edit the input file and introduce the line comprising the *package* command in it. This is perfectly fine, but always remember to use this near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. 
+
+To call *USER-OMP* in a LAMMPS run, use *omp* as *style*. Next you need to choose proper *arguments* for the *omp* style. *Argument* should be chosen as the number of OpenMP threads that you like to associate with each MPI process. This is an integer and should be chosen sensibly. If you have N number of physical cores available per node then *Number of MPI processes* x *Number of OpenMP threads* = *Number of cores per node*.
+
+Each *argument* comes with a number of *keyword* and their corresponding *values*. These *keyword/values* provides you enhanced flexibility to distribute your job among the MPI ranks and threads. For a quick reference, the following table could be useful: 
+
+|Keyword   | values  | What it does? |
+|----------|---------|---------------|
+| neigh    | yes     | threaded neighbor list build (this is the default) |
+| neigh    | no      | non-threaded neighbor list build |
+
+An example of calling the *USER-OMP* package in a LAMMPS input file is given below:
+
+```
+package omp 4 neigh no
+```
+{: .bash}
+
+Additionally, you also need to append an extra "/omp" suffix wherever applicable. For example, a pair potential with USER-OMP optimization should be mentioned in the input file as:
+
+```
+pair_style      lj/charmm/coul/long/omp 8.0 10.0
+```
+{: .bash}
+
+* A simpler way to do this is through the command-line when launching LAMMPS using the `-pk`command-line switch. The syntax would be exactly the same as when used in an input script:
+
+```
+export OMP_NUM_THREADS=4
+export OMP_PROC_BIND=spread
+export OMP_PLACES=threads
+mpirun -np 10 -ppn 10 lmp -sf omp -pk omp 4 -in in.rhodo neigh no
+```
+{: .bash}
+
+The second method appears to be convenient since you don't need to take the hassle to edit the input file (and possibly in many places)!
+
+Note that there is an extra command-line switch in the above command-line. Do you know what thisis for? To distinguish the various styles of these accelerator packages from its 'regular' non-accelerated variants, LAMMPS has introduces suffixes and the `-sf` switch  auto-appends these accelerator suffixes to various styles in the input script. Therefore, when an accelerator package is invoked through the `-pk` switch (for example, `-pk omp` or `-pk gpu`), the `-sf` switch ensures that the appropriate style is also being invoked in the simulation (for example, it ensures that the `lj/cut/gpu` is used instead of `lj/cut` as `pair_style`, or,  `lj/charmm/coul/long/omp` is used in place of `lj/charmm/coul/long`).  
+
+In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e. through the command-line.
+
+## Case study: Rhodopsin (with USER-OMP package)
+We shall use the same input file for the rhodopsin system with lipid bilayer. The MD settings for this run is described in Episode 2. In this episode, we'll run this using the USER-OMP package to mix MPI and OpenMP. For all the runs use the default value for the *neigh* keyword. 
+
+1. First, find out the number of cpu cores available per node in the HPC system that you are using and then figure out all the possible MPI/OpenMP combinations that you can have per node. For example, I did this study in Intel Xeon Gold 6148 (Skylake) processor with 2x20 core 2.4 GHz having 192 GiB of RAM. This means each node has 40 physical cores. So, to satify the relation, *Number of MPI processes* x *Number of OpenMP threads* = *Number of cores per node*, I can have the following combinations per node: 1MPI/40 OpenMP threads, 2MPI/20 OpenMP threads, 4MPI/10 OpenMP threads, 5MPI/8 OpenMP threads, 8MPI/5 OpenMP threads, 10MPI/4 OpenMP threads, 20MPI/2 OpenMP threads, and 40MPI/1 OpenMP threads. I like to see scaling, say up to 10 nodes or more. This means that I have to run a total 80 calculations for 10 nodes since I have 8 MPI/OpenMP combinations for each node. Run the jobs for all possible combination in your HPC system.
+2. Run the job for with pure-MPI settings, i.e. with 40 cores (1node), 80 cores (2 nodes), and so on and make sure not to use any OpenMP threading in these runs.
+3. A good metric to measure scalability is to compute *parallel efficiency* for each of these runs. *Parallel efficiency* is defined as:
+  *Parallel efficiency = (1/Np) * (Time taken by a serial run / ( Time taken by Np processors)*
+Calculate *parallel efficiency* for each of these jobs. To get the total time taken by each job, search for "wall time" in the log/screen output files.
+4. Make a plot of *parallel efficiency* versus *number of nodes*.
+5. Write down your observation and make comments on any performance enhancement when you compare these results with the pure MPI runs.
+
+### Solution
+The plot for the HPC system that used (i.e. Kay@ICHEC) is shown below. You can see that I am getting about 15% performance enhancement due to using MPI+OpenMP hybrid approach over the pure MPI-based approach. 
+
+![scaling_rhodo_user_omp](../fig/05/scaling_rhodo_user_omp.png)
 
 ## GPU package
 
@@ -184,8 +242,7 @@ If the answer to these two questions is a *yes* then we you can proceed to the f
 
 ## How to invoke the GPU package in LAMMPS run?
 
-As discussed above, you need to use the *package* command to invoke the *GPU* package. To use *GPU package* as an accelerator you need to select `gpu` as *style*. Next you need to choose
-proper *arguments* for the *gpu* style. The argument for *gpu* style is *ngpu*.
+As discussed above, you need to use the *package* command to invoke the *GPU* package. To use *GPU package* as an accelerator you need to select `gpu` as *style*. Next you need to choose proper *arguments* for the *gpu* style. The argument for *gpu* style is *ngpu*.
 
 * `ngpu`: This sets the number of GPUs per node. There must be at least as many MPI tasks per node
   as GPUs, as set by the mpirun or mpiexec command. If there are more MPI tasks (per node) than GPUs,
@@ -210,16 +267,12 @@ optimum way. For a quick reference, the following table could be useful:
 >
 {: .callout}
 
-If the `package` command is specified in an input script, it must be near the top of the script,
-before the simulation box has been defined. This is because it specifies settings that the
-accelerator packages use in their initialization, before a simulation is defined. This command can
-be used in LAMMPS in two different ways:
+## How to invoke the GPU package?
+There are two alternate ways to fo this, either you can edit the LAMMPS input file to add the extra 'stuffs' corresponsing to the *package* command, or invoke it through command-line keeping the input files unchanged.
 
-* Edit the input file and introduce the line comprising the *package* command in it. This is
-  perfectly fine, but always remember to use this near the top of the script, before the simulation
-  box has been defined. This is because it specifies settings that the accelerator packages use in
-  their initialization, before a simulation is defined. An example of calling the *GPU package* in a
-  LAMMPS input file is given below:
+If the `package` command is specified in an input script, it must be near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. This command can be used in LAMMPS in two different ways:
+
+* Edit the input file and introduce the line comprising the *package* command in it. This is perfectly fine, but always remember to use this near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. An example of calling the *GPU package* in a LAMMPS input file is given below:
 
 ```
 package         gpu 2 neigh yes newton off split 1.0
@@ -256,7 +309,7 @@ appropriate style is also being invoked in the simulation (for example, it ensur
 In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e.
 through the command-line.
 
-> ## Challenge 1: The First Exercise
+> ## Hands-on for the GPU package
 >
 > Let us start with first example. Below is given a LAMMPS input script for a LJ system. Prepare
 > a submission script to run a LAMMPS job with the following input file using 2 gpus. For this run,
