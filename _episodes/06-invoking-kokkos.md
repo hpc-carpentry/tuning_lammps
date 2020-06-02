@@ -185,6 +185,10 @@ Take the rhodopsin input files, and run this in 1 node for the following set of 
 |neigh|newton|comm|binsize|1MPI/40t|2MPI/40t|1MPI/20t|4MPI/10t|5MPI/8t|8MPI/5t|10MPI/4t|20MPI/2t|40MPI/1t|
 |-----|------|----|-------|--------|--------|--------|--------|-------|-------|--------|--------|--------|
 |full | off  | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |    ?   |
+|full | off  |host|default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |    ?   |
+|full | off  |dev |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |    ?   |
+|full | on   | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |    ?   |
+|half | on   | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |    ?   |
 
 
 {% include links.md %}
