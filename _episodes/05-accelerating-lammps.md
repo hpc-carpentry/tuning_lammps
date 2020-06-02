@@ -58,14 +58,7 @@ backend languages. This will be discussed more later in the
 [next lesson]({{page.root}}/06-invoking-kokkos).
 
 In the meantime, we'll touch a few key points about other accelerator packages to give you a feel
-about what these packages offer and in many cases these packages outperform Kokkos in its current
-form!
-
-> ## Kokkos: A developing library
->
-> Most of the accelerator packages offered by LAMMPS may outperform Kokkos. So... why should we
-> bother to learn about using Kokkos?
-{: .discussion}
+about what these packages offer, to learn to invoke an accelerator package in a LAMMPS run, and get some data to comapre the sppedup with regular as well as Kokkos-enabled LAMMPS runs. 
 
 ## OPT package
 
@@ -107,37 +100,39 @@ There are, however, a number of conditions;
 There are many LAMMPS features that are supported by this accelerator package, which can be found
 [here]({{page.root}}/reference/#package-USER-INTEL).
 
-Performance enhancement using this package depends on many considerations, such as the hardware
-that is available to you, various styles that you are using in the input, the size of your problem,
-and precision. For example, if you are using a pair style (say, `reax`) for which this is not
-implemented, its obvious that you are not going to have a performance gain for the *Pair* part of
-the calculation. Now, if the majority of the computation time is coming from the *Pair* part then
-you are in trouble. If you would like to know how much speedup you can achieve using USER-INTEL,
-you can look [here](https://lammps.sandia.gov/doc/Speed_intel.html)
+Performance enhancement using this package depends on many considerations, such as the hardware that is available to you, various styles that you are using in the input, the size of your problem, and precision. For example, if you are using a pair style (say, `reax`) for which this is not implemented, its obvious that you are not going to have a performance gain for the *Pair* part of the calculation. Now, if the majority of the computation time is coming from the *Pair* part then you are in trouble. If you would like to know how much speedup you can achieve using USER-INTEL, you can look [here](https://lammps.sandia.gov/doc/Speed_intel.html)
 
 ## USER-OMP package
 
-This accelerator package offers performance gain through otimisation and multi-threading via OpenMP
-interface. In order to make the multi-threading functional, you need multi-core CPUs and a compiler
-that supports multithreading. If your compiler does not support multithreading then also you can
-use it as an optimized serial code. Considerably a big sub-set of the LAMMPS routines can be used
-with this accelerator.
+This accelerator package offers performance gain through otimisation and multi-threading via OpenMP interface. In order to make the multi-threading functional, you need multi-core CPUs and a compiler that supports multithreading. If your compiler does not support multithreading then also you can use it as an optimized serial code. Considerably a big sub-set of the LAMMPS routines can be used with this accelerator.
 
 A list of functionalities enabled with this package can be found
 [here]({{page.root}}/reference/#package-USER-OMP).
 
-Generally, one can expect 5-20% performance when using this package either in serial or parallel.
-The optimal number of OpenMP threads to use is to be always tested for a problem. But, this gives
-better performance when used for less number of threads, generally 2-4. It is important to remember
-that MPI implementation in LAMMPS is so robust that you may always expect this to be more effective
-than using OpenMP on multi-core CPUs.
+Generally, one can expect 5-20% performance when using this package either in serial or parallel. The optimal number of OpenMP threads to use is to be always tested for a problem. But, this gives better performance when used for less number of threads, generally 2-4. It is important to remember that MPI implementation in LAMMPS is so robust that you may always expect this to be more effective than using OpenMP on multi-core CPUs.
 
-> ## Why is MPI+OpenMP is preferred over pure MPI sometimes?
->
-> When you use multiple nodes for your job, you might experience communication overhead. In such
-> case using a mix of MPI and OpenMP threads often may result in better performance than a pure
-> MPI job
-{: .discussion}
+Let us now come back to the *Rhodopsin* example for which we did a thorough scaling study in the previous episode. 
+
+## How to invoke a package in LAMMPS run?
+
+To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to
+know a LAMMPS command called `package`. This command invokes package-specific settings for an
+accelerator. You can learn about this command in detail from the
+[LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
+
+The basic syntax of this command is:
+*package style args*
+
+```style``` provides you to choose the accelerator package for your run. There are four different
+packages available currently (version 3Mar20):
+
+* `gpu`: This calls the *GPU* package
+* `intel`: This calls the *USER-INTEL* package
+* `omp` : This calls the *USER-OMP* package
+* `kokkos`: This calls the *Kokkos* package
+
+## How to invoke the UDSER-OMP package?
+(Fix Me) Discuss about the syntax.
 
 ## GPU package
 
@@ -189,25 +184,9 @@ Before invoking the GPU package, you must ask the following questions:
 
 If the answer to these two questions is a *yes* then we you can proceed to the following section.
 
-## How to invoke a package in LAMMPS run?
+## How to invoke the GPU package in LAMMPS run?
 
-To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to
-know a LAMMPS command called `package`. This command invokes package-specific settings for an
-accelerator. You can learn about this command in detail from the
-[LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
-
-The basic syntax of this command is:
-*package style args*
-
-```style``` provides you to choose the accelerator package for your run. There are four different
-packages available currently (version 3Mar20):
-
-* `gpu`: This calls the *GPU* package
-* `intel`: This calls the *USER-INTEL* package
-* `omp` : This calls the *USER-OMP* package
-* `kokkos`: This calls the *Kokkos* package
-
-To use *GPU package* as an accelerator you need to select `gpu` as *style*. Next you need to choose
+As discussed above, you need to use the *package* command to invoke the *GPU* package. To use *GPU package* as an accelerator you need to select `gpu` as *style*. Next you need to choose
 proper *arguments* for the *gpu* style. The argument for *gpu* style is *ngpu*.
 
 * `ngpu`: This sets the number of GPUs per node. There must be at least as many MPI tasks per node
