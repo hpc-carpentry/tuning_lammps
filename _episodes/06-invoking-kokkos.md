@@ -191,6 +191,7 @@ Take the rhodopsin input files, and run this in 1 node for the following set of 
 |half | on   | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    | 
 
 For the Skylake (AVX 512) system with 40 cores, the results for this input is given below:
+
 |neigh|newton|comm|binsize|1MPI/40t|2MPI/40t|4MPI/10t|5MPI/8t|8MPI/5t|10MPI/4t|20MPI/2t|40MPI/1t|
 |-----|------|----|-------|--------|--------|--------|--------|-------|-------|--------|--------|
 |full | off  | no |default|  172   |  139   |  123   |  125   |  120  |  117  |  116   |  118   |
