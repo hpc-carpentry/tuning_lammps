@@ -111,13 +111,11 @@ A list of functionalities enabled with this package can be found
 
 Generally, one can expect 5-20% performance when using this package either in serial or parallel. The optimal number of OpenMP threads to use is to be always tested for a problem. But, this gives better performance when used for less number of threads, generally 2-4. It is important to remember that MPI implementation in LAMMPS is so robust that you may always expect this to be more effective than using OpenMP on multi-core CPUs.
 
-Let us now come back to the *Rhodopsin* example for which we did a thorough scaling study in the previous episode. 
+Let us now come back to the *Rhodopsin* example for which we did a thorough scaling study in the previous episode. We found that the *Kspace* and *Neigh* calculations suffer fron poor scalability as you increase number of cores to do the calculations. In such situation a hybrid approach combining parallelizing over domains (i.e. MPI-based) and parallelizing over atoms (i.e. thread based OpenMP) could be more beneficial to improve scalability than a pure MPI-based approach. To test this, in the following exercise, we'll do a set of calculations to mix MPI and OpenMP using the USER-OMP package. Additionally, this exercise will also help us to learn the basic principles of invoking accelerator packages in a LAMMPS run. Before strating our runs, let us now discuss the syntax of the *package* command in LAMMPS, as outlined below. 
 
 ## How to invoke a package in LAMMPS run?
 
-To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to
-know a LAMMPS command called `package`. This command invokes package-specific settings for an
-accelerator. You can learn about this command in detail from the
+To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to know a LAMMPS command called `package`. This command invokes package-specific settings for an accelerator. You can learn about this command in detail from the
 [LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
 
 The basic syntax of this command is:
