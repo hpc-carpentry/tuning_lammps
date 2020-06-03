@@ -90,8 +90,7 @@ Comments:
   This means for the fixes that we are using in this calculation not yet supports Kokkos communication and hence using different values of the *comm* keyword makes no difference.
   
   2. Switching on *newton* and using *half* neighbour list make the runs faster for most of the MPI/OpenMP settings.
-
-  When *half* neighbour list and OpenMP is being used together in Kokkos, it uses data duplication to amke it thread-safe. When you use relatively less number of threads (8 or less) this could be fastest and for more threads it becomes memory-bound and suffers from poor scalability with increasing thread-counts. If you look at the data in the above table carefully, you will notice that using 40 OpenMP threads for *neigh=half* and *newton=on* makes the run slower. On the other hand, when you use only 1 OpenMP thread per MPI rank, it requires no data duplication or atomic operations, hence it produces the fastest run.  
+  When *half* neighbour list and OpenMP is being used together in Kokkos, it uses data duplication to amke it thread-safe. When you use   relatively less number of threads (8 or less) this could be fastest and for more threads it becomes memory-bound and suffers from poor scalability with increasing thread-counts. If you look at the data in the above table carefully, you will notice that using 40 OpenMP threads for *neigh=half* and *newton=on* makes the run slower. On the other hand, when you use only 1 OpenMP thread per MPI rank, it requires no data duplication or atomic operations, hence it produces the fastest run.  
   
  So, we'll be using this (i.e. *neigh half newton on comm host*) for all the runs in the scalability studies below.
 
