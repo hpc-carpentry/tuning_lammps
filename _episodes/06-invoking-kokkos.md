@@ -176,50 +176,5 @@ prior to this point. It is used to invoke different modes of execution. In the a
 GPU mode and it will be run with 4 physical GPUs. Similarly, we can call the OpenMP mode (threaded), using something
 like: `-k on t 4`. In this case we are invoking Kokkos package to use the OpenMP optimization with 4 threads. In this episode, we'll be discussing about using Kokkos to invoke mixed MPI and OpenMP runs.
 
-## Using OpenMP threading through the Kokkos package
-For this exercise also we'll take the rhodopsin system as mentioned in episodes 4 and 5. We shall take the same input file and repeat the same scalability study for the mixed MPI/OpenMP settings as we did it for the USER-OMP package. Well, there is some extra things to do before this when we use the Kokkos OpenMP settings. OpenMP with Kokkos comes with a few extra keywords (refer to the above table). These are *neigh*, *newton*, *comm* and *binsize*.  First thing here that we need to do is to find what values of these keywords offer fastest runs. Once we get to kknow these values, we can use them for all the runs needed to perform the scalability studies.
-
-### Find out the optimum values of the keywords
-Take the rhodopsin input files, and run this in 1 node for the following set of parameters as given in the table below. Fill in the blank spaces in the table with the walltimes (in seconds) required for this run. Comment on which set of values give you the fastest runs.
-
-|neigh|newton|comm|binsize|1MPI/40t|2MPI/40t|4MPI/10t|5MPI/8t |8MPI/5t|10MPI/4t|20MPI/2t|40MPI/1t|
-|-----|------|----|-------|--------|--------|--------|--------|-------|-------|--------|--------|
-|full | off  | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |
-|full | off  |host|default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |
-|full | off  |dev |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |
-|full | on   | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |
-|half | on   | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    | 
-
-For the Skylake (AVX 512) system with 40 cores, the results for this input is given below:
-
-|neigh|newton|comm|binsize|1MPI/40t|2MPI/40t|4MPI/10t|5MPI/8t |8MPI/5t|10MPI/4t|20MPI/2t|40MPI/1t|
-|-----|------|----|-------|--------|--------|--------|--------|-------|-------|--------|--------|
-|full | off  | no |default|  172   |  139   |  123   |  125   |  120  |  117  |  116   |  118   |
-|full | off  |host|default|  172   |  139   |  123   |  125   |  120  |  117  |  116   |  118   |
-|full | off  |dev |default|  172   |  139   |  123   |  125   |  120  |  117  |  116   |  119   |
-|full | on   | no |default|  176   |  145   |  125   |  128   |  120  |  119  |  116   |  118   |
-|half | on   | no |default|  190   |  135   |  112   |  119   |  103  |  102  |  97    |  94    |
-
-Comments: 
-  1. The choice of *comm* not making practical difference.
-  2. Switching on *newton* and using *neigh* equals to *half* make the runs faster for most of the settings.
-  So, we'll be using this (i.e. *neigh half newton on comm host*) for all the runs in the scalability studies below.
- 
-### Do the scalability study
- 1. Figure out all the possible MPI/OpenMP combinations that you can have per node (just as you did for the USER-OMP runs in episode 5). For example, I did this study in Intel Xeon Gold 6148 (Skylake) processor with 2x20 core 2.4 GHz having 192 GiB of RAM. This means each node has 40 physical cores. So, to satify the relation, *Number of MPI processes* x *Number of OpenMP threads* = *Number of cores per node*, I can have the following combinations per node: 1MPI/40 OpenMP threads, 2MPI/20 OpenMP threads, 4MPI/10 OpenMP threads, 5MPI/8 OpenMP threads, 8MPI/5 OpenMP threads, 10MPI/4 OpenMP threads, 20MPI/2 OpenMP threads, and 40MPI/1 OpenMP threads. I like to see scaling, say up to 10 nodes or more. This means that I have to run a total 80 calculations for 10 nodes since I have 8 MPI/OpenMP combinations for each node. Run the jobs for all possible combinations in your HPC system.
-2. Calculate *parallel efficiency* for each of these jobs. To get the total time taken by each job, search for "wall time" in the log/screen output files.
-4. Make a plot of *parallel efficiency* versus *number of nodes*.
-5. Also, make a comparison of the parallel performance between the USER-OMP and Kokkos implementations of the OpenMP threading.
-5. Write down your observation and make comments on any performance enhancement when you compare these results with the pure MPI runs.
-
-### Solution
-The plot is shown below. The main observations are outlined here:
-  1. Data for the pure MPI-based run is plotted with the thick blue line. Strikingly, none of the Kokkos based MPI/OpenMP mixed runs show comparable parallel performance with the pure MPI-based approach. The difference in parallel efficiency is more pronounced for less node counts and this gap in performance reduces slowly as we increase more nodes to run the job. This looks like to see comaparable performance with the pure MPI-based runs we need to increase number of nodes far beyond than what is used in the current study. 
-  2. If we now compare the performance of Kokkos OpenMP with the threading impleted with the USER-OMP package, there is quite a bit of difference.
-  3. This difference could be due to vectorization. Currently (version 7Aug19 or 3Mar20) the Kokkos package in LAMMPS doesn't vectorize well as compared to the vectorization implemented in the USER-OMP package. USER-INTEL should be even better than USER-OMP at vectorizing if the styles are supported in that package.
-  4. The 'deceleration' is probably due to Kokkos and OpenMP overheads to make the kernels thread-safe.
-  5. If we just compare the performance among the Kokkos OpenMP runs, we see that parallel efficiency values are converging even for more thread-counts (1 to 20) as we increase the number of nodes. This is indicative that Kokkos OpenMP scales better with increasing thread counts as compared to the USER-OMP package.
-
-![scaling_rhodo_kokkos_omp](../fig/06/scaling_rhodo_kokkos_omp.png)
  
 {% include links.md %}
