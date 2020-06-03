@@ -205,7 +205,7 @@ Comments:
   2. Switching on *newton* and using *neigh* equals to *half* make the runs faster for most of the settings.
   So, we'll be using this (i.e. *neigh half newton on comm host*) for all the runs in the scalability studies below.
  
- ### Do the scalability study
+### Do the scalability study
  1. Figure out all the possible MPI/OpenMP combinations that you can have per node (just as you did for the USER-OMP runs in episode 5). For example, I did this study in Intel Xeon Gold 6148 (Skylake) processor with 2x20 core 2.4 GHz having 192 GiB of RAM. This means each node has 40 physical cores. So, to satify the relation, *Number of MPI processes* x *Number of OpenMP threads* = *Number of cores per node*, I can have the following combinations per node: 1MPI/40 OpenMP threads, 2MPI/20 OpenMP threads, 4MPI/10 OpenMP threads, 5MPI/8 OpenMP threads, 8MPI/5 OpenMP threads, 10MPI/4 OpenMP threads, 20MPI/2 OpenMP threads, and 40MPI/1 OpenMP threads. I like to see scaling, say up to 10 nodes or more. This means that I have to run a total 80 calculations for 10 nodes since I have 8 MPI/OpenMP combinations for each node. Run the jobs for all possible combinations in your HPC system.
 2. Calculate *parallel efficiency* for each of these jobs. To get the total time taken by each job, search for "wall time" in the log/screen output files.
 4. Make a plot of *parallel efficiency* versus *number of nodes*.
@@ -213,7 +213,13 @@ Comments:
 5. Write down your observation and make comments on any performance enhancement when you compare these results with the pure MPI runs.
 
 ### Solution
-(Fix me) Write down the observations.
+The plot is shown below. The main observations are outlined here:
+  1. Data for the pure MPI-based run is plotted with the thick blue line. Strikingly, none of the Kokkos based MPI/OpenMP mixed runs show comparable parallel performance with the pure MPI-based approach. The difference in parallel efficiency is more pronounced for less node counts and this gap in performance reduces slowly as we increase more nodes to run the job. This looks like to see comaparable performance with the pure MPI-based runs we need to increase number of nodes far beyond than what is used in the current study. 
+  2. If we now compare the performance of Kokkos OpenMP with the threading impleted with the USER-OMP package, there is quite a bit of difference.
+  3. This difference could be due to vectorization. Currently (version 7Aug19 or 3Mar20) the Kokkos package in LAMMPS doesn't vectorize well as compared to the vectorization implemented in the USER-OMP package. USER-INTEL should be even better than USER-OMP at vectorizing if the styles are supported in that package.
+  4. The 'deceleration' is probably due to Kokkos and OpenMP overheads to make the kernels thread-safe.
+  5. If we just compare the performance among the Kokkos OpenMP runs, we see that parallel efficiency values are converging even for more thread-counts (1 to 20) as we increase the number of nodes. This is indicative that Kokkos OpenMP scales better with increasing thread counts as compared to the USER-OMP package.
+
 ![scaling_rhodo_kokkos_omp](../fig/06/scaling_rhodo_kokkos_omp.png)
  
 {% include links.md %}
