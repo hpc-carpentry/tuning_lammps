@@ -101,8 +101,7 @@ The next you need to choose proper *keywords* and *value* pairs. These *keyword/
 
 ## Rules of thumb
 
-1. ***neigh***: For GPU, a value of *full* for *neigh* keyword is often more efficient, and in case of CPU a value
-  of *half* is often faster.
+1. ***neigh***: When you use *full* list, all the neighbors of atom I are stored with atom *I*. On the contrary, for a *half* list, the I-J interaction is stored either with atom *I* or *J* but not both. For GPU, a value of *full* for *neigh* keyword is often more efficient, and in case of CPU a value of *half* is often faster.
 2. ***newton***: Using this keyword you can turn Newton’s 3rd law *on* or *off* for pairwise and bonded interactions.
   Turning this *on* means less computation and more communication, and setting it *off* means interactions will be
   calculated by both processors if these interacting atoms are being handled by these two different processors. This
