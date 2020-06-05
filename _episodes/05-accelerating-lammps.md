@@ -354,7 +354,7 @@ At this stage, once you complete a job successfully, it is time to look for a fe
 LAMMPS output file. A few of them are for the sanity check to see if LAMMPS is doing the things
 that you asked for and a few of them tell you about the performances.
 
-## Device information
+### Device information
 
 It prints about the device information both in the screen-output and the log file. You would notice
 something like this:
@@ -372,7 +372,7 @@ each GPU. The detail about the graphics card is also printed, *Tesla K80, 13 CU,
 with the *numerical precision* of the implemented *GPU package* is also printed. In this case, it
 is using *double precision*. Next it shows how the MPI-processes are spawned with a GPU core.
 
-## Accelerated version of pair-potential
+### Accelerated version of pair-potential
 
 This section of the output shows you that it is actually using the *accelerated* version of the
 pair potential *lj/cut*. You can see that it is using *lj/cut/gpu* though in your input file you
@@ -384,7 +384,7 @@ this run.
 ```
 {: .output}
  
-## Performance section
+### Performance section
 
 The following screen-output tells you all about the performance. Some of these terms are already
 discussed in previous episode (episode 4). When you the *GPU package* you would see an extra block
