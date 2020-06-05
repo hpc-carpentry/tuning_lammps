@@ -316,10 +316,8 @@ through the command-line.
 
 ## Exercise 1: Learn to call GPU package from command-line
 
-Let us start with first example. Below is given a LAMMPS input script for a LJ system. Prepare
-a submission script to run a LAMMPS job with the following input file using 2 gpus. For this run,
-make sure that the neighbour list is built on the CPUs, and a dynamic load-balancing between the
-CPUs and GPUs.
+In this exercise, we'll deal with a Lennard-Jones (LJ) system as described by the following input file. You can vary the system size and the length of the run using the variables *x*, *y*, *z*, and *t*. For this exercise, let us choose *x* = *y* = *z* = 60. Since this is a system with *fcc* lattice, the total number of atoms should be 864,000 for the chosen values of *x*, *y*, and *z*. Let, *t* = 500.
+We'll call the *GPU* package from the command-line in this case. Can you prepare a job submission file for this system such that it enables to use 2 GPUs with 24 MPI ranks. Make sure that the neighbor is built on the CPUs and there is a dynamic load balancing between the CPUs and the GPUs. 
 
  ```
 {% include /snippets/ep05/in.lj %}
@@ -328,6 +326,8 @@ CPUs and GPUs.
 
 
 ### Solution
+A job submission script is shown below. Note that the number of MPI ranks is fixed by `#SBATCH --ntasks-per-node=24`. You are requesting for 2 GPUs by using `#SBATCH --gres=gpu:2`. Rest of the input parameters can be passed to the LAMMPS executable using command-line switches. The system size can be chosen using `-v x 60 -v y 60 -v z 60`, length of the run can be decided by `-v t 500`, GPU package and the number of GPUs is chosen by `-pk gpu 2`, the GPU package related fix/pair styles can be chosen using `-sf gpu`, and other GPU package related keywords are chosen using `neigh no newton off split -1.0`. A *no* value of the *neigh* keyword ensures that the neighbor list is built in the *CPUs*. Dynamic load balancing option between CPUs and GPUs is chosen using ` split -1.0`.
+
   ~~~
   #!/bin/bash -x
   #SBATCH --account=ecam
@@ -337,14 +337,14 @@ CPUs and GPUs.
   #SBATCH --error=mpi-err.%j
   #SBATCH --time=01:00:00
   #SBATCH --partition=gpus
-  #SBATCH --gres=gpu:4
+  #SBATCH --gres=gpu:2
    
   module use /usr/local/software/jureca/OtherStages
   module load Stages/Devel-2019a
   module load intel-para/2019a
   module load LAMMPS/18Feb2020-cuda
   
-  srun lmp -v x 10 -v y 10 -v z 10 -v t 50000 -sf gpu -pk gpu 4 neigh no newton off split -1.0 -in in.lj
+  srun lmp -v x 60 -v y 60 -v z 60 -v t 500 -sf gpu -pk gpu 2 neigh no newton off split -1.0 -in in.lj
   ~~~
   {: .bash}
 
