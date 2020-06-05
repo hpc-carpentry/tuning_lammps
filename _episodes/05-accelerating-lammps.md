@@ -326,7 +326,7 @@ We'll call the *GPU* package from the command-line in this case. Can you prepare
 
 
 ### Solution
-A job submission script is shown below. Note that the number of MPI ranks is fixed by `#SBATCH --ntasks-per-node=24`. You are requesting for 2 GPUs by using `#SBATCH --gres=gpu:2`. Rest of the input parameters can be passed to the LAMMPS executable using command-line switches. The system size can be chosen using `-v x 60 -v y 60 -v z 60`, length of the run can be decided by `-v t 500`, GPU package and the number of GPUs is chosen by `-pk gpu 2`, the GPU package related fix/pair styles can be chosen using `-sf gpu`, and other GPU package related keywords are chosen using `neigh no newton off split -1.0`. A *no* value of the *neigh* keyword ensures that the neighbor list is built in the *CPUs*. Dynamic load balancing option between CPUs and GPUs is chosen using ` split -1.0`.
+A job submission script is shown below. Note that the number of MPI ranks is fixed by `#SBATCH --ntasks-per-node=24`. You are requesting for 2 GPUs by using `#SBATCH --gres=gpu:2`. Rest of the input parameters can be passed to the LAMMPS executable using command-line switches. The system size can be chosen using `-v x 60 -v y 60 -v z 60`, length of the run can be decided by `-v t 500`, GPU package and the number of GPUs is chosen by `-pk gpu 2`, the GPU package related fix/pair styles can be chosen using `-sf gpu`, and other GPU package related keywords are chosen using `neigh no newton off split -1.0`. A *no* value of the *neigh* keyword ensures that the neighbor list is built in the *CPUs*. Dynamic load balancing option between CPUs and GPUs is chosen using `split -1.0`.
 
   ~~~
   #!/bin/bash -x
