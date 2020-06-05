@@ -345,7 +345,7 @@ CPUs and GPUs.
   
   srun lmp -v x 10 -v y 10 -v z 10 -v t 50000 -sf gpu -pk gpu 4 neigh no newton off split -1.0 -in in.lj
   ~~~
-  {: .solution}
+  {: .bash}
 
 ## Know about the GPU package output
 
