@@ -326,7 +326,8 @@ CPUs and GPUs.
 ```
 {: .input}
 
-  ### Solution
+
+### Solution
   ~~~
   #!/bin/bash -x
   #SBATCH --account=ecam
