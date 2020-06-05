@@ -314,23 +314,38 @@ appropriate style is also being invoked in the simulation (for example, it ensur
 In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e.
 through the command-line.
 
-> ## Hands-on for the GPU package
->
-> Let us start with first example. Below is given a LAMMPS input script for a LJ system. Prepare
-> a submission script to run a LAMMPS job with the following input file using 2 gpus. For this run,
-> make sure that the neighbour list is built on the CPUs, and a dynamic load-balancing between the
-> CPUs and GPUs.
->
-> ```
-> {% include /snippets/ep05/in.lj %}
-> ```
-> {: .input}
->
-> > ## Solution
-> >
-> > (FIX ME)
-> {: .solution}
-{: .challenge}
+## Exercise 1: Learn to call GPU package from command-line
+
+Let us start with first example. Below is given a LAMMPS input script for a LJ system. Prepare
+a submission script to run a LAMMPS job with the following input file using 2 gpus. For this run,
+make sure that the neighbour list is built on the CPUs, and a dynamic load-balancing between the
+CPUs and GPUs.
+
+ ```
+{% include /snippets/ep05/in.lj %}
+```
+{: .input}
+
+  ### Solution
+  ~~~
+  #!/bin/bash -x
+  #SBATCH --account=ecam
+  #SBATCH --nodes=1
+  #SBATCH --ntasks-per-node=24
+  #SBATCH --output=mpi-out.%j
+  #SBATCH --error=mpi-err.%j
+  #SBATCH --time=01:00:00
+  #SBATCH --partition=gpus
+  #SBATCH --gres=gpu:4
+   
+  module use /usr/local/software/jureca/OtherStages
+  module load Stages/Devel-2019a
+  module load intel-para/2019a
+  module load LAMMPS/18Feb2020-cuda
+  
+  srun lmp -v x 10 -v y 10 -v z 10 -v t 50000 -sf gpu -pk gpu 4 neigh no newton off split -1.0 -in in.lj
+  ~~~
+  {: .solution}
 
 ## Know about the GPU package output
 
