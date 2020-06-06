@@ -440,19 +440,13 @@ Let us repeat the entire exercise as described in *Exercise 1* but this time we'
 (FIX ME) This needs to be done!
 
 
-> ## Challenge 3: Optimization
-> 
-> Use the above input file and submit as many jobs as required to optimize the run-time parameters
-> for the best performance from 1 node.
->
->> ## Solution
->>
->> 1. Make a plot of walltime (in sec) vs #gpu/#cpu for ```neigh yes newton off split -1.0```
->> 2. Do the same for ```neigh yes newton off split 1.0```
->> 3. Repeat it again for ```neigh no newton off split -1.0``` and ```neigh no newton off split 1.0```
->> 4. Make 4 different plots and comment on which one is the best performing settings.
-> {: .solution}
-{: .challenge}
+## Exercise 4: Speed-up (CPU versus GPU)
+Use the above input file and submit as many jobs as required to optimize the run-time parameters
+for the best performance from 1 node.
+
+### Solution
+
+![CPUvsGPU](../fig/05/CPUvsGPU.png)
 
 
 {% include links.md %}
