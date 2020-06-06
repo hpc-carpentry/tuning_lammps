@@ -421,7 +421,7 @@ I did this study in a Intel Xeon E5-2680 v3 Haswell CPU node having 2x12 cores p
 
 The main observations from the following plots are:
   1. For the system with 4000 atoms, increasing the number of MPI tasks actually degrades the overall performance.
-  2. For the 256K system, we can notice an initail speed-up with increasing MPI task counts upto 4 MPI ranks per GPU, and then it starts decling again.
+  2. For the 256K system, we can notice an initial speed-up with increasing MPI task counts upto 4 MPI ranks per GPU, and then it starts decling again.
   3. For the largest 11M atom system, there is a sharp increase of speed-up upto 4 MPI ranks per GPU, and then also a relatively slow but steady increase is seen with increasing MPI tasks per GPU (in this case, 6 MPI tasks per GPU).
   
   Possible explanation: FIX ME
