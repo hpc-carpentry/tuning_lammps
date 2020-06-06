@@ -245,7 +245,7 @@ Before invoking the GPU package, you must ask the following questions:
 
 If the answer to these two questions is a *yes* then we you can proceed to the following section.
 
-## How to invoke the GPU package in LAMMPS run?
+## Basic syntax: arguments and keywords
 
 As discussed above, you need to use the *package* command to invoke the *GPU* package. To use *GPU package* as an accelerator you need to select `gpu` as *style*. Next you need to choose proper *arguments* for the *gpu* style. The argument for *gpu* style is *ngpu*.
 
@@ -272,7 +272,7 @@ optimum way. For a quick reference, the following table could be useful:
 >
 {: .callout}
 
-## How to invoke the GPU package?
+## Invoke either through input or by command-line
 There are two alternate ways to fo this, either you can edit the LAMMPS input file to add the extra 'stuffs' corresponsing to the *package* command, or invoke it through command-line keeping the input files unchanged.
 
 If the `package` command is specified in an input script, it must be near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. This command can be used in LAMMPS in two different ways:
@@ -412,6 +412,14 @@ mentioned in the above table. Moreover, one may find that for a particular probl
 stead of 4 GPUs may give better performance, and this why this is advisable to figure out the best
 possible set of run-time parameters following a thorough optimization before  starting the
 production runs. This might save your lot of resource and time!
+
+## Exercise 2
+As mentioned above, employing the full computing workforce to solve your problem may not always return the most profit. We need to tune this before starting any production run. In this exercise, we'll be using the above input file defining a LJ-system. Here we'll do three sets of run where each set will have different numbers of atoms in the box. Let the system sizes be defined by *x* = *y* = *z* = 10, *x* = *y* = *z* = 40 and *x* = *y* = *z* = 140. This implies that these three systems will have 4000, 256,000 and nearly 11 million atoms in the box respectively. We can choose the length of the simulation also using *t* = 5000. For each case, run it for differnt numbers of GPU/MPI tasks combination. For example, I ran these systems in a node having 4 K80 NVIDIA GPUs and 24 physical cores. I choose to employ all 4 GPUs abut different number of MPI tasks. Since there are 4 GPUs, I must take at least 4 MPI ranks. So, I choose the following combinations: 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks, 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks, 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks. After the runs are over, the performance data is extracted from the log/screen output files using the command `grep "Performance:"` in units if *timestep/s*. Finally, plot a *normalized speed-up factor per node* for each of these configurations and write down the main observations. 
+
+### Solution
+I did this study in a Intel Xeon E5-2680 v3 Haswell CPU node having 2x12 cores per node and two NVIDIA K80 GPUs (four visible devices per node: 2 x 4992 CUDA cores, 2 x 24 GiB GDDR5 memory) with Mellanox EDR InfiniBand high-speed network with non-blocking fat tree topology. Six GPU/MPI combinations were tried for each characteristic system size. These are 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks, 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks, 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks. Plot is shown below.
+
+![gpu_mpi_counts.png](../fig/05/gpu_mpi_counts.png)
 
 > ## Challenge 2
 > 
