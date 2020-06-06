@@ -413,8 +413,8 @@ stead of 4 GPUs may give better performance, and this why this is advisable to f
 possible set of run-time parameters following a thorough optimization before  starting the
 production runs. This might save your lot of resource and time!
 
-## Exercise 2
-As mentioned above, employing the full computing workforce to solve your problem may not always return the most profit. We need to tune this before starting any production run. In this exercise, we'll be using the above input file defining a LJ-system. Here we'll do three sets of run where each set will have different numbers of atoms in the box. Let the system sizes be defined by *x* = *y* = *z* = 10, *x* = *y* = *z* = 40 and *x* = *y* = *z* = 140. This implies that these three systems will have 4000, 256,000 and nearly 11 million atoms in the box respectively. We can choose the length of the simulation also using *t* = 5000. For each case, run it for differnt numbers of GPU/MPI tasks combination. For example, I ran these systems in a node having 4 K80 NVIDIA GPUs and 24 physical cores. I choose to employ all 4 GPUs abut different number of MPI tasks. Since there are 4 GPUs, I must take at least 4 MPI ranks. So, I choose the following combinations: 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks, 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks, 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks. For this exercise, choose *package* keywords such that neighbor list building and force computations are done entirely on the GPUs. It can be done using `-sf gpu -pk gpu 4 neigh yes newton off split 1.0 ` where 4 GPUs are being used. After the runs are over, the performance data is extracted from the log/screen output files using the command `grep "Performance:"` in units if *timestep/s*. Finally, plot a *normalized speed-up factor per node* for each of these configurations and write down the main observations. 
+## Exercise 2: Offload entire neighbor build and force computation to GPUs
+As mentioned above, employing the full computing workforce to solve your problem may not always return the most profit. We need to tune this before starting any production run. In this exercise, we'll be using the above input file defining a LJ-system. Here we'll do three sets of run where each set will have different numbers of atoms in the box. Let the system sizes be defined by *x* = *y* = *z* = 10, *x* = *y* = *z* = 40 and *x* = *y* = *z* = 140. This implies that these three systems will have 4000, 256,000 and nearly 11 million atoms in the box respectively. We can choose the length of the simulation also using *t* = 5000. For each case, run it for differnt numbers of GPU/MPI tasks combination. For example, I ran these systems in a node having 4 K80 NVIDIA GPUs and 24 physical cores. I choose to employ all 4 GPUs abut different number of MPI tasks. Since there are 4 GPUs, I must take at least 4 MPI ranks. So, I choose the following combinations: 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks, 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks, 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks. For this exercise, choose *package* keywords such that neighbor list building and force computations are done entirely on the GPUs. It can be done using `-sf gpu -pk gpu 4 neigh yes newton off split 1.0 ` where 4 GPUs are being used. After the runs are over, the performance data is extracted from the log/screen output files using the command `grep "Performance:"` in units if *timestep/s*. Finally, plot a *normalized speed-up factor per node* versus GPU/MPI choices for each of these configurations and write down the main observations. 
 
 ### Solution
 I did this study in a Intel Xeon E5-2680 v3 Haswell CPU node having 2x12 cores per node and two NVIDIA K80 GPUs (four visible devices per node: 2 x 4992 CUDA cores, 2 x 24 GiB GDDR5 memory) with Mellanox EDR InfiniBand high-speed network with non-blocking fat tree topology. Six GPU/MPI combinations were tried for each characteristic system size. These are 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks, 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks, 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks. Plot is shown below.
@@ -428,92 +428,15 @@ The main observations from the following plots are:
 
 ![gpu_mpi_counts.png](../fig/05/gpu_mpi_counts.png)
 
-> ## Challenge 2
-> 
-> **(FIXME) Might not be generic enough** Assume that you have an access to a computing node having
-> 4 GPUs and 24 CPU cores. You are also told that you need to find out whether building neighbour
-> list on CPU or GPU is more beneficial. You should also look for which is best strategy for the
-> force-calculations i.e. offloading the force-calculation job entirely to the GPUs or to find a
-> balance between CPUs and GPUs.  This means that you need to submit several runs with various
-> settings involving number of MPI tasks, number of GPUs, and relevant command-line switches. So
-> many possibilities exist! Can you show 10 (**FIXME 4-5 maybe enough?**) different command-line
-> options that you might like to use for your run?
->
->> ## Solution
->>
->> 1. 2GPU/1 MPI task per GPU, Neighbour list building on GPU, force-calculation entirely on GPU
->>
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} = 2 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 2. 2 GPUs/12 MPI proc per GPU, Neighbour list building on CPUs, force-calculation optimum load-balancing
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} = 24 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split -1.0 
->> ```
->> {: .bash}
->>
->> 3. (FIXME below!) **Do we really need 10?? Surely 3 or 4 is enough!)
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 4. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 5.
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 6. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 7. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 8. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 9. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 10. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
-> {: .solution}
-{: .challenge}
+
+## Exercise 3: Switch on dynamic load balancing
+We discussed earlier that it can be done using the `split` keyword. Using this keyword a fixed fraction of particles is offloaded to the GPU while force calculation for the other particles occurs simultaneously on the CPU. When you set `split 1` you are offloading entire force computations to the GPUs (discussed in previous exercise). What fraction of particles would be offloaded to GPUs can be set explicitly by choosing a value ranging from 0 to 1. When you set its value to  *-1*, you are switching on dynamic balancing. This means that LAMMPS picks the split factor dynamically.
+
+Let us repeat the entire exercise as described in *Exercise 1* but this time we'll use dynamic load balancing, i.e. in the command-line we'll use `-sf gpu -pk gpu 4 neigh yes newton off split -1.0`. Plot the data for *normalized speed-up factor per node* versus GPU/MPI choices for each of these configurations and discuss how it differs from the observations that you derived from *exercise 1*.
+
+### Solution
+(FIX ME) This needs to be done!
+
 
 > ## Challenge 3: Optimization
 > 
