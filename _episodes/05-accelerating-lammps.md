@@ -452,9 +452,5 @@ Let us repeat the entire exercise as described in *Exercise 1* but this time we'
 > {: .solution}
 {: .challenge}
 
-> ## Kokkos package
->
-> (**FIX ME!**)
-{: .callout}
 
 {% include links.md %}
