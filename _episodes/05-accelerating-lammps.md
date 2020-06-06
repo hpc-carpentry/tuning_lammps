@@ -424,7 +424,9 @@ The main observations from the following plots are:
   2. For the 256K system, we can notice an initial speed-up with increasing MPI task counts upto 4 MPI ranks per GPU, and then it starts decling again.
   3. For the largest 11M atom system, there is a sharp increase of speed-up upto 4 MPI ranks per GPU, and then also a relatively slow but steady increase is seen with increasing MPI tasks per GPU (in this case, 6 MPI tasks per GPU).
   
-  Possible explanation: FIX ME
+  Possible explanation: 
+  1. For the smallest system, the number of atoms assigned to each GPU or MPI ranks is very low. The system size is so small that considering GPU acceleration is practically meaningless. In this case you are emplying far too many workers to complete a small job and therefore it is not suprising that the scaling deteriorates with increasing MPI tasks. In fact, you may try to use 1 GPU and a few MPI task to see if the performance increases in this case. 
+  2. Fix Me.
 
 ![gpu_mpi_counts.png](../fig/05/gpu_mpi_counts.png)
 
