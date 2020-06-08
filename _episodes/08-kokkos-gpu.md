@@ -45,13 +45,28 @@ To run the Kokkos package, the following three command-line switches are very im
 > > #SBATCH --ntasks-per-node=24
 > > #SBATCH --partition=gpus
 > > #SBATCH --gres=gpu:4
-> > 
+> > ... ... ...
+> > ... ... ...
 > > srun lmp -k on g 4 -sf kk -pk kokkos -in in.lj
 > > ~~~
 > > {: .input}
 > {: .solution}
 {: .challenge}
 
+
+## Exercise : Speed-up ( CPU versus GPU package versus Kokkos/GPU )
+We have already discussed that the primary aim of developing the Kokkos package is to write a single C++ code that will run on both devices (like GPU, KNL) and hosts (CPU) with or without multi-threading. Targeting portability without losing the functionality and the performance of a code is the primary objective of Kokkos. 
+Let us see now see how the current Kokkos/GPU implementation within LAMMPS (version 3Mar20) achieves this goal by comparing its performance with the CPU and GPU package. For this, we shall repeat the same set of tasks as described in exercise 4 of episode 5, GPU section. Take a LJ-system with ~11 million atons by choosing *x* = *y* = *z* = 140 and *t* = 500. We'll use optimum number of GPU devices and MPI tasks to run the jobs with Kokkos/GPU with several number of node counts. Kokkos/GPU is aslo specially designed to run everything on the GPUs. We shall offload the entire force compuation and neighbour list building to the GPUs. This can be done using `-k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware on` or `-k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off` (if *CUDA-aware MPI* is not available to you).
+
+* Do a systamatic study by running the job with different number of nodes with the Kokkos/GPU package. For example, if five nodes are available to you, run this job using all the physical cores available with 1 node, 2 nodes, 3 nodes, 4 nodes and 5 nodes. 
+  * Extract the performance data from the log/screen output files from each of these runs. You can do this using the command `grep "Performance:" log.lammps` and note down the performance value in units if *timestep/s*. 
+  * Make a plot to comapare the performance of the Kokkos/GPU runs with the CPU runs (i.e. without any accelerator package) and the GPU runs (i.e. with the GPU package enabled) with number of nodes. 
+  * Plot the speed-up factor (= GPU performance/CPU performance) versus the number of nodes.
+  * Discuss the main observations from these plots.
+
+### Solution
+
+![CPUvsGPUvsKKGPU](../fig/05/CPUvsGPUvsKKGPU.png)
 
 ## Case study 2: for NVIDIA GPU architecture
 
