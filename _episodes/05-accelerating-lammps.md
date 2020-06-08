@@ -257,7 +257,7 @@ Each *argument* comes with a number of *keyword* and their corresponding *values
 *keyword/values* provides you enhanced flexibility to distribute your job among CPUs and GPUs in an
 optimum way. For a quick reference, the following table could be useful:
 
-> ## Keywords of the GPU package (for more details look for the LAMMPS [official documentation](https://lammps.sandia.gov/doc/package.html)
+> ## Keywords of the GPU package (for more details look for the LAMMPS [official documentation](https://lammps.sandia.gov/doc/package.html))
 >
 > | Keywords   |Use                                                                                                           |Default value |
 > |------------|--------------------------------------------------------------------------------------------------------------|--------------|
