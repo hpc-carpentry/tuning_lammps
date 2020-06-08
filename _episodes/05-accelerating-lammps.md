@@ -439,6 +439,8 @@ Let us repeat the entire exercise as described in *Exercise 1* but this time we'
 ### Solution
 (FIX ME) This needs to be done!
 
+![gpu_mpi_counts_LB](../fig/05/gpu_mpi_counts_LB.png)
+
 
 ## Exercise 4: Speed-up (CPU versus GPU)
 By now we have idea about some of the 'preferred' tuning parameters for a LJ-sytem. For the current exercise, let us take the system with ~11 million atoms, i.e. *x* = *y* = *z* = 140 and *t* = 500 and for this size of atoms, we know from exercise 2 that 4 GPUs/24 MPI tasks (i.e. 6 MPI tasks/GPU) makes the run fastest. We like to see how much acceleration a GPU package can provide if we offload the entire force compuation and neighbour list building to the GPUs. This can be done using `-sf gpu -pk gpu 4 neigh yes newton off split 1.0`. 
