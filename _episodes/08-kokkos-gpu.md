@@ -66,7 +66,7 @@ Let us see now see how the current Kokkos/GPU implementation within LAMMPS (vers
 
 ### Solution
 
-![CPUvsGPUvsKKGPU](../fig/05/CPUvsGPUvsKKGPU.png)
+![CPUvsGPUvsKKGPU](../fig/08/CPUvsGPUvsKKGPU.png)
 
 ## Case study 2: for NVIDIA GPU architecture
 
