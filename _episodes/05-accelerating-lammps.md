@@ -257,16 +257,16 @@ Each *argument* comes with a number of *keyword* and their corresponding *values
 *keyword/values* provides you enhanced flexibility to distribute your job among CPUs and GPUs in an
 optimum way. For a quick reference, the following table could be useful:
 
-> ## Packages in LAMMPS; Keywords
+> ## Keywords of the GPU package (for more details look for the LAMMPS [official documentation](https://lammps.sandia.gov/doc/package.html)
 >
 > | Keywords   |Use                                                                                                           |Default value |
 > |------------|--------------------------------------------------------------------------------------------------------------|--------------|
-> |`neigh`     | specifies where neighbor lists for pair style computation will be built: GPU or CPU                          | yes          |
-> |`newton`    | sets the Newton flags for pairwise (not bonded) interactions to off or on                                    | off          |
-> |`binsize`   | sets the size of bins used to bin atoms in neighbor list builds performed on the GPU, if neigh = yes is set  | 0.0          |
-> |`split`     | used for load balancing force calculations between CPU and GPU cores in GPU-enabled pair styles              |              |
+> |`neigh`     | specifies where neighbor lists for pair style computation will be built: GPU or CPU.                         | yes          |
+> |`newton`    | sets the Newton flags for pairwise (not bonded) interactions to off or on. Only *off* value is supported with the GPU package currently (version 3Mar20)                                                                                           | off (only)          |
+> |`binsize`   | sets the size of bins used to bin atoms in neighbor list builds performed on the GPU, if *neigh = yes* is set  | 0.0          |
+> |`split`     | used for load balancing force calculations between CPU and GPU cores in GPU-enabled pair styles              |  1.0 (all on GPU), -1.0 (dynamic load balancing), 0 <split<1.0 (custom)            |
 > |`gpuID`     | allows selection of which GPUs on each node will be used for a simulation                                    |              |
-> |`tpa`       | sets the number of GPU thread per atom used to perform force calculations                                    | 1            |
+> |`tpa`       | sets the number of GPU thread per atom used to perform force calculations. It is used for fining tuning of performance. When you use large cutoffs or do a simulation with a small number of particles per GPU, you may increase the value of this keyword to see if it can improve performance. The number of threads per atom must be chosen as a power of 2 and cannot be greater than 32 (with current version 3Mar20).                                    | 1            |
 > |`device`    | used to tune parameters optimized for a specific accelerator and platform when using OpenCL                  |              |
 > |`blocksize` | allows you to tweak the number of threads used per thread block                                              | minimum = 32 |
 >
