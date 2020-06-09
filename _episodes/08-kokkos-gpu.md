@@ -27,12 +27,12 @@ To run the Kokkos package, the following three command-line switches are very im
   4. ```-k on g {ngpu}```: Using this switch you can specify the number of GPU devices that you want to use per node. You also need to request to reserve the GPU devices using `#SBATCH --gres=gpu:{ngpu}` (for *SLURM* users). Replace *ngpu* with an integer value equals to the number of devices that you like to use.
  
 
-> ## Rules for performance
+> ## Before you start
 > 
 > 1. **Know your host:** get the number of physical cores per node available to you. 
 > 2. **Know your device:** Fix Me
 > 3. **Check for hyperthreading:** Sometimes a CPU splits its each physical cores into multiple virtual cores known as threads. In Intel's term, this is called hyperthreads (HT). When hyperthreading is enabled, each physical core appears as two logical CPU units to the OS and thus allows these logical cores to share the physical execution space. This may result in a 'slight' performance gain.  (FIX ME)
-> 3. **Fix CPU affinity:** --bind-to socket, --bind-to core
+> 3. **Fix CPU affinity:** --bind-to core
 > 4. **CUDA-aware MPI**: Check if you have CUDA-aware MPI. (FIX ME)
 {: .callout}
 
@@ -53,8 +53,23 @@ To run the Kokkos package, the following three command-line switches are very im
 > {: .solution}
 {: .challenge}
 
+> ## A few tips on availing speedup from Kokkos/GPU (collected from [LAMMPS website](https://lammps.sandia.gov/doc/Speed_kokkos.html))
+> 
+> 1. **Hardware comptibility**: For better performance, you must use *Kepler* or later generations of GPUs.
+> 2. **MPI tasks per GPU**: You should use one MPI task per GPU because Kokkos tries to run everything on the GPU, including the integrator and other fixes/computes. One may get better performance by assigning multiple MPI tasks per GPU if some styles used in the input script have not yet been Kokkos-enabled.
+> 3. **CUDA-aware MPI library**: Using this can provide significant performance gain wherever possible. If this is not available, set it *off* using the `-pk kokkos cuda/aware no` switch.
+> 4. **neigh and newton**: For Kokkos/GPU, the default is *neigh = full* and *newton = off*. For *Maxwell* and *Kepler* generations of GPUs, the *default* settings are typically the best. For *Pascal* generations, setting *neigh = half* and *newton = on* might produce faster runs.
+> 5. **binsize**: For many pair styles, setting the value of *binsize* to twice that used for the CPU styles could offer speedup (and this is the *default* for the Kokkos/GPU style)
+> 6. **Avoid mixing Kokkos and non-Kokkos styles**: In the LAMMPS input file, if you use styles that are not ported to use Kokkos, you may experience a significan loss in performance. This performance penalty occurs because it causes the data to be copied back to the CPU repeatedly. 
+{: .callout}
 
-## Exercise : Speed-up ( CPU versus GPU package versus Kokkos/GPU )
+In the following discussion, we'll work on a few exercises to get familiarized on some of these aspects to some extent.
+
+## Exercise 1: performance penalty due to use of mixed styles
+
+### Solution
+
+## Exercise ?: Speed-up ( CPU versus GPU package versus Kokkos/GPU )
 We have already discussed that the primary aim of developing the Kokkos package is to write a single C++ code that will run on both devices (like GPU, KNL) and hosts (CPU) with or without multi-threading. Targeting portability without losing the functionality and the performance of a code is the primary objective of Kokkos. 
 Let us see now see how the current Kokkos/GPU implementation within LAMMPS (version 3Mar20) achieves this goal by comparing its performance with the CPU and GPU package. For this, we shall repeat the same set of tasks as described in exercise 4 of episode 5, GPU section. Take a LJ-system with ~11 million atons by choosing *x* = *y* = *z* = 140 and *t* = 500. We'll use optimum number of GPU devices and MPI tasks to run the jobs with Kokkos/GPU with several number of node counts. Kokkos/GPU is aslo specially designed to run everything on the GPUs. We shall offload the entire force compuation and neighbour list building to the GPUs. This can be done using `-k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware on` or `-k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off` (if *CUDA-aware MPI* is not available to you).
 
