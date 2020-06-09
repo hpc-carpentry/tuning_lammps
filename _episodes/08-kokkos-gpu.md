@@ -97,7 +97,7 @@ First, we ran with the input file as provided in the exercise 1 of the GPU secti
 |Input | Performance (timesteps/sec) |  Performance lost by a factor of |
 |------|-----------------------------|----------------------------------|
 |Input 1 (all Kokkos enabled styles used)| 8.097                   |                                 |
-|Input 2 (non-Kokkos style used: compute coord/atom | 3.022        |  2.68                           |
+|Input 2 (non-Kokkos style used: *compute coord/atom*) | 3.022        |  2.68                           |
 
 In *Input 2* we have used styles that is not yet ported to Kokkos. We can check this from the log/screen output files:
 > ~~~
