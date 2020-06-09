@@ -69,6 +69,9 @@ In the following discussion, we'll work on a few exercises to get familiarized o
   1. First, let us take the input for the LJ-system from the Exercise 1 of the GPU section in Episode 5 (Let us call this as *Input 1*). Run this input using all the visible devices in a node available to you and use Kokkos/GPU as the accelerator package using the following setting: `-k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off`. Use the number of MPI tasks that equals to the number of devices.
   2. Measure the performance of this run in units of *timesteps/s*. 
   3. Now, modify the above LJ-input file as shown below. In this case, we'll append a few extra lines near the end of the file. Let us name this modified input file as *Input 2*. Run this input using the same identical Kokkos setting: `-k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off`, and with identical number of GPU and MPI tasks as you did for the task 1.
+  4. Again, measure the performance of this run in units of *timesteps/s*. 
+  5. Comapre between the performance of these two runs and comment on your observations.
+  
   > ~~~
   > ... ... ...
   > ... ... ...
@@ -86,9 +89,6 @@ In the following discussion, we'll work on a few exercises to get familiarized o
   > run		500
   > ~~~
   {: .input}
-   
-  4. Again, measure the performance of this run in units of *timesteps/s*. 
-  5. Comapre between the performance of these two runs and comment on your observations.
 
 ### Solution
 I did this study in a Intel Xeon E5-2680 v3 Haswell CPU node having 2x12 cores per node and two NVIDIA K80 GPUs (four visible devices per node: 2 x 4992 CUDA cores, 2 x 24 GiB GDDR5 memory) with Mellanox EDR InfiniBand high-speed network with non-blocking fat tree topology. I have  used 1 MPI tasks per GPU. This means that for four visible devices we have used four MPI tasks in total.  
