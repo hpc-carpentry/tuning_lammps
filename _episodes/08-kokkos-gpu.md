@@ -94,8 +94,8 @@ In the following discussion, we'll work on a few exercises to get familiarized o
 I did this study in a Intel Xeon E5-2680 v3 Haswell CPU node having 2x12 cores per node and two NVIDIA K80 GPUs (four visible devices per node: 2 x 4992 CUDA cores, 2 x 24 GiB GDDR5 memory) with Mellanox EDR InfiniBand high-speed network with non-blocking fat tree topology. I have  used 1 MPI tasks per GPU. This means that for four visible devices we have used four MPI tasks in total.  
 First, we ran with the input file as provided in the exercise 1 of the GPU section in episode 5. Second, we modified this input as mentioned above and performance for both of these runs are measured in units of *timesteps/s*. We can get this information from the log/screen output files. The comparison of performance is given in this table:
 
-|Input | Performance (timesteps/sec) | Performance (timesteps/sec) | Performance lost by a factor of |
-|------|-----------------------------|-----------------------------|---------------------------------|
+|Input | Performance (timesteps/sec) |  Performance lost by a factor of |
+|------|-----------------------------|----------------------------------|
 |Input 1 (all Kokkos enabled styles used)| 8.097                   |                                 |
 |Input 2 (non-Kokkos style used: compute coord/atom | 3.022        |  2.68                           |
 
