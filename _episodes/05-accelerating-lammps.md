@@ -58,14 +58,7 @@ backend languages. This will be discussed more later in the
 [next lesson]({{page.root}}/06-invoking-kokkos).
 
 In the meantime, we'll touch a few key points about other accelerator packages to give you a feel
-about what these packages offer and in many cases these packages outperform Kokkos in its current
-form!
-
-> ## Kokkos: A developing library
->
-> Most of the accelerator packages offered by LAMMPS may outperform Kokkos. So... why should we
-> bother to learn about using Kokkos?
-{: .discussion}
+about what these packages offer, to learn to invoke an accelerator package in a LAMMPS run, and get some data to compare the sppedup with regular as well as Kokkos-enabled LAMMPS runs. 
 
 ## OPT package
 
@@ -107,37 +100,100 @@ There are, however, a number of conditions;
 There are many LAMMPS features that are supported by this accelerator package, which can be found
 [here]({{page.root}}/reference/#package-USER-INTEL).
 
-Performance enhancement using this package depends on many considerations, such as the hardware
-that is available to you, various styles that you are using in the input, the size of your problem,
-and precision. For example, if you are using a pair style (say, `reax`) for which this is not
-implemented, its obvious that you are not going to have a performance gain for the *Pair* part of
-the calculation. Now, if the majority of the computation time is coming from the *Pair* part then
-you are in trouble. If you would like to know how much speedup you can achieve using USER-INTEL,
-you can look [here](https://lammps.sandia.gov/doc/Speed_intel.html)
+Performance enhancement using this package depends on many considerations, such as the hardware that is available to you, various styles that you are using in the input, the size of your problem, and precision. For example, if you are using a pair style (say, `reax`) for which this is not implemented, its obvious that you are not going to have a performance gain for the *Pair* part of the calculation. Now, if the majority of the computation time is coming from the *Pair* part then you are in trouble. If you would like to know how much speedup you can achieve using USER-INTEL, you can look [here](https://lammps.sandia.gov/doc/Speed_intel.html)
 
 ## USER-OMP package
 
-This accelerator package offers performance gain through otimisation and multi-threading via OpenMP
-interface. In order to make the multi-threading functional, you need multi-core CPUs and a compiler
-that supports multithreading. If your compiler does not support multithreading then also you can
-use it as an optimized serial code. Considerably a big sub-set of the LAMMPS routines can be used
-with this accelerator.
+This accelerator package offers performance gain through otimisation and multi-threading via OpenMP interface. In order to make the multi-threading functional, you need multi-core CPUs and a compiler that supports multithreading. If your compiler does not support multithreading then also you can use it as an optimized serial code. Considerably a big sub-set of the LAMMPS routines can be used with this accelerator.
 
 A list of functionalities enabled with this package can be found
 [here]({{page.root}}/reference/#package-USER-OMP).
 
-Generally, one can expect 5-20% performance when using this package either in serial or parallel.
-The optimal number of OpenMP threads to use is to be always tested for a problem. But, this gives
-better performance when used for less number of threads, generally 2-4. It is important to remember
-that MPI implementation in LAMMPS is so robust that you may always expect this to be more effective
-than using OpenMP on multi-core CPUs.
+Generally, one can expect 5-20% performance when using this package either in serial or parallel. The optimal number of OpenMP threads to use is to be always tested for a problem. But, this gives better performance when used for less number of threads, generally 2-4. It is important to remember that MPI implementation in LAMMPS is so robust that you may always expect this to be more effective than using OpenMP on multi-core CPUs.
 
-> ## Why is MPI+OpenMP is preferred over pure MPI sometimes?
->
-> When you use multiple nodes for your job, you might experience communication overhead. In such
-> case using a mix of MPI and OpenMP threads often may result in better performance than a pure
-> MPI job
-{: .discussion}
+Let us now come back to the *Rhodopsin* example for which we did a thorough scaling study in the previous episode. We found that the *Kspace* and *Neigh* calculations suffer from poor scalability as you increase number of cores to do the calculations. In such situation a hybrid approach combining parallelizing over domains (i.e. MPI-based) and parallelizing over atoms (i.e. thread based OpenMP) could be more beneficial to improve scalability than a pure MPI-based approach. To test this, in the following exercise, we'll do a set of calculations to mix MPI and OpenMP using the USER-OMP package. Additionally, this exercise will also help us to learn the basic principles of invoking accelerator packages in a LAMMPS run. Before strating our runs, let us now discuss the syntax of the *package* command in LAMMPS, as outlined below. 
+
+## How to invoke a package in LAMMPS run?
+To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to know a LAMMPS command called `package`. This command invokes package-specific settings for an accelerator. You can learn about this command in detail from the
+[LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
+
+The basic syntax of this command is:
+*package style args keywords values*
+
+```style``` provides you to choose the accelerator package for your run. There are four different
+packages available currently (version 3Mar20):
+
+* `gpu`: This calls the *GPU* package
+* `intel`: This calls the *USER-INTEL* package
+* `omp` : This calls the *USER-OMP* package
+* `kokkos`: This calls the *Kokkos* package
+
+## How to invoke the USER-OMP package?
+There are two alternate ways to do this, either you can edit the LAMMPS input file to add the extra 'stuffs' corresponding to the *package* command, or invoke it through command-line keeping the input files unchanged.
+
+If the `package` command is specified in an input script, it must be near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. This command can be used in LAMMPS in two different ways:
+
+* Edit the input file and introduce the line comprising the *package* command in it. This is perfectly fine, but always remember to use this near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. 
+
+To call *USER-OMP* in a LAMMPS run, use *omp* as *style*. Next you need to choose proper *arguments* for the *omp* style. *Argument* should be chosen as the number of OpenMP threads that you like to associate with each MPI process. This is an integer and should be chosen sensibly. If you have N number of physical cores available per node then *Number of MPI processes* x *Number of OpenMP threads* = *Number of cores per node*.
+
+Each *argument* comes with a number of *keyword* and their corresponding *values*. These *keyword/values* provides you enhanced flexibility to distribute your job among the MPI ranks and threads. For a quick reference, the following table could be useful: 
+
+|Keyword   | values  | What it does? |
+|----------|---------|---------------|
+| neigh    | yes     | threaded neighbor list build (this is the default) |
+| neigh    | no      | non-threaded neighbor list build |
+
+An example of calling the *USER-OMP* package in a LAMMPS input file is given below:
+
+```
+package omp 4 neigh no
+```
+{: .bash}
+
+Additionally, you also need to append an extra "/omp" suffix wherever applicable. For example, a pair potential with USER-OMP optimization should be mentioned in the input file as:
+
+```
+pair_style      lj/charmm/coul/long/omp 8.0 10.0
+```
+{: .bash}
+
+* A simpler way to do this is through the command-line when launching LAMMPS using the `-pk`command-line switch. The syntax would be exactly the same as when used in an input script:
+
+```
+export OMP_NUM_THREADS=4
+export OMP_PROC_BIND=spread
+export OMP_PLACES=threads
+mpirun -np 10 -ppn 10 lmp -sf omp -pk omp 4 -in in.rhodo neigh no
+```
+{: .bash}
+
+The second method appears to be convenient since you don't need to take the hassle to edit the input file (and possibly in many places)!
+
+Note that there is an extra command-line switch in the above command-line. Do you know what thisis for? To distinguish the various styles of these accelerator packages from its 'regular' non-accelerated variants, LAMMPS has introduces suffixes and the `-sf` switch  auto-appends these accelerator suffixes to various styles in the input script. Therefore, when an accelerator package is invoked through the `-pk` switch (for example, `-pk omp` or `-pk gpu`), the `-sf` switch ensures that the appropriate style is also being invoked in the simulation (for example, it ensures that the `lj/cut/gpu` is used instead of `lj/cut` as `pair_style`, or,  `lj/charmm/coul/long/omp` is used in place of `lj/charmm/coul/long`).  
+
+In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e. through the command-line.
+
+## Case study: Rhodopsin (with USER-OMP package)
+We shall use the same input file for the rhodopsin system with lipid bilayer. The MD settings for this run is described in Episode 2. In this episode, we'll run this using the USER-OMP package to mix MPI and OpenMP. For all the runs use the default value for the *neigh* keyword. 
+
+1. First, find out the number of cpu cores available per node in the HPC system that you are using and then figure out all the possible MPI/OpenMP combinations that you can have per node. For example, I did this study in Intel Xeon Gold 6148 (Skylake) processor with 2x20 core 2.4 GHz having 192 GiB of RAM. This means each node has 40 physical cores. So, to satisfy the relation, *Number of MPI processes* x *Number of OpenMP threads* = *Number of cores per node*, I can have the following combinations per node: 1MPI/40 OpenMP threads, 2MPI/20 OpenMP threads, 4MPI/10 OpenMP threads, 5MPI/8 OpenMP threads, 8MPI/5 OpenMP threads, 10MPI/4 OpenMP threads, 20MPI/2 OpenMP threads, and 40MPI/1 OpenMP threads. I like to see scaling, say up to 10 nodes or more. This means that I have to run a total 80 calculations for 10 nodes since I have 8 MPI/OpenMP combinations for each node. Run the jobs for all possible combination in your HPC system.
+2. Run the job for with pure-MPI settings, i.e. with 40 cores (1node), 80 cores (2 nodes), and so on and make sure not to use any OpenMP threading in these runs.
+3. A good metric to measure scalability is to compute *parallel efficiency* for each of these runs. *Parallel efficiency* is defined as:
+  *Parallel efficiency = (1/Np) * (Time taken by a serial run / ( Time taken by Np processors)*
+Calculate *parallel efficiency* for each of these jobs. To get the total time taken by each job, search for "wall time" in the log/screen output files.
+4. Make a plot of *parallel efficiency* versus *number of nodes*.
+5. Write down your observation and make comments on any performance enhancement when you compare these results with the pure MPI runs.
+
+### Solution
+For a perfectly scalable system, parallel efficiency should be qual to 100%, and as it approaches zero we say that the paralle performance is poor.
+A few observations from the following plot:
+1. As we increase number of nodes, the parallel efficiency decreases considerably for all the runs. This decrease in performance could be associated to the poor scalability of the *Kspace* and *Neigh* computations. We have discussed about this in episode 2.
+2. Parallel efficiency is increased by about 10-15% when we use mixed MPI+OpenMP approach.
+3. The performance of hybrid runs are better than or comparable to pure MPI runs only when the number of OpenMP threads are less than or equals to five. This implies that USER-OMP package shows scalability only when number of threads are less in number.
+4. Though we are seeing about 10-15% increase in parallel efficiency of hybrid MPI+OpenMP runs (using 2 threads) over pure MPI runs, still it is important to note that trends in loss of performance with increasing core number is similar in both of these types of runs thus indicating that this increase in performance might not be due to threading but rather due to better SIMD vectorization. Specially, for Skylake processor the vectorization capability is great.  In fact, in LAMMPS, MPI-based parallelization almost always win over OpenMP until thousands of MPI ranks are being used where communication overheads very much significant. There are overheads to making the kernels thread-safe. 
+
+![scaling_rhodo_user_omp](../fig/05/scaling_rhodo_user_omp.png)
 
 ## GPU package
 
@@ -189,26 +245,9 @@ Before invoking the GPU package, you must ask the following questions:
 
 If the answer to these two questions is a *yes* then we you can proceed to the following section.
 
-## How to invoke a package in LAMMPS run?
+## Basic syntax: arguments and keywords
 
-To call an accelerator packages (USER-INTEL, USER-OMP, GPU, KOKKOS) in your LAMMPS run, you need to
-know a LAMMPS command called `package`. This command invokes package-specific settings for an
-accelerator. You can learn about this command in detail from the
-[LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
-
-The basic syntax of this command is:
-*package style args*
-
-```style``` provides you to choose the accelerator package for your run. There are four different
-packages available currently (version 3Mar20):
-
-* `gpu`: This calls the *GPU* package
-* `intel`: This calls the *USER-INTEL* package
-* `omp` : This calls the *USER-OMP* package
-* `kokkos`: This calls the *Kokkos* package
-
-To use *GPU package* as an accelerator you need to select `gpu` as *style*. Next you need to choose
-proper *arguments* for the *gpu* style. The argument for *gpu* style is *ngpu*.
+As discussed above, you need to use the *package* command to invoke the *GPU* package. To use *GPU package* as an accelerator you need to select `gpu` as *style*. Next you need to choose proper *arguments* for the *gpu* style. The argument for *gpu* style is *ngpu*.
 
 * `ngpu`: This sets the number of GPUs per node. There must be at least as many MPI tasks per node
   as GPUs, as set by the mpirun or mpiexec command. If there are more MPI tasks (per node) than GPUs,
@@ -218,31 +257,27 @@ Each *argument* comes with a number of *keyword* and their corresponding *values
 *keyword/values* provides you enhanced flexibility to distribute your job among CPUs and GPUs in an
 optimum way. For a quick reference, the following table could be useful:
 
-> ## Packages in LAMMPS; Keywords
+> ## Keywords of the GPU package (for more details look for the LAMMPS [official documentation](https://lammps.sandia.gov/doc/package.html))
 >
 > | Keywords   |Use                                                                                                           |Default value |
 > |------------|--------------------------------------------------------------------------------------------------------------|--------------|
-> |`neigh`     | specifies where neighbor lists for pair style computation will be built: GPU or CPU                          | yes          |
-> |`newton`    | sets the Newton flags for pairwise (not bonded) interactions to off or on                                    | off          |
-> |`binsize`   | sets the size of bins used to bin atoms in neighbor list builds performed on the GPU, if neigh = yes is set  | 0.0          |
-> |`split`     | used for load balancing force calculations between CPU and GPU cores in GPU-enabled pair styles              |              |
+> |`neigh`     | specifies where neighbor lists for pair style computation will be built: GPU or CPU.                         | yes          |
+> |`newton`    | sets the Newton flags for pairwise (not bonded) interactions to off or on. Only *off* value is supported with the GPU package currently (version 3Mar20)                                                                                           | off (only)          |
+> |`binsize`   | sets the size of bins used to bin atoms in neighbor list builds performed on the GPU, if *neigh = yes* is set  | 0.0          |
+> |`split`     | used for load balancing force calculations between CPU and GPU cores in GPU-enabled pair styles              |  1.0 (all on GPU), -1.0 (dynamic load balancing), 0 <split<1.0 (custom)            |
 > |`gpuID`     | allows selection of which GPUs on each node will be used for a simulation                                    |              |
-> |`tpa`       | sets the number of GPU thread per atom used to perform force calculations                                    | 1            |
+> |`tpa`       | sets the number of GPU thread per atom used to perform force calculations. It is used for fining tuning of performance. When you use large cutoffs or do a simulation with a small number of particles per GPU, you may increase the value of this keyword to see if it can improve performance. The number of threads per atom must be chosen as a power of 2 and cannot be greater than 32 (with current version 3Mar20).                                    | 1            |
 > |`device`    | used to tune parameters optimized for a specific accelerator and platform when using OpenCL                  |              |
 > |`blocksize` | allows you to tweak the number of threads used per thread block                                              | minimum = 32 |
 >
 {: .callout}
 
-If the `package` command is specified in an input script, it must be near the top of the script,
-before the simulation box has been defined. This is because it specifies settings that the
-accelerator packages use in their initialization, before a simulation is defined. This command can
-be used in LAMMPS in two different ways:
+## Invoke either through input or by command-line
+There are two alternate ways to do this, either you can edit the LAMMPS input file to add the extra 'stuffs' corresponding to the *package* command, or invoke it through command-line keeping the input files unchanged.
 
-* Edit the input file and introduce the line comprising the *package* command in it. This is
-  perfectly fine, but always remember to use this near the top of the script, before the simulation
-  box has been defined. This is because it specifies settings that the accelerator packages use in
-  their initialization, before a simulation is defined. An example of calling the *GPU package* in a
-  LAMMPS input file is given below:
+If the `package` command is specified in an input script, it must be near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. This command can be used in LAMMPS in two different ways:
+
+* Edit the input file and introduce the line comprising the *package* command in it. This is perfectly fine, but always remember to use this near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. An example of calling the *GPU package* in a LAMMPS input file is given below:
 
 ```
 package         gpu 2 neigh yes newton off split 1.0
@@ -279,23 +314,39 @@ appropriate style is also being invoked in the simulation (for example, it ensur
 In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e.
 through the command-line.
 
-> ## Challenge 1: The First Exercise
->
-> Let us start with first example. Below is given a LAMMPS input script for a LJ system. Prepare
-> a submission script to run a LAMMPS job with the following input file using 2 gpus. For this run,
-> make sure that the neighbour list is built on the CPUs, and a dynamic load-balancing between the
-> CPUs and GPUs.
->
-> ```
-> {% include /snippets/ep05/in.lj %}
-> ```
-> {: .input}
->
-> > ## Solution
-> >
-> > (FIX ME)
-> {: .solution}
-{: .challenge}
+## Exercise 1: Learn to call GPU package from command-line
+
+In this exercise, we'll deal with a Lennard-Jones (LJ) system as described by the following input file. You can vary the system size and the length of the run using the variables *x*, *y*, *z*, and *t*. For this exercise, let us choose *x* = *y* = *z* = 60. Since this is a system with *fcc* lattice, the total number of atoms should be 864,000 for the chosen values of *x*, *y*, and *z*. Let, *t* = 500.
+We'll call the *GPU* package from the command-line in this case. Can you prepare a job submission file for this system such that it enables to use 2 GPUs with 24 MPI ranks. Make sure that the neighbor is built on the CPUs and there is a dynamic load balancing between the CPUs and the GPUs. 
+
+ ```
+{% include /snippets/ep05/in.lj %}
+```
+{: .input}
+
+
+### Solution
+A job submission script is shown below. Note that the number of MPI ranks is fixed by `#SBATCH --ntasks-per-node=24`. You are requesting for 2 GPUs by using `#SBATCH --gres=gpu:2`. Rest of the input parameters can be passed to the LAMMPS executable using command-line switches. The system size can be chosen using `-v x 60 -v y 60 -v z 60`, length of the run can be decided by `-v t 500`, GPU package and the number of GPUs is chosen by `-pk gpu 2`, the GPU package related fix/pair styles can be chosen using `-sf gpu`, and other GPU package related keywords are chosen using `neigh no newton off split -1.0`. A *no* value of the *neigh* keyword ensures that the neighbor list is built in the *CPUs*. Dynamic load balancing option between CPUs and GPUs is chosen using `split -1.0`.
+
+  ~~~
+  #!/bin/bash -x
+  #SBATCH --account=ecam
+  #SBATCH --nodes=1
+  #SBATCH --ntasks-per-node=24
+  #SBATCH --output=mpi-out.%j
+  #SBATCH --error=mpi-err.%j
+  #SBATCH --time=01:00:00
+  #SBATCH --partition=gpus
+  #SBATCH --gres=gpu:2
+   
+  module use /usr/local/software/jureca/OtherStages
+  module load Stages/Devel-2019a
+  module load intel-para/2019a
+  module load LAMMPS/18Feb2020-cuda
+  
+  srun lmp -v x 60 -v y 60 -v z 60 -v t 500 -sf gpu -pk gpu 2 neigh no newton off split -1.0 -in in.lj
+  ~~~
+  {: .bash}
 
 ## Know about the GPU package output
 
@@ -303,7 +354,7 @@ At this stage, once you complete a job successfully, it is time to look for a fe
 LAMMPS output file. A few of them are for the sanity check to see if LAMMPS is doing the things
 that you asked for and a few of them tell you about the performances.
 
-## Device information
+### Device information
 
 It prints about the device information both in the screen-output and the log file. You would notice
 something like this:
@@ -321,7 +372,7 @@ each GPU. The detail about the graphics card is also printed, *Tesla K80, 13 CU,
 with the *numerical precision* of the implemented *GPU package* is also printed. In this case, it
 is using *double precision*. Next it shows how the MPI-processes are spawned with a GPU core.
 
-## Accelerated version of pair-potential
+### Accelerated version of pair-potential
 
 This section of the output shows you that it is actually using the *accelerated* version of the
 pair potential *lj/cut*. You can see that it is using *lj/cut/gpu* though in your input file you
@@ -333,7 +384,7 @@ this run.
 ```
 {: .output}
  
-## Performance section
+### Performance section
 
 The following screen-output tells you all about the performance. Some of these terms are already
 discussed in previous episode (episode 4). When you the *GPU package* you would see an extra block
@@ -362,110 +413,48 @@ stead of 4 GPUs may give better performance, and this why this is advisable to f
 possible set of run-time parameters following a thorough optimization before  starting the
 production runs. This might save your lot of resource and time!
 
-> ## Challenge 2
-> 
-> **(FIXME) Might not be generic enough** Assume that you have an access to a computing node having
-> 4 GPUs and 24 CPU cores. You are also told that you need to find out whether building neighbour
-> list on CPU or GPU is more beneficial. You should also look for which is best strategy for the
-> force-calculations i.e. offloading the force-calculation job entirely to the GPUs or to find a
-> balance between CPUs and GPUs.  This means that you need to submit several runs with various
-> settings involving number of MPI tasks, number of GPUs, and relevant command-line switches. So
-> many possibilities exist! Can you show 10 (**FIXME 4-5 maybe enough?**) different command-line
-> options that you might like to use for your run?
->
->> ## Solution
->>
->> 1. 2GPU/1 MPI task per GPU, Neighbour list building on GPU, force-calculation entirely on GPU
->>
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} = 2 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 2. 2 GPUs/12 MPI proc per GPU, Neighbour list building on CPUs, force-calculation optimum load-balancing
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} = 24 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split -1.0 
->> ```
->> {: .bash}
->>
->> 3. (FIXME below!) **Do we really need 10?? Surely 3 or 4 is enough!)
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 4. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 5.
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 6. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 7. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 8. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 9. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
->> 10. 
->> ```
->> {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =4 
->> {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 4 neigh yes newton off split 1.0
->> ```
->> {: .bash}
->>
-> {: .solution}
-{: .challenge}
+## Exercise 2: Offload entire neighbor build and force computation to GPUs
+As mentioned above, employing the full computing workforce to solve your problem may not always return the most profit. We need to tune this before starting any production run. In this exercise, we'll be using the above input file defining a LJ-system. Here we'll do three sets of run where each set will have different numbers of atoms in the box. Let the system sizes be defined by *x* = *y* = *z* = 10, *x* = *y* = *z* = 40 and *x* = *y* = *z* = 140. This implies that these three systems will have 4000, 256,000 and nearly 11 million atoms in the box respectively. We can choose the length of the simulation also using *t* = 5000. For each case, run it for different numbers of GPU/MPI tasks combination. For example, I ran these systems in a node having 4 K80 NVIDIA GPUs and 24 physical cores. I choose to employ all 4 GPUs abut different number of MPI tasks. Since there are 4 GPUs, I must take at least 4 MPI ranks. So, I choose the following combinations: 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks, 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks, 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks. For this exercise, choose *package* keywords such that neighbor list building and force computations are done entirely on the GPUs. It can be done using `-sf gpu -pk gpu 4 neigh yes newton off split 1.0` where 4 GPUs are being used. After the runs are over, the performance data is extracted from the log/screen output files using the command `grep "Performance:" log.lammps` in units if *timestep/s*. Finally, plot a *normalized speed-up factor per node* versus GPU/MPI choices for each of these configurations and write down the main observations. 
 
-> ## Challenge 3: Optimization
-> 
-> Use the above input file and submit as many jobs as required to optimize the run-time parameters
-> for the best performance from 1 node.
->
->> ## Solution
->>
->> 1. Make a plot of walltime (in sec) vs #gpu/#cpu for ```neigh yes newton off split -1.0```
->> 2. Do the same for ```neigh yes newton off split 1.0```
->> 3. Repeat it again for ```neigh no newton off split -1.0``` and ```neigh no newton off split 1.0```
->> 4. Make 4 different plots and comment on which one is the best performing settings.
-> {: .solution}
-{: .challenge}
+### Solution
+I did this study in a Intel Xeon E5-2680 v3 Haswell CPU node having 2x12 cores per node and two NVIDIA K80 GPUs (four visible devices per node: 2 x 4992 CUDA cores, 2 x 24 GiB GDDR5 memory) with Mellanox EDR InfiniBand high-speed network with non-blocking fat tree topology. Six GPU/MPI combinations were tried for each characteristic system size. These are 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks, 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks, 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks. Plot is shown below.
 
-> ## Kokkos package
->
-> (**FIX ME!**)
-{: .callout}
+The main observations from the following plots are:
+  1. For the system with 4000 atoms, increasing the number of MPI tasks actually degrades the overall performance.
+  2. For the 256K system, we can notice an initial speed-up with increasing MPI task counts up to 4 MPI ranks per GPU, and then it starts decling again.
+  3. For the largest 11M atom system, there is a sharp increase of speed-up up to 4 MPI ranks per GPU, and then also a relatively slow but steady increase is seen with increasing MPI tasks per GPU (in this case, 6 MPI tasks per GPU).
+  
+  Possible explanation: 
+  1. For the smallest system, the number of atoms assigned to each GPU or MPI ranks is very low. The system size is so small that considering GPU acceleration is practically meaningless. In this case you are emplying far too many workers to complete a small job and therefore it is not surprising that the scaling deteriorates with increasing MPI tasks. In fact, you may try to use 1 GPU and a few MPI task to see if the performance increases in this case. 
+  2. Fix Me.
+
+![gpu_mpi_counts.png](../fig/05/gpu_mpi_counts.png)
+
+
+## Exercise 3: Switch on dynamic load balancing
+We discussed earlier that it can be done using the `split` keyword. Using this keyword a fixed fraction of particles is offloaded to the GPU while force calculation for the other particles occurs simultaneously on the CPU. When you set `split 1` you are offloading entire force computations to the GPUs (discussed in previous exercise). What fraction of particles would be offloaded to GPUs can be set explicitly by choosing a value ranging from 0 to 1. When you set its value to  *-1*, you are switching on dynamic balancing. This means that LAMMPS picks the split factor dynamically.
+
+Let us repeat the entire exercise as described in *Exercise 1* but this time we'll use dynamic load balancing, i.e. in the command-line we'll use `-sf gpu -pk gpu 4 neigh yes newton off split -1.0`. Plot the data for *normalized speed-up factor per node* versus GPU/MPI choices for each of these configurations and discuss how it differs from the observations that you derived from *exercise 1*.
+
+### Solution
+(FIX ME) This needs to be done!
+
+![gpu_mpi_counts_LB](../fig/05/gpu_mpi_counts_LB.png)
+
+
+## Exercise 4: Speed-up (CPU versus GPU)
+By now we have idea about some of the 'preferred' tuning parameters for a LJ-sytem. For the current exercise, let us take the system with ~11 million atoms, i.e. *x* = *y* = *z* = 140 and *t* = 500 and for this size of atoms, we know from exercise 2 that 4 GPUs/24 MPI tasks (i.e. 6 MPI tasks/GPU) makes the run fastest. We like to see how much acceleration a GPU package can provide if we offload the entire force computation and neighbour list building to the GPUs. This can be done using `-sf gpu -pk gpu 4 neigh yes newton off split 1.0`. 
+  * Do a systamatic study by running the job with different number of nodes both with and without the GPU package. For example, if five nodes are available to you, run this job using all the physical cores available with 1 node, 2 nodes, 3 nodes, 4 nodes and 5 nodes (2 sets: one with the GPU package enabled, and the other is the regular MPI-based runs without any accelerator package). 
+  * Extract the performance data from the log/screen output files from each of these runs. You can do this using the command `grep "Performance:" log.lammps` and note down the performance value in units if *timestep/s*. 
+  * Make a plot to comapare the performance of the CPU runs (i.e. without any accelerator package) and the GPU runs (i.e. with the GPU package enabled) with number of nodes. 
+  * Plot the speed-up factor (= GPU performance/CPU performance) versus the number of nodes.
+  * Discuss the main observations from these plots.
+
+### Solution
+I ran these jobs in the Jureca HPC system with nodes having Intel Xeon E5-2680 v3 Haswell CPU with 2x12 cores per node and two NVIDIA K80 GPUs (four visible devices) per node with Mellanox EDR InfiniBand high-speed network with non-blocking fat tree topology. Two sets of runs (i.e. with and without the GPU package) were executed with up to 8 nodes. Performance data were extracted from the log files in the unit of *timesteps/second*, speed-up factors were calculated for each node and were plotted as shown below. 
+We can see a rreasonable acceleration when we use the GPU package for all the runs consistently. The calculated speed-up factors shows that we obtain maximum speed-up (~5.2x) when we use 1 node, then it gradually decreases (for 2 nodes it is 5x) and finally saturates to a value of ~4.25x when we run using 3 nodes or higher (up to 8 nodes is tested here). The slight decrease in speed-up with increasing number of nodes could be related to the inter-node communications. But overall the GPU package offers quite a fair amount of performance enhancement over the regular CPU version of LAMMPS with MPI parallelization. 
+
+![CPUvsGPU](../fig/05/CPUvsGPU.png)
+
 
 {% include links.md %}

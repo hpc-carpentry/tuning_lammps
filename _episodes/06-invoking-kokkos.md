@@ -33,6 +33,14 @@ was written in a  native language specific to that particular device. How does K
 1. It maps a C++ kernel to different backend languages like Cuda, OpenMP, Pthreads.
 2. It also provides data abstractions to adjust (at compile time) the memory layout of data structures like 2D
    and 3D arrays to optimize performance on different hardware.
+   
+> ## Kokkos: A developing library
+>
+> Why should we bother to learn about using Kokkos?
+> > ## Solution
+> > (Fix Me! "The primary reason for Kokkos being developed is that it allows you to write a *single* pair style in C++ where and without (much) understanding of GPU programming, that will then work on both GPUs (or Xeon Phi) and CPUs with or without multi-threading. It cannot fully reach the performance of USER-INTEL or the GPU package on CPUs and GPUs, but adding new code to those for a pair style, for which something similar already exists, is *significantly* less effort with Kokkos and requires significantly less programming expertise in vectorization and directive based SIMD programming or CPU computing. Also support for a new kind of computing hardware will primarily need additional code in the Kokkos library and just a little bit of programming setup/management in LAMMPS."
+> {: .solution}
+{: .discussion}
 
 ## What is KOKKOS package in LAMMPS?
 
@@ -72,13 +80,10 @@ The list of LAMMPS features that is supported by Kokkos is given below:
 
 
 ## How to invoke Kokkos package in a LAMMPS run?
-You already know how to call an accelerator package in LAMMPS. It was discussed in the previous chapter. The basic
-syntax of this command is: `*package style args*`
+You already know how to call an accelerator package in LAMMPS. It was discussed in the previous chapter. The basic syntax of this command is: `*package style args keyword values*`
 Obviously, you need to use *kokkos* as *style* with suitable arguments/keywords.
 
-The next you need to choose proper *keywords* and *value* pairs. These *keyword/values* provides you enhanced
-flexibility to distribute your job among cpu and gpus in an optimum way. For a quick reference, the following table
-could be useful:
+The next you need to choose proper *keywords* and *value* pairs. These *keyword/values* provides you enhanced flexibility to distribute your job among cpu and gpus in an optimum way. For a quick reference, the following table could be useful:
 
  | Keywords |what it does? |Default value |
  |----------|--------------|--------------|
@@ -96,8 +101,7 @@ could be useful:
 
 ## Rules of thumb
 
-1. ***neigh***: For GPU, a value of *full* for *neigh* keyword is often more efficient, and in case of CPU a value
-  of *half* is often faster.
+1. ***neigh***: When you use *full* list, all the neighbors of atom I are stored with atom *I*. On the contrary, for a *half* list, the I-J interaction is stored either with atom *I* or *J* but not both. For GPU, a value of *full* for *neigh* keyword is often more efficient, and in case of CPU a value of *half* is often faster.
 2. ***newton***: Using this keyword you can turn Newton’s 3rd law *on* or *off* for pairwise and bonded interactions.
   Turning this *on* means less computation and more communication, and setting it *off* means interactions will be
   calculated by both processors if these interacting atoms are being handled by these two different processors. This
@@ -121,62 +125,25 @@ could be useful:
   
 
 ## Invoking Kokkos through input file or through command-line?
+From episode 5, we already learnt how to use the *package* command to call an accelerator package in a LAMMPS run. Unlike the *USER-OMP* or the *GPU* package which supports either OpenMP or GPU, the *Kokkos* package supports both OpenMP and GPUs. This adds additional complexities in the command-line to invoke appropriate execution mode (OpenMP or GPU) when you decide to use *kokkos* for your LAMMPS runs. Though you can also invoke them through modifying the LAMMPS input file, but it is more convenient to do this through the command-line. In the following section, we'll touch a few general command-line features which are needed to call *Kokkos*. OpenMP specific or GPU specific command-line switches will be discussed in later episodes when we'll be discussing about them in more detail.
 
-We have already discussed this aspect in previous episode while discussing about invoking GPU package in LAMMPS.
-The ultimate essence remains same even for invoking Kokkos package. We can invoke this using the *package* command
-in two different ways:
-
-* Edit the input file and introduce  the line comprising the *package* command in it. This is perfectly fine, but
-  always remember to use this near the top of the script, before the simulation box has been defined. This is because
-  it specifies settings that the accelerator packages use in their initialization, before a simulation is defined.
-  An example of calling Kokkos package in a LAMMPS input file is given below:
-
+Let us recall the command-line to submit a LAMMPS job that uses USER-OMP as an accelerator package (refer to Episode 5, USER-OMP section).
 ```
-package kokkos neigh full newton off comm no
+mpirun -np 40 -ppn 10 lmp -sf omp -pk omp 4 -in in.rhodo neigh no
 ```
-{: .bash}
 
-Additionally, you also need to append an extra "/kokkos" suffix wherever applicable. For example, a pair potential
-with Kokkos optimization should be mentioned in the input file as:
+This is very much straight-forward to edit the above command-line to make it appropriate for a Kokkos run. A few points to keep in mind:
 
+  1. The total number of MPI ranks is set in the usual way via *mpirun* or *mpiexec* or *srun* command. It has nothing to do with Kokkos.
+    * `mpirun -np 40 -ppn 10` allows you to submit the job in 4 nodes each of them having 10 MPI processes.
+  2. To enable Kokkos package you need to use a switch `-k on`. 
+  3. To use Kokkos enabled styles (pair styles/fixes etc.), you need one additional switch `-sf kk`. This will append the "/kk" suffix to all the styles that Kokkos supports in LAMMPS. For example, when you use this, the *lj/charmm/coul/long* pair style would be read as *lj/charmm/coul/long/kk* at runtime. 
+  
+With these points keeping in mind, the above command-line could be modified as following to make it ready for Kokkos:
 ```
-pair_style      lj/cut/kk 2.5
+mpirun -np 40 -ppn 10 lmp -k on -sf kk -in in.rhodo
 ```
-{: .bash}
+But, this above command-line is still *incomplete*. We have not yet passed any information about the execution mode (OpenMP or GPU), or the number of OpenMP threads, or the number of GPUs that we want to use for this run, or the *package* arguments and keywords (and values) to the LAMMPS executable. We'll discussing about them in the following episodes.
 
-* A simpler way to do this is through the command-line when launching LAMMPS using the `-pk` command-line switch.
-  The syntax would be exactly the same as when used in an input script:
-
-```
-srun lmp -in in.lj -k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off
-```
-{: .bash}
-
-The second method appears to be convenient since you don't need to take the hassle to edit the input file
-(and possibly in many places)! Note that there is an extra command-line switch in the above command-line. 
-Do you know what is this for? To distinguish the various styles of these accelerator packages from its 'regular'
-non-accelerated variants, LAMMPS has introduces suffixes and the `-sf` switch  auto-appends these accelerator
-suffixes to various styles in the input script. Therefore, when an accelerator package is invoked through the `pk`
-switch (for example, `-pk kokkos`), the `-sf` switch ensures that the appropriate style is also being invoked
-in the simulation (for example, it ensures that the `lj/cut/kk` is used instead of `lj/cut` as `pair_style`).  
-
-In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e. through the 
-command-line.
-
-### Invoking different modes of execution
-
-If you note the above example of commandline call of Kokkos, you can see `-k on g 4`. This has not been discussed
-prior to this point. It is used to invoke different modes of execution. In the above example, we are calling the
-GPU mode and it will be run with 4 physical GPUs. Similarly, we can call the OpenMP mode (threaded), using something
-like: ` -k on t 24`. In this case we are invoking Kokkos package to use the OpenMP optimization with 24 threads.
-
-
-> ## Modifying input and submission script
-> 
-> Analyse the input file `input.lj` and the submission script `run.sh`
-> 
-> What additional modifications need to be made to make them run under (FIXME) conditions
->
-{: .challenge}
-
+ 
 {% include links.md %}
