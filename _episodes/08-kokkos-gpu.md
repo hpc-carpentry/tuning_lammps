@@ -72,23 +72,23 @@ In the following discussion, we'll work on a few exercises to get familiarized o
   4. Again, measure the performance of this run in units of *timesteps/s*. 
   5. Compare between the performance of these two runs and comment on your observations.
   
-  > ~~~
-  > ... ... ...
-  > ... ... ...
-  > neighbor	0.3 bin
-  > neigh_modify	delay 0 every 20 check no
-  >
-  > compute 1 all coord/atom cutoff 2.5
-  > compute 2 all reduce sum c_1
-  > variable acn equal c_2/atoms
-  > 
-  > fix		1 all nve
-  >
-  > thermo 50
-  > thermo_style custom step time  temp press pe ke etotal density v_acn
-  > run		500
-  > ~~~
-  {: .input}
+  ```
+  ... ... ...
+  ... ... ...
+  neighbor	0.3 bin
+  neigh_modify	delay 0 every 20 check no
+  
+  compute 1 all coord/atom cutoff 2.5
+  compute 2 all reduce sum c_1
+  variable acn equal c_2/atoms
+  
+  fix		1 all nve
+  
+  thermo 50
+  thermo_style custom step time  temp press pe ke etotal density v_acn
+  run		500
+  ```
+  {: .bash}
 
 ### Solution
 I did this study in a Intel Xeon E5-2680 v3 Haswell CPU node having 2x12 cores per node and two NVIDIA K80 GPUs (four visible devices per node: 2 x 4992 CUDA cores, 2 x 24 GiB GDDR5 memory) with Mellanox EDR InfiniBand high-speed network with non-blocking fat tree topology. I have  used 1 MPI tasks per GPU. This means that for four visible devices we have used four MPI tasks in total.  
