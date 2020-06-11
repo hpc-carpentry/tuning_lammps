@@ -88,7 +88,7 @@ In the following discussion, we'll work on a few exercises to get familiarized o
   thermo_style custom step time  temp press pe ke etotal density v_acn
   run		500
   ```
-  {: .bash}
+ 
 
 ### Solution
 I did this study in a Intel Xeon E5-2680 v3 Haswell CPU node having 2x12 cores per node and two NVIDIA K80 GPUs (four visible devices per node: 2 x 4992 CUDA cores, 2 x 24 GiB GDDR5 memory) with Mellanox EDR InfiniBand high-speed network with non-blocking fat tree topology. I have  used 1 MPI tasks per GPU. This means that for four visible devices we have used four MPI tasks in total.  
