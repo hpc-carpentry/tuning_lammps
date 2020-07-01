@@ -9,4 +9,4 @@ import math
 if __name__ == "__main__":
     #extract_data(sys.argv[1:])
     lammps_data = lammps_extract.extract_data(sys.argv[1:])
-    omp_pe_rhodopsin(lammps_data)
+    kokkos_omp_pe_rhodopsin(lammps_data)
