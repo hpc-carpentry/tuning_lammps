@@ -253,11 +253,11 @@ to scale to a very large number of cores.
 
 While MPI offers domain based parallelization, one can also use paralleization over
 particles. This can be done using OpenMP which is a different parallelization paradigm
-based on threading. This multithreading is *conceptually* easy to implement. Moreover,
+based on threading. This multi-threading is *conceptually* easy to implement. Moreover,
 OpenMP parallelization is orthogonal to MPI parallelization which means you can use
 them together. OpenMP also comes with an overhead: starting and stopping OpenMP takes
 compute time, OpenMP needs to be careful about how it handles memory (which can be
-expensive depending on the implemenation), the particular use case impacts the
+expensive depending on the implementation), the particular use case impacts the
 efficiency. Remember that, in general, a threaded parallelization method in LAMMPS
 may not be as efficient as MPI unless you have situations where domain decomposition
 is no longer efficient (we will see below how to recognise such situations).
