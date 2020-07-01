@@ -31,23 +31,27 @@ def cpu_v_gpu(data):
     # cpu_gpu_df = pd.DataFrame()
     #print(math.ceil(max(data['Performance'])))
 
-    fig, ax1 = plt.subplots()
-    ax1.plot(cpu['# nodes'], cpu['Performance'], 'bo-', label="CPU Performance", linewidth=0.75, markersize=5)
-    ax1.plot(gpu['# nodes'], gpu['Performance'], 'go-', label="GPU Performance", linewidth=0.75, markersize=5)
-    ax1.plot(kkgpu['# nodes'], kkgpu['Performance'], 'ro-', label="Kokkos/GPU Performance", linewidth=0.75, markersize=5)
+    fig, ax1 = plt.subplots(figsize=(8,6))
+    ax1.plot(cpu['# nodes'], cpu['Performance'], 'bo-', label="CPU", linewidth=1.5, markersize=5)
+    ax1.plot(gpu['# nodes'], gpu['Performance'], 'gv-', label="GPU Package", linewidth=1.5, markersize=7.5)
+    ax1.plot(kkgpu['# nodes'], kkgpu['Performance'], 'r*-', label="Kokkos/GPU Package", linewidth=1.5, markersize=7.5)
     ax1.set_ylim(0, (round_up(max(data['Performance'])+1)))
     ax1.grid(color='k', linestyle='--', linewidth=1, alpha=0.2)
     ax1.set_xlim(1, (max(cpu['# nodes'])+0.01))
+    ax1.set_xlabel("Number of nodes", fontsize=12, fontname="Arial")
+    ax1.set_ylabel("Performance (timesteps/second)", fontsize=12, fontname="Arial")
 
     ax2 = ax1.twinx()
     #print(len(gpu['Performance']), len(cpu['# nodes']))
-    ax2.plot(cpu['# nodes'], speed_up_gpu, 'gv:', label="GPU Performance", linewidth=0.75, markersize=5)
-    ax2.plot(cpu['# nodes'], speed_up_kkgpu, 'rv:', label="Kokkos/GPU Performance", linewidth=0.75, markersize=5)
+    ax2.plot(cpu['# nodes'], speed_up_gpu, 'gv', linestyle="dashed", label="Speed-up for GPU Package", linewidth=1.5, markersize=7.5)
+    ax2.plot(cpu['# nodes'], speed_up_kkgpu, 'r*', linestyle="dashed", label="Speed-up for Kokkos/GPU Package", linewidth=1.5, markersize=7.5)
+    ax2.set_ylabel("Speed up factor", fontsize=12, fontname="Arial")
     ax2.set_ylim(0,10)
 
     h1, l1 = ax1.get_legend_handles_labels()
     h2, l2 = ax2.get_legend_handles_labels()
-    ax1.legend(h1+h2, l1+l2, loc=2, borderaxespad=0., ncol=2)
+    ax1.legend(h1+h2, l1+l2, loc=2, ncol=1)
+    fig.suptitle("11 million atom Lennard-Jones system, Intel Xeon E5-2680 v3 Haswell CPU 2x12 cores \n w. 4 K80 GPUs/nodes and Mellanox EDR InfiniBand network.\nLAMMPS 3Mar20, Intel Compiler and CUDA", fontsize=10)
 
     fig.savefig("CPU_v_GPU.png")
 
@@ -95,8 +99,16 @@ def gpu_perf(data):
     ax.plot(gpu_df['4K MPI tasks'], gpu_df['4K Normalised'], 'bo-', label="4K atoms", linewidth=0.75, markersize=5)
     ax.plot(gpu_df['256K MPI tasks'], gpu_df['256K Normalised'], 'gv-', label="256K atoms", linewidth=0.75, markersize=5)      
     ax.plot(gpu_df['11M MPI tasks'], gpu_df['11M Normalised'], 'r*-', label="11M atoms", linewidth=0.75, markersize=5)  
+    
     ax.set_xticks(gpu_df['4K MPI tasks'])
+    ax.set_xlabel("Number of cores", fontsize=12, fontname="Arial")
+    ax.set_ylabel("Normalised speed-up factor per node", fontsize=12, fontname="Arial")
+
+    ax.legend()
     ax.set_xticklabels(x_ticks)
+    ax.grid(color='k', linestyle='--', linewidth=1, alpha=0.2)
+
+    fig.suptitle("Lennard-Jones system in Intel Xeon E5-2680 v3 Haswell CPU 2x12 Cores \n w. x4 NVIDEA K80 GPUs/node, Malleanox EDR InfiniBand network. \n LAMMPS 3Mar20, Intel compiler and CUDA", fontsize=10)
     fig.savefig("GPU_performance.png")    
 
 def scaling_rhodopsin(data):
@@ -121,17 +133,24 @@ def scaling_rhodopsin(data):
 
     fig, ax = plt.subplots()
 
-    ax.plot(scaling['MPI tasks'], scaling['Sp_Pair'], 'bo-', label='Pair', linewidth=0.75, markersize=1)
-    ax.plot(scaling['MPI tasks'], scaling['Sp_Bond    '], 'go-', label='Bond', linewidth=0.75, markersize=1)
-    ax.plot(scaling['MPI tasks'], scaling['Sp_Kspace '], 'ro-', label='Kspace', linewidth=0.75, markersize=1)
-    ax.plot(scaling['MPI tasks'], scaling['Sp_Neigh '], 'co-', label='Neigh', linewidth=0.75, markersize=1)
-    ax.plot(scaling['MPI tasks'], scaling['Sp_Comm'], 'mo-', label='Comm', linewidth=0.75, markersize=1)
+    ax.plot(scaling['MPI tasks'], scaling['Sp_Pair'], color='tab:blue', linestyle='-', marker='v', label='Pair', linewidth=1.25, markersize=2)
+    ax.plot(scaling['MPI tasks'], scaling['Sp_Bond    '], color='tab:green', linestyle='-', marker='v', label='Bond', linewidth=1.25, markersize=2)
+    ax.plot(scaling['MPI tasks'], scaling['Sp_Kspace '], color='tab:orange', linestyle='-', marker='v', label='Kspace', linewidth=1.25, markersize=2)
+    ax.plot(scaling['MPI tasks'], scaling['Sp_Neigh '], color='tab:red', linestyle='-', marker='v', label='Neigh', linewidth=1.25, markersize=2)
+    ax.plot(scaling['MPI tasks'], scaling['Sp_Comm'], color='tab:cyan', linestyle='-', marker='v', label='Comm', linewidth=1.25, markersize=2)
     #ax.plot(scaling['MPI tasks'], scaling['Sp_Output'], 'yo:', label='Output', linewidth=0.75, markersize=5)
-    ax.plot(scaling['MPI tasks'], scaling['Sp_Modify'], 'yo-', label='Modify', linewidth=0.75, markersize=1)
-    ax.plot(scaling['MPI tasks'], scaling['Sp_Other'], color='orange', linestyle='-', label='Other', linewidth=0.75, markersize=2)
-    ax.plot(scaling['MPI tasks'], scaling['Sp_Wall'], 'ko:', label='Walltime', linewidth=0.75, markersize=4)
+    ax.plot(scaling['MPI tasks'], scaling['Sp_Modify'], color='tab:olive', linestyle='-', marker='v', label='Modify', linewidth=1.25, markersize=2)
+    ax.plot(scaling['MPI tasks'], scaling['Sp_Other'], color='darkorchid', linestyle='-', marker='v', label='Other', linewidth=1.25, markersize=2)
+    ax.plot(scaling['MPI tasks'], scaling['Sp_Wall'], 'ko', linestyle='dashed', label='Walltime', linewidth=1, markersize=4)
+
+    ax.set_xlabel("Number of cores", fontsize=12, fontname="Arial")
+    ax.set_ylabel("Speed-up factor", fontsize=12, fontname="Arial")
+    ax.set_xlim(0,400)
+    ax.set_ylim(0,400)
     plt.legend()
     ax.grid(color='k', linestyle='--', linewidth=1, alpha=0.2)
+
+    fig.suptitle("Speed-up factor for Rhodopsin system of 32K atoms", fontsize=12, y=0.92)
     fig.savefig("Rhodopsin_scaling.png") 
 
     #print(scaling)
