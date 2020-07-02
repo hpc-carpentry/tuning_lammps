@@ -216,7 +216,7 @@ There are two alternate ways to add these options to your simulation:
   `-pk` command-line switch. The syntax would be essentially the same as when used in an
   input script:
   ```
-   mpirun -np 10 -ppn 10 lmp -sf omp -pk omp 4 neigh no -in in.rhodo
+   mpirun -np 10 -ppn 10 lmp -in in.rhodo -sf omp -pk omp 4 neigh no
   ```
   {: .bash}
   The second method appears to be convenient since you don't need to take the hassle to
@@ -387,89 +387,73 @@ could be useful.
 >
 {: .callout}
 
-## Invoke either through input or by command-line
-There are two alternate ways to do this, either you can edit the LAMMPS input file to add the extra 'stuffs' corresponding to the *package* command, or invoke it through command-line keeping the input files unchanged.
-
-If the `package` command is specified in an input script, it must be near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. This command can be used in LAMMPS in two different ways:
-
-* Edit the input file and introduce the line comprising the *package* command in it. This is perfectly fine, but always remember to use this near the top of the script, before the simulation box has been defined. This is because it specifies settings that the accelerator packages use in their initialization, before a simulation is defined. An example of calling the *GPU package* in a LAMMPS input file is given below:
-
-```
-package         gpu 2 neigh yes newton off split 1.0
-```
-{: .bash}
-
-Additionally, you also need to append an extra "/gpu" suffix wherever applicable. For example, a
-pair potential with GPU optimization should be mentioned in the input file as:
-
-```
-pair_style      lj/cut/gpu 2.5
-```
-{: .bash}
-
-* A simpler way to do this is through the command-line when launching LAMMPS using the `-pk`
-  command-line switch. The syntax would be exactly the same as when used in an input script:
+Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 
 ```
 {{ site.run_openmp }} {{ site.sched_lammps_exec }} -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
 ```
 {: .bash}
 
-The second method appears to be convenient since you don't need to take the hassle to edit the
-input file (and possibly in many places)!
-
-Note that there is an extra command-line switch in the above command-line. Do you know what this
-is for? To distinguish the various styles of these accelerator packages from its 'regular'
-non-accelerated variants, LAMMPS has introduces suffixes and the `-sf` switch  auto-appends these
-accelerator suffixes to various styles in the input script. Therefore, when an accelerator package
-is invoked through the `-pk` switch (for example, `-pk gpu`), the `-sf` switch ensures that the
-appropriate style is also being invoked in the simulation (for example, it ensures that the
-`lj/cut/gpu` is used instead of `lj/cut` as `pair_style`).
-
-In this tutorial, we'll stick to the second method of invoking the accelerator package, i.e.
-through the command-line.
-
-## Exercise 1: Learn to call GPU package from command-line
-
-In this exercise, we'll deal with a Lennard-Jones (LJ) system as described by the following input file. You can vary the system size and the length of the run using the variables *x*, *y*, *z*, and *t*. For this exercise, let us choose *x* = *y* = *z* = 60. Since this is a system with *fcc* lattice, the total number of atoms should be 864,000 for the chosen values of *x*, *y*, and *z*. Let, *t* = 500.
-We'll call the *GPU* package from the command-line in this case. Can you prepare a job submission file for this system such that it enables to use 2 GPUs with 24 MPI ranks. Make sure that the neighbor is built on the CPUs and there is a dynamic load balancing between the CPUs and the GPUs.
-
- ```
+> ## Learn to call the **GPU** package from command-line
+>
+> In this exercise, we'll deal with a Lennard-Jones (LJ) system as described by the
+> following input file. You can vary the system size and the length of the run using the
+> variables `x`, `y`, `z`, and `t`. For this exercise, let us choose `x = y = z = 60`. Since
+> this is a system with `fcc` lattice, the total number of atoms should be 864,000 for
+> the chosen values of `x`, `y`, and `z`. Let, `t` = 500.
+> We'll call the **GPU** package from the command-line in this case. Can you prepare a
+> job submission file for this system such that it enables to use 2 GPUs with 24 MPI ranks.
+> Make sure that the neighbor is built on the CPUs and there is a dynamic load balancing
+> between the CPUs and the GPUs.
+> ```
+> {% capture mycode %}
 {% include /snippets/ep05/in.lj %}
-```
-{: .input}
+{% endcapture %}{{ mycode | strip | newline_to_br | replace: '<br />', '<br />> ' | strip_html | strip }}
+> ```
+> {: .code}
+>
+> > ## Solution
+> > *** I don't like this, it is currently far too system specific, can we generalise?***
+> > A job submission script is shown below. Note that the number of MPI ranks is fixe
+> > by `#SBATCH --ntasks-per-node=24`. You are requesting for 2 GPUs by using
+> > `#SBATCH --gres=gpu:2`. Rest of the input parameters can be passed to the LAMMPS
+> > executable using command-line switches. The system size can be chosen using
+> > `-v x 60 -v y 60 -v z 60`, length of the run can be decided by `-v t 500`, **GPU**
+> > package and the number of GPUs is chosen by `-pk gpu 2`, the **GPU** package
+> > related fix/pair styles can be chosen using `-sf gpu`, and other **GPU** package
+> > related keywords are chosen using `neigh no newton off split -1.0`. A `no` value of
+> > the `neigh` keyword ensures that the neighbor list is built in the *CPUs*. Dynamic
+> > load balancing option between CPUs and GPUs is chosen using `split -1.0`.
+> >
+> > ~~~
+> > #!/bin/bash -x
+> > #SBATCH --account=ecam
+> > #SBATCH --nodes=1
+> > #SBATCH --ntasks-per-node=24
+> > #SBATCH --output=mpi-out.%j
+> > #SBATCH --error=mpi-err.%j
+> > #SBATCH --time=01:00:00
+> > #SBATCH --partition=gpus
+> > #SBATCH --gres=gpu:2
+> >
+> > module use /usr/local/software/jureca/OtherStages
+> > module load Stages/Devel-2019a
+> > module load intel-para/2019a
+> > module load LAMMPS/18Feb2020-cuda
+> >
+> > srun lmp -v x 60 -v y 60 -v z 60 -v t 500 -sf gpu -pk gpu 2 neigh no newton off split -1.0 -in in.lj
+> > ~~~
+> > {: .bash}
+> {: .solution}
+{: .challenge}
 
-
-### Solution
-A job submission script is shown below. Note that the number of MPI ranks is fixed by `#SBATCH --ntasks-per-node=24`. You are requesting for 2 GPUs by using `#SBATCH --gres=gpu:2`. Rest of the input parameters can be passed to the LAMMPS executable using command-line switches. The system size can be chosen using `-v x 60 -v y 60 -v z 60`, length of the run can be decided by `-v t 500`, GPU package and the number of GPUs is chosen by `-pk gpu 2`, the GPU package related fix/pair styles can be chosen using `-sf gpu`, and other GPU package related keywords are chosen using `neigh no newton off split -1.0`. A *no* value of the *neigh* keyword ensures that the neighbor list is built in the *CPUs*. Dynamic load balancing option between CPUs and GPUs is chosen using `split -1.0`.
-
-  ~~~
-  #!/bin/bash -x
-  #SBATCH --account=ecam
-  #SBATCH --nodes=1
-  #SBATCH --ntasks-per-node=24
-  #SBATCH --output=mpi-out.%j
-  #SBATCH --error=mpi-err.%j
-  #SBATCH --time=01:00:00
-  #SBATCH --partition=gpus
-  #SBATCH --gres=gpu:2
-
-  module use /usr/local/software/jureca/OtherStages
-  module load Stages/Devel-2019a
-  module load intel-para/2019a
-  module load LAMMPS/18Feb2020-cuda
-
-  srun lmp -v x 60 -v y 60 -v z 60 -v t 500 -sf gpu -pk gpu 2 neigh no newton off split -1.0 -in in.lj
-  ~~~
-  {: .bash}
-
-## Know about the GPU package output
+#### Know about the **GPU** package output
 
 At this stage, once you complete a job successfully, it is time to look for a few things in the
-LAMMPS output file. A few of them are for the sanity check to see if LAMMPS is doing the things
-that you asked for and a few of them tell you about the performances.
+LAMMPS output file. The first of these is to check that  LAMMPS is doing the things
+that you asked for and the rest are to tell you about the performances.
 
-### Device information
+##### Device information
 
 It prints about the device information both in the screen-output and the log file. You would notice
 something like this:
@@ -479,19 +463,20 @@ something like this:
 ```
 {: .output}
 
-The first thing that you should notice here is that it's using an *acceleration* for the pair potential lj/cut
-and fir this purpose it is using two devices (Device 0 and Device 1) and 12 MPI-processes per
+The first thing that you should notice here is that it's using an *acceleration* for the
+pair potential lj/cut
+and for this purpose it is using two devices (`Device 0` and `Device 1`) and 12 MPI-processes per
 device. That is what you asked for: 2 GPUs (```-pk gpu 2```) and
-`{{ site.sched_comment }} {{ site.sched_flag_ntasks }}=24`. Number of tasks is shared equally by
-each GPU. The detail about the graphics card is also printed, *Tesla K80, 13 CU, etc. etc.* along
-with the *numerical precision* of the implemented *GPU package* is also printed. In this case, it
-is using *double precision*. Next it shows how the MPI-processes are spawned with a GPU core.
+`{{ site.sched_comment }} {{ site.sched_flag_ntasks }}=24`. The number of tasks is shared equally by
+each GPU. The detail about the graphics card is also printed, along
+with the *numerical precision* used by the **GPU** package is also printed. In this case, it
+is using *double precision*. Next it shows how many MPI-processes are spawned per GPU.
 
-### Accelerated version of pair-potential
+##### Accelerated version of pair-potential
 
 This section of the output shows you that it is actually using the *accelerated* version of the
-pair potential *lj/cut*. You can see that it is using *lj/cut/gpu* though in your input file you
-mentioned this as *pair_style  lj/cut 2.5*. This is what happens when you use the *-sf gpu*
+pair potential `lj/cut`. You can see that it is using `lj/cut/gpu` though in your input file you
+mentioned this as `pair_style  lj/cut 2.5`. This is what happens when you use the `-sf gpu`
 command-line switch. This automatically ensures that the correct accelerated version is called for
 this run.
 ```
@@ -499,11 +484,12 @@ this run.
 ```
 {: .output}
 
-### Performance section
+#### Performance section
 
 The following screen-output tells you all about the performance. Some of these terms are already
-discussed in previous episode (episode 4). When you the *GPU package* you would see an extra block
-of information known as *Device Time Info (average)*. This gives you a total breakdown saying how
+discussed in the [previous episode]({{page.root}}/04-lammps-bottlenecks). When you the **GPU**
+package you would see an extra block
+of information known as `Device Time Info (average)`. This gives you a total breakdown saying how
 the devices (GPUs) have been utilised to do various parts of the job.
 
 ```
@@ -511,40 +497,80 @@ the devices (GPUs) have been utilised to do various parts of the job.
 ```
 {: .output}
 
-You should now know how to submit a LAMMPS job that uses GPU package as an accelerator. This is
+You should now know how to submit a LAMMPS job that uses the **GPU** package as an accelerator.
+This is
 quite simple, though optimizing the run may not be that straight-forward. You can have numerous
 possibilities of choosing the *argument* and the *keywords*. Not only that, the host CPU might have
- multiple cores. More choices would arise from here.
+multiple cores. More choices would arise from here.
 
-By rule of thumb, you must have at least same number of MPI processes as the number of GPU cores
-available to you. But often, using many MPI tasks per GPU gives you the best performance. As an
-example, if you have 4 physical GPUs, you must initiate 4 MPI processes for this job. But, assume
-that you have a CPU with 12 cores. This gives you flexibility to use at most 12 MPI processes and
-the possible combinations are 4gpu/4cpu, 4gpu/8cpu and 4gpu/12cpu. Though it may sound like that
-4gpu/12cpu will provide the maximum speed-up, that may not be the case! This entirely depends on
+For a rule of thumb, you must have at least same number of MPI processes as the number of GPUs
+available to you. But often, using many MPI tasks per GPU gives you the better performance. As an
+example, if you have 4 physical GPUs, you must initiate (at least) 4 MPI processes for this job.
+But, assume that you have a CPU with 12 cores. This gives you flexibility to use at most
+12 MPI processes and
+the possible combinations are 4 GPUs with 4 CPUs, 4 GPUs with 8 CPUs and 4 GPUs with 12
+CPUs. Though it may sound like that
+4 GPUs with 12 CPUs will provide the maximum speed-up, that may not be the case! This
+entirely depends on
 the problem and also on other settings which can in general be controlled by the *keywords*
-mentioned in the above table. Moreover, one may find that for a particular problem using 2 GPUs in
-stead of 4 GPUs may give better performance, and this why this is advisable to figure out the best
-possible set of run-time parameters following a thorough optimization before  starting the
-production runs. This might save your lot of resource and time!
+mentioned in the above table. Moreover, one may find that for a particular problem using 2 GPUs
+instead of 4 GPUs may give better performance, and this is why it is advisable to figure
+out the best possible set of run-time parameters by following a thorough optimization
+before starting the production runs. This might save your lot of resource and time!
 
-## Exercise 2: Offload entire neighbor build and force computation to GPUs
-As mentioned above, employing the full computing workforce to solve your problem may not always return the most profit. We need to tune this before starting any production run. In this exercise, we'll be using the above input file defining a LJ-system. Here we'll do three sets of run where each set will have different numbers of atoms in the box. Let the system sizes be defined by *x* = *y* = *z* = 10, *x* = *y* = *z* = 40 and *x* = *y* = *z* = 140. This implies that these three systems will have 4000, 256,000 and nearly 11 million atoms in the box respectively. We can choose the length of the simulation also using *t* = 5000. For each case, run it for different numbers of GPU/MPI tasks combination. For example, I ran these systems in a node having 4 K80 NVIDIA GPUs and 24 physical cores. I choose to employ all 4 GPUs abut different number of MPI tasks. Since there are 4 GPUs, I must take at least 4 MPI ranks. So, I choose the following combinations: 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks, 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks, 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks. For this exercise, choose *package* keywords such that neighbor list building and force computations are done entirely on the GPUs. It can be done using `-sf gpu -pk gpu 4 neigh yes newton off split 1.0` where 4 GPUs are being used. After the runs are over, the performance data is extracted from the log/screen output files using the command `grep "Performance:" log.lammps` in units if *timestep/s*. Finally, plot a *normalized speed-up factor per node* versus GPU/MPI choices for each of these configurations and write down the main observations.
-
-### Solution
-I did this study in a Intel Xeon E5-2680 v3 Haswell CPU node having 2x12 cores per node and two NVIDIA K80 GPUs (four visible devices per node: 2 x 4992 CUDA cores, 2 x 24 GiB GDDR5 memory) with Mellanox EDR InfiniBand high-speed network with non-blocking fat tree topology. Six GPU/MPI combinations were tried for each characteristic system size. These are 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks, 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks, 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks. Plot is shown below.
-
-The main observations from the following plots are:
-  1. For the system with 4000 atoms, increasing the number of MPI tasks actually degrades the overall performance.
-  2. For the 256K system, we can notice an initial speed-up with increasing MPI task counts up to 4 MPI ranks per GPU, and then it starts decling again.
-  3. For the largest 11M atom system, there is a sharp increase of speed-up up to 4 MPI ranks per GPU, and then also a relatively slow but steady increase is seen with increasing MPI tasks per GPU (in this case, 6 MPI tasks per GPU).
-
-  Possible explanation:
-  1. For the smallest system, the number of atoms assigned to each GPU or MPI ranks is very low. The system size is so small that considering GPU acceleration is practically meaningless. In this case you are emplying far too many workers to complete a small job and therefore it is not surprising that the scaling deteriorates with increasing MPI tasks. In fact, you may try to use 1 GPU and a few MPI task to see if the performance increases in this case.
-  2. Fix Me.
-
-![gpu_mpi_counts.png](../fig/05/gpu_mpi_counts.png)
-
+> ## Exercise: Offload entire neighbor build and force computation to GPUs
+> As mentioned above, employing the full computing workforce to solve your problem may
+> not always return the most profit. We need to tune this before starting any production
+> run. In this exercise, we'll be using the above input file defining a LJ-system. Here
+> we'll do three sets of run where each set will have different numbers of atoms in the
+> box. Let the system sizes be defined by `x = y = z = 10`, `x = y = z = 40` and
+> `x = y = z = 140`. This implies that these three systems will have 4000, 256,000 and
+> nearly 11 million atoms in the box respectively. We can choose the length of the
+> simulation also using `t = 5000`. For each case, run it for different numbers of
+> GPU/MPI task combinations. For example, I ran these systems in a node having 4 K80
+> NVIDIA GPUs and 24 physical cores. I choose to employ all 4 GPUs abut different number
+> of MPI tasks. Since there are 4 GPUs, I must use at least 4 MPI ranks. So, I choose
+> the following combinations: 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks,
+> 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks, 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks.
+> For this exercise, choose `package` keywords such that neighbor list building and
+> force computations are done entirely on the GPUs. It can be done using
+> ```
+> -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+> ```
+> {: .bash}
+> where 4 GPUs are being used. After the runs are over, the performance data
+> is extracted from the log/screen output files using the command
+> ```
+> grep "Performance:" log.lammps
+> ```
+> {: .bash}
+> in units of `timestep/s`. Finally, plot a *normalized speed-up factor per node* versus
+> GPU/MPI choices for each of these configurations and write down the main observations.
+>
+> > ## Solution
+> > I did this study in a Intel Xeon E5-2680 v3 Haswell CPU node having 2x12 cores per
+> > node and two NVIDIA K80 GPUs (which actually means four visible devices per node).
+> > Six GPU/MPI combinations were tried for each characteristic system size. These are
+> > 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks, 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks,
+> > 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks. The final plot is shown below.
+> >
+> > <p align="center"><img src="../fig/05/gpu_mpi_counts.png" width="50%"/></p>
+> >
+> > The main observations from the following plots are:
+> > 1. For the system with 4000 atoms, increasing the number of MPI tasks actually
+> >    degrades the overall performance.
+> > 2. For the 256K system, we can notice an initial speed-up with increasing MPI task
+> >    counts up to 4 MPI ranks per GPU, and then it starts declining again.
+> > 3. For the largest 11M atom system, there is a sharp increase of speed-up up to 4
+> >    MPI ranks per GPU, and then also a relatively slow but steady increase is seen
+> >    with increasing MPI tasks per GPU (in this case, 6 MPI tasks per GPU).
+> >
+> > Possible explanation:
+> > 1. For the smallest system, the number of atoms assigned to each GPU or MPI ranks is
+> >    very low. The system size is so small that considering GPU acceleration is practically meaningless. In this case you are emplying far too many workers to complete a small job and therefore it is not surprising that the scaling deteriorates with increasing MPI tasks. In fact, you may try to use 1 GPU and a few MPI task to see if the performance increases in this case.
+> > 2. Fix Me.
+> {: .solution}
+{: .challenge}
 
 ## Exercise 3: Switch on dynamic load balancing
 We discussed earlier that it can be done using the `split` keyword. Using this keyword a fixed fraction of particles is offloaded to the GPU while force calculation for the other particles occurs simultaneously on the CPU. When you set `split 1` you are offloading entire force computations to the GPUs (discussed in previous exercise). What fraction of particles would be offloaded to GPUs can be set explicitly by choosing a value ranging from 0 to 1. When you set its value to  *-1*, you are switching on dynamic balancing. This means that LAMMPS picks the split factor dynamically.
