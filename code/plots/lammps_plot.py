@@ -171,7 +171,7 @@ def omp_pe_rhodopsin(data, serial_run=7019):
     rhodo_pe_df['Nodes'] = mpi_group['# nodes']
     rhodo_pe_df['MPI_only_pe'] = (1.0/mpi_group['# nodes']/40)*(serial_run/mpi_group['Wall']*100)
 
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['MPI_only_pe'], 'bo-', label='MPI-only', linewidth=3, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['MPI_only_pe'], 'ko-', label='MPI-only', linewidth=3, markersize=4)
 
     #print(rhodo_pe_df)
 
@@ -191,18 +191,21 @@ def omp_pe_rhodopsin(data, serial_run=7019):
         del globals()['omp%s' % nums[i]]['level_0']
         rhodo_pe_df[str('%s_MPI_' % rev_nums[i])+str(nums[i])+'_OMP_pe'] = (1.0/globals()['omp%s' % nums[i]]['# nodes']/40)*(serial_run/globals()['omp%s' % nums[i]]['Wall']*100)
 
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['1_MPI_40_OMP_pe'], 'ko-', label='1 MPI x 40 OpenMP', linewidth=0.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['2_MPI_20_OMP_pe'], 'ko-', label='2 MPI x 20 OpenMP', linewidth=0.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['4_MPI_10_OMP_pe'], 'ko-', label='4 MPI x 10 OpenMP', linewidth=0.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['5_MPI_8_OMP_pe'], 'ko-', label='5 MPI x 8 OpenMP', linewidth=0.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['8_MPI_5_OMP_pe'], 'ko-', label='8 MPI x 5 OpenMP', linewidth=0.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['10_MPI_4_OMP_pe'], 'ko-', label='10 MPI x 4 OpenMP', linewidth=0.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['20_MPI_2_OMP_pe'], 'ko-', label='20 MPI x 2 OpenMP', linewidth=0.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['40_MPI_1_OMP_pe'], 'ko-', label='40 MPI x 1 OpenMP', linewidth=0.75, markersize=1)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['1_MPI_40_OMP_pe'], color='tab:blue', linestyle='-', marker='o', label='1 MPI x 40 OpenMP', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['2_MPI_20_OMP_pe'], color='tab:green', linestyle='-', marker='v', label='2 MPI x 20 OpenMP', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['4_MPI_10_OMP_pe'], color='tab:orange', linestyle='-', marker='^', label='4 MPI x 10 OpenMP', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['5_MPI_8_OMP_pe'], color='tab:red', linestyle='-', marker='>', label='5 MPI x 8 OpenMP', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['8_MPI_5_OMP_pe'], color='tab:cyan', linestyle='-', marker='<', label='8 MPI x 5 OpenMP', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['10_MPI_4_OMP_pe'], color='tab:olive', linestyle='-', marker='*', label='10 MPI x 4 OpenMP', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['20_MPI_2_OMP_pe'], color='darkorchid', linestyle='-', marker='X', label='20 MPI x 2 OpenMP', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['40_MPI_1_OMP_pe'], color='peru', linestyle='-', marker='D', label='40 MPI x 1 OpenMP', linewidth=1.25, markersize=4)
     ax.grid(color='k', linestyle='--', linewidth=1, alpha=0.2)
     ax.set_ylim(0,100)
     ax.set_xlim(0.5,(rhodo_pe_df['Nodes'].max()+0.5))
-    ax.legend()
+    ax.legend(ncol=2, loc=1, fontsize=8)
+    ax.set_xlabel("Number of nodes", fontsize=12, fontname="Arial")
+    ax.set_ylabel("Parallel efficiency (%)", fontsize=12, fontname="Arial")
+    fig.suptitle("Intel Xeon Gold (Skylake) processors with 2x20-core 2.4 GHz,\n192 GB RAM Rhodopsin system (32K atoms), lj/charmm/coul/long\n+ PPPM with USER-OMP (Intel compiler 2019u5, GCC 8.2.0)", fontsize=11, y=0.99)
     fig.savefig("Rhodopsin_omp_pe.png") 
 
 
@@ -223,7 +226,7 @@ def kokkos_omp_pe_rhodopsin(data, serial_run=7019):
     rhodo_pe_df['Nodes'] = mpi_group['# nodes']
     rhodo_pe_df['MPI_only_pe'] = (1.0/mpi_group['# nodes']/40)*(serial_run/mpi_group['Wall']*100)
 
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['MPI_only_pe'], 'bo-', label='MPI-only', linewidth=3, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['MPI_only_pe'], 'ko-', label='MPI-only', linewidth=3, markersize=4)
 
     #print(kkomp_group)
     kkomp_group = group.get_group("Kokkos/OMP")
@@ -242,19 +245,22 @@ def kokkos_omp_pe_rhodopsin(data, serial_run=7019):
         del globals()['omp%s' % nums[i]]['level_0']
         rhodo_pe_df[str('%s_MPI_' % rev_nums[i])+str(nums[i])+'_OMP_Kokkos_pe'] = (1.0/globals()['omp%s' % nums[i]]['# nodes']/40)*(serial_run/globals()['omp%s' % nums[i]]['Wall']*100)
 
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['1_MPI_40_OMP_Kokkos_pe'], 'go-', label='1 MPI x 40 OpenMP w. Kokkos', linewidth=2.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['2_MPI_20_OMP_Kokkos_pe'], 'r:', label='2 MPI x 20 OpenMP w. Kokkos', linewidth=2.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['4_MPI_10_OMP_Kokkos_pe'], 'r:', label='4 MPI x 10 OpenMP w. Kokkos', linewidth=2.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['5_MPI_8_OMP_Kokkos_pe'], 'r:', label='5 MPI x 8 OpenMP w. Kokkos', linewidth=2.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['8_MPI_5_OMP_Kokkos_pe'], 'r:', label='8 MPI x 5 OpenMP w. Kokkos', linewidth=2.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['10_MPI_4_OMP_Kokkos_pe'], 'r:', label='10 MPI x 4 OpenMP w. Kokkos', linewidth=2.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['20_MPI_2_OMP_Kokkos_pe'], 'r:', label='20 MPI x 2 OpenMP w. Kokkos', linewidth=2.75, markersize=1)
-    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['40_MPI_1_OMP_Kokkos_pe'], 'r:', label='40 MPI x 1 OpenMP w. Kokkos', linewidth=2.75, markersize=1)
-
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['1_MPI_40_OMP_Kokkos_pe'], color='tab:blue', linestyle='-', marker='o', label='1 MPI x 40 OpenMP w. Kokkos', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['2_MPI_20_OMP_Kokkos_pe'], color='tab:green', linestyle='-', marker='v', label='2 MPI x 20 OpenMP w. Kokkos', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['4_MPI_10_OMP_Kokkos_pe'], color='tab:orange', linestyle='-', marker='^', label='4 MPI x 10 OpenMP w. Kokkos', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['5_MPI_8_OMP_Kokkos_pe'], color='tab:red', linestyle='-', marker='>', label='5 MPI x 8 OpenMP w. Kokkos', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['8_MPI_5_OMP_Kokkos_pe'], color='tab:cyan', linestyle='-', marker='<', label='8 MPI x 5 OpenMP w. Kokkos', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['10_MPI_4_OMP_Kokkos_pe'], color='tab:olive', linestyle='-', marker='*', label='10 MPI x 4 OpenMP w. Kokkos', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['20_MPI_2_OMP_Kokkos_pe'], color='darkorchid', linestyle='-', marker='X', label='20 MPI x 2 OpenMP w. Kokkos', linewidth=1.25, markersize=4)
+    ax.plot(rhodo_pe_df['Nodes'], rhodo_pe_df['40_MPI_1_OMP_Kokkos_pe'], color='peru', linestyle='-', marker='D', label='40 MPI x 1 OpenMP w. Kokkos', linewidth=1.25, markersize=4)
     ax.grid(color='k', linestyle='--', linewidth=1, alpha=0.2)
     ax.set_ylim(0,100)
     ax.set_xlim(0.5,(rhodo_pe_df['Nodes'].max()+0.5))
-    ax.legend()
+    ax.legend(ncol=2, loc=1, fontsize=8)
+    ax.set_xlabel("Number of nodes", fontsize=12, fontname="Arial")
+    ax.set_ylabel("Parallel efficiency (%)", fontsize=12, fontname="Arial")
+    fig.suptitle("Intel Xeon Gold (Skylake) processors with 2x20-core 2.4 GHz,\n192 GB RAM Rhodopsin system (32K atoms), lj/charmm/coul/long\n+ PPPM with USER-OMP and Kokkos (Intel compiler 2019u5, GCC 8.2.0)", fontsize=11, y=0.99)
+
     fig.savefig("Rhodopsin_kokkos_omp.png") 
 
 if __name__ == "__main__":
