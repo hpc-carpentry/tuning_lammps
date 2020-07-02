@@ -537,7 +537,6 @@ before starting the production runs. This might save your lot of resource and ti
 > ```
 > -sf gpu -pk gpu 4 neigh yes newton off split 1.0
 > ```
-> {: .bash}
 > where 4 GPUs are being used. After the runs are over, the performance data
 > is extracted from the log/screen output files using the command
 > ```
@@ -572,30 +571,81 @@ before starting the production runs. This might save your lot of resource and ti
 > {: .solution}
 {: .challenge}
 
-## Exercise 3: Switch on dynamic load balancing
-We discussed earlier that it can be done using the `split` keyword. Using this keyword a fixed fraction of particles is offloaded to the GPU while force calculation for the other particles occurs simultaneously on the CPU. When you set `split 1` you are offloading entire force computations to the GPUs (discussed in previous exercise). What fraction of particles would be offloaded to GPUs can be set explicitly by choosing a value ranging from 0 to 1. When you set its value to  *-1*, you are switching on dynamic balancing. This means that LAMMPS picks the split factor dynamically.
+> ## Exercise: Switch on dynamic load balancing
+>
+> We discussed earlier that it can be done using the `split` keyword. Using this keyword a
+> fixed fraction of particles is offloaded to the GPU while force calculation for the
+> other particles occurs simultaneously on the CPU. When you set `split 1` you are
+> offloading entire force computations to the GPUs (discussed in previous exercise). What
+> fraction of particles would be offloaded to GPUs can be set explicitly by choosing a
+> value ranging from `0` to `1`. When you set its value to  `-1`, you are switching on
+> dynamic load balancing. This means that LAMMPS selects the split factor dynamically.
+>
+> Let us repeat the entire exercise as described in the
+> [previous exercise](#exercise-offload-entire-neighbor-build-and-force-computation-to-gpus)
+> but this time we'll use dynamic load balancing, i.e. in the command-line we'll use:
+> ```
+> -sf gpu -pk gpu 4 neigh yes newton off split -1.0
+> ```
+> Plot the data for *normalized speed-up factor per node* versus GPU/MPI choices for each
+> of these configurations and discuss how it differs from the observations that you
+> derived from the
+> [previous exercise](#exercise-offload-entire-neighbor-build-and-force-computation-to-gpus).
+>
+> > ## Solution
+> > (FIX ME) This needs to be done!
+> >
+> > <p align="center"><img src="../fig/05/gpu_mpi_counts_LB.png" width="50%"/></p>
+> {: .solution}
+{: .challenge}
 
-Let us repeat the entire exercise as described in *Exercise 1* but this time we'll use dynamic load balancing, i.e. in the command-line we'll use `-sf gpu -pk gpu 4 neigh yes newton off split -1.0`. Plot the data for *normalized speed-up factor per node* versus GPU/MPI choices for each of these configurations and discuss how it differs from the observations that you derived from *exercise 1*.
-
-### Solution
-(FIX ME) This needs to be done!
-
-![gpu_mpi_counts_LB](../fig/05/gpu_mpi_counts_LB.png)
-
-
-## Exercise 4: Speed-up (CPU versus GPU)
-By now we have idea about some of the 'preferred' tuning parameters for a LJ-sytem. For the current exercise, let us take the system with ~11 million atoms, i.e. *x* = *y* = *z* = 140 and *t* = 500 and for this size of atoms, we know from exercise 2 that 4 GPUs/24 MPI tasks (i.e. 6 MPI tasks/GPU) makes the run fastest. We like to see how much acceleration a GPU package can provide if we offload the entire force computation and neighbour list building to the GPUs. This can be done using `-sf gpu -pk gpu 4 neigh yes newton off split 1.0`.
-  * Do a systamatic study by running the job with different number of nodes both with and without the GPU package. For example, if five nodes are available to you, run this job using all the physical cores available with 1 node, 2 nodes, 3 nodes, 4 nodes and 5 nodes (2 sets: one with the GPU package enabled, and the other is the regular MPI-based runs without any accelerator package).
-  * Extract the performance data from the log/screen output files from each of these runs. You can do this using the command `grep "Performance:" log.lammps` and note down the performance value in units if *timestep/s*.
-  * Make a plot to comapare the performance of the CPU runs (i.e. without any accelerator package) and the GPU runs (i.e. with the GPU package enabled) with number of nodes.
-  * Plot the speed-up factor (= GPU performance/CPU performance) versus the number of nodes.
-  * Discuss the main observations from these plots.
-
-### Solution
-I ran these jobs in the Jureca HPC system with nodes having Intel Xeon E5-2680 v3 Haswell CPU with 2x12 cores per node and two NVIDIA K80 GPUs (four visible devices) per node with Mellanox EDR InfiniBand high-speed network with non-blocking fat tree topology. Two sets of runs (i.e. with and without the GPU package) were executed with up to 8 nodes. Performance data were extracted from the log files in the unit of *timesteps/second*, speed-up factors were calculated for each node and were plotted as shown below.
-We can see a rreasonable acceleration when we use the GPU package for all the runs consistently. The calculated speed-up factors shows that we obtain maximum speed-up (~5.2x) when we use 1 node, then it gradually decreases (for 2 nodes it is 5x) and finally saturates to a value of ~4.25x when we run using 3 nodes or higher (up to 8 nodes is tested here). The slight decrease in speed-up with increasing number of nodes could be related to the inter-node communications. But overall the GPU package offers quite a fair amount of performance enhancement over the regular CPU version of LAMMPS with MPI parallelization.
-
-![CPUvsGPU](../fig/05/CPUvsGPU.png)
-
+> ## Exercise 4: Speed-up (CPU versus GPU)
+> By now we have idea about some of the 'preferred' tuning parameters for a LJ-sytem. For
+> the current exercise, let us take the system with ~11 million atoms, i.e.
+> `x = y = z = 140` and `t = 500` and for this size of atoms, we know from ***ADD REF***
+> that 4 GPUs/24 MPI tasks (i.e. 6 MPI tasks per GPU) gives the best performance. We
+> wish to see how much acceleration a GPU package can provide if we offload the entire
+> force computation and neighbour list building to the GPUs. This can be done using
+> ```
+> -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+> ```
+> {: .bash}
+> * Do a systematic study by running the job with different number of nodes both with
+>   and without the **GPU** package. For example, if five nodes are available to you,
+>   run this job using all the physical cores available with 1 node, 2 nodes, 3 nodes,
+>   4 nodes and 5 nodes (2 sets: one with the **GPU** package enabled, and the other is
+>   the regular MPI-based runs without any accelerator package).
+> * Extract the performance data from the log/screen output files from each of these
+>   runs. You can do this using the command
+>   ```
+>   grep "Performance:" log.lammps
+>   ```
+>   and note down the performance value in units if `timestep/s`.
+> * Make a plot to compare the performance of the CPU runs (i.e. without any accelerator
+>   package) and the GPU runs (i.e. with the GPU package enabled) with number of nodes.
+> * Plot the speed-up factor (= GPU performance/CPU performance) versus the number of
+>   nodes.
+> * Discuss the main observations from these plots.
+>
+> > ## Solution
+> > I ran these jobs in the Jureca HPC system with nodes having
+> > Haswell CPU with 2x12 cores per node and two NVIDIA K80 GPUs (four visible devices)
+> > per node. Two sets of runs (i.e. with and without the GPU package) were executed
+> > with up to 8 nodes. Performance data was extracted from the log files in the unit of
+> > `timesteps/second`, speed-up factors were calculated for each node and were plotted
+> > as shown below.
+> >
+> > <p align="center"><img src="../fig/05/CPUvsGPU.png" width="50%"/></p>
+> >
+> > We can see a reasonable acceleration when we use the GPU package for all the runs
+> > consistently. The calculated speed-up factors show that we obtain maximum speed-up
+> > (~5.2x) when we use 1 node, then it gradually decreases (for 2 nodes it is 5x) and
+> > finally saturates to a value of ~4.25x when we run using 3 nodes or higher (up to 8
+> > nodes is tested here). The slight decrease in speed-up with increasing number of
+> > nodes could be related to the inter-node communications. But overall the GPU package
+> > offers quite a fair amount of performance enhancement over the regular CPU version
+> > of LAMMPS with MPI parallelization.
+> {: .solution}
+{: .challenge}
 
 {% include links.md %}
