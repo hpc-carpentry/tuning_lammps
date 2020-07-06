@@ -414,7 +414,7 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 >
 > > ## Solution
 > > *** I don't like this, it is currently far too system specific, can we generalise?***
-> > A job submission script is shown below. Note that the number of MPI ranks is fixe
+> > A job submission script is shown below. Note that the number of MPI ranks is fixed
 > > by `#SBATCH --ntasks-per-node=24`. You are requesting for 2 GPUs by using
 > > `#SBATCH --gres=gpu:2`. Rest of the input parameters can be passed to the LAMMPS
 > > executable using command-line switches. The system size can be chosen using
