@@ -7,7 +7,7 @@ questions:
 - "What hardware can LAMMPS be used on?"
 - "How can I enable architecture support at runtime?"
 - "What accelerator packages are compatible with which hardware?"
-- "What is KOKKOS and why should I use it?"
+- "What is Kokkos and why should I use it?"
 objectives:
 - "First learning objective. (FIXME)"
 keypoints:
@@ -148,7 +148,7 @@ package. Additionally, this exercise will also help us to learn the basic princi
 invoking accelerator packages in a LAMMPS run. Before starting our runs, let us now
 discuss the syntax of the `package` command in LAMMPS, as outlined below.
 
-To call an accelerator package (**USER-INTEL**, **USER-OMP**, **GPU**, **KOKKOS**) in
+To call an accelerator package (**USER-INTEL**, **USER-OMP**, **GPU**, **Kokkos**) in
 your LAMMPS run, you need to know a LAMMPS command called `package`. This command
 invokes package-specific settings for an accelerator. You can learn about this command
 in detail from the
@@ -156,7 +156,7 @@ in detail from the
 
 The basic syntax for the additional options to the LAMMPS are:
 ```
-package <style> <args>
+package <style> <arguments>
 ```
 
 `style` allows you to choose the accelerator package for your run. There are four different
