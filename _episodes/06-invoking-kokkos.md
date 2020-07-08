@@ -11,23 +11,24 @@ keypoints:
 ---
 ## Kokkos
 
-In recent times, the HPC industry has witnessed a dramatic architectural revolution. Modern
+In recent times, the HPC industry has witnessed dramatic architectural revolution. Modern
 HPC architecture
-not only includes the conventional multi-core CPUs, but also many-core systems (like Intel Xeon
-Phis or NVIDIA GPUs),
+not only includes the conventional multi-core CPUs, but also many-core systems (GPUs are
+a good example of this but there are other technologies),
 and we don't know yet where this revolution will end up! With the availability of so many
 cores for computing,
 one would naturally expect a 'scalable' speedup in performance. However, this
 scalability does not come
 free-of-cost, this may require several man-years to modify an existing code to make it
-compatible for new hardware architectures.
+compatible with (and efficient on) new hardware architectures.
 
-Why do we need to modify a code for new architectures? This is because these different
-hardware were designed keeping in mind different/innovative philosophies of parallelization
-and these philosophies continue to develop to enhance performance. We often need to use
-novel parallelization approaches other than the classic
-MPI-based approach. For example, on a shared memory platform one can use OpenMP (not so
-new), or, on a mixed CPU+GPU platform, one can use CUDA or OpenACC to parallelize their
+Why do we need to modify a code for new architectures? This is because innovative
+hardware is designed with different/innovative philosophies of parallelization in mind,
+and these philosophies continue to develop to enhance performance. We frequently now
+need to use novel parallelization approaches other than (or as well as) the classic
+MPI-based approach to use the latest hardware. For example, on a shared memory platform
+one can use OpenMP (not so new), or, on a mixed CPU+GPU platform, one can use CUDA or
+OpenACC to parallelize your
 codes. The major issue with all these approaches is the performance
 portability which arises due to differences in hardware, and software implementations
 for hardware (writing CUDA code for NVIDIA GPUs won't help you with Intel Xeon Phi). So,

@@ -406,9 +406,9 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > Make sure that the neighbor is built on the CPUs and there is a dynamic load balancing
 > between the CPUs and the GPUs.
 > ```
-> {% capture mycode %}
+{% capture mycode %}
 {% include /snippets/ep05/in.lj %}
-{% endcapture %}{{ mycode | append_to_newline: "> " }}
+{% endcapture %}{{ mycode | strip | multiline_string_in_callout: 1 }}
 > ```
 > {: .code}
 > > ## Solution

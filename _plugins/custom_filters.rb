@@ -4,8 +4,8 @@ module Jekyll::CustomFilter
 
   # Each method of the module creates a custom Jekyll filter
 
-  def append_to_newline(input, append_string = '')
-    input.to_s.strip.gsub(/\n/, "\n" + append_string.to_s)
+  def multiline_string_in_callout(input, levels_of_indent = 0)
+    input.split("\n").map{ |line| "> " * levels_of_indent + line }.join("\n")
   end
 
 end
