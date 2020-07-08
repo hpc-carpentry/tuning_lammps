@@ -3,7 +3,7 @@ title: "Invoking KOKKOS"
 teaching: 0
 exercises: 0
 questions:
-- "How do I invoke KOKKOS with LAMMPS?"
+- "How do I invoke KOKKOS within LAMMPS?"
 objectives:
 - "Learn how to transition from a normal LAMMPS call to an accelerated call"
 keypoints:
@@ -11,34 +11,54 @@ keypoints:
 ---
 ## Kokkos
 
-In recent times, the HPC industry has witnessed a dramatic architectural revolution. Modern HPC architecture
-not only includes the conventional multi-core CPUs, but also manycore systems like Xeon Phis or NVIDEA GPUs,
-and we don't know yet where this revolution will end up! With the availability of so many cores for computing,
-one would naturally expect a 'scalable' speedup in performance. However, this scalability does not come
-free-of-cost, this may require several man-years to modify an existing code to make it compatible for new
-hardware architectures. Why do we need to modify a code for new architectures? This is because these different
-hardwares were designed keeping in mind different philosophies of parallelization and these philosophies keep
-updating at more finer levels to enhance the performance. Some of the architectures prefer data-parallelization,
-while some of them work better for task-level parallelization. So to access the finer levels of parallelization
-offered by modern day architectures, we often need to use parallelizing approaches other than the old classic
-MPI-based approach. For example, on a shared memory platform one can use OpenMP, or, on a mixed CPU+GPU platform,
-one can use CUDA or OpenACC to parallelize their codes. The major issue with all these approaches is the performance
-portability which arises due to complex and varying memory access pattern across devices. So, the question arises:
-Is there any way to ease this difficulty?  
+In recent times, the HPC industry has witnessed a dramatic architectural revolution. Modern
+HPC architecture
+not only includes the conventional multi-core CPUs, but also many-core systems (like Intel Xeon
+Phis or NVIDIA GPUs),
+and we don't know yet where this revolution will end up! With the availability of so many
+cores for computing,
+one would naturally expect a 'scalable' speedup in performance. However, this
+scalability does not come
+free-of-cost, this may require several man-years to modify an existing code to make it
+compatible for new hardware architectures.
 
-Kokkos is probably an answer to this portability issue. The primary objective of Kokkos is to maximize the
-amount of user code that can be compiled for various devices but obtaing comparable performance if the code
-was written in a  native language specific to that particular device. How does Kokkos achieve this goal? 
+Why do we need to modify a code for new architectures? This is because these different
+hardware were designed keeping in mind different/innovative philosophies of parallelization
+and these philosophies continue to develop to enhance performance. We often need to use
+novel parallelization approaches other than the classic
+MPI-based approach. For example, on a shared memory platform one can use OpenMP (not so
+new), or, on a mixed CPU+GPU platform, one can use CUDA or OpenACC to parallelize their
+codes. The major issue with all these approaches is the performance
+portability which arises due to differences in hardware, and software implementations
+for hardware (writing CUDA code for NVIDIA GPUs won't help you with Intel Xeon Phi). So,
+the question arises: Is there any way to ease this difficulty?
 
-1. It maps a C++ kernel to different backend languages like Cuda, OpenMP, Pthreads.
-2. It also provides data abstractions to adjust (at compile time) the memory layout of data structures like 2D
+Kokkos strives to be an answer to this portability issue. The primary objective of Kokkos
+is to maximize the
+amount of user code that can be compiled for various devices but obtaining comparable
+performance if the code
+was written in a  native language specific to that particular device. How does Kokkos
+achieve this goal?
+
+1. It maps a C++ kernel to different backend languages like CUDA, OpenMP, Pthreads.
+2. It also provides data abstractions to adjust (at compile time) the memory layout of
+   data structures like 2D
    and 3D arrays to optimize performance on different hardware.
-   
+
 > ## Kokkos: A developing library
 >
 > Why should we bother to learn about using Kokkos?
 > > ## Solution
-> > (Fix Me! "The primary reason for Kokkos being developed is that it allows you to write a *single* pair style in C++ where and without (much) understanding of GPU programming, that will then work on both GPUs (or Xeon Phi) and CPUs with or without multi-threading. It cannot fully reach the performance of USER-INTEL or the GPU package on CPUs and GPUs, but adding new code to those for a pair style, for which something similar already exists, is *significantly* less effort with Kokkos and requires significantly less programming expertise in vectorization and directive based SIMD programming or CPU computing. Also support for a new kind of computing hardware will primarily need additional code in the Kokkos library and just a little bit of programming setup/management in LAMMPS."
+> > The primary reason for Kokkos being developed is that it allows you to write a
+> > *single* pair style in C++ without (much) understanding of GPU programming, that
+> > will then work on both GPUs (or Xeon Phi) and CPUs with or without multi-threading.
+> > It cannot (currently) fully reach the performance of USER-INTEL or the GPU package
+> > on *particular* CPUs and GPUs, but adding new code to those for a pair style, for
+> > which something similar already exists, is *significantly* less effort with Kokkos
+> > and requires significantly less programming expertise in vectorization and directive
+> > based SIMD programming or CPU computing. Also support for a new kind of computing
+> > hardware will primarily need additional code in the Kokkos library and just a
+> > little bit of programming setup/management in LAMMPS."
 > {: .solution}
 {: .discussion}
 
@@ -58,7 +78,7 @@ for that hardware when all the runtime parameters are chosen sensibly. What are 
   that most of the codes can be run on GPUs once assigned by the CPU and when all the jobs are done, it is communicated
   back to CPU, thus minimising the amount of data transfer between CPU and GPU.
 * supports modern GPUs only (an extensive list of supported hardwares are given in LAMMPS [website]().
-* Currently supports double precision only. 
+* Currently supports double precision only.
 * Still in developmental stage, so more features and flexibilities are expected in future versions of LAMMPS.
 
 The list of LAMMPS features that is supported by Kokkos is given below:
@@ -122,7 +142,7 @@ The next you need to choose proper *keywords* and *value* pairs. These *keyword/
   this copying process. But, not all HPC systems have the CUDA-aware MPI available. It results in a *Segmentation*
   *Fault* error at runtime. We can avoid this error by setting its value to *off* (i.e. `cuda/aware off`). But,
   whenever a CUDA-aware MPI is available to you, try to exploit it for a Kokkos/GPU run to get the speedup.
-  
+
 
 ## Invoking Kokkos through input file or through command-line?
 From episode 5, we already learnt how to use the *package* command to call an accelerator package in a LAMMPS run. Unlike the *USER-OMP* or the *GPU* package which supports either OpenMP or GPU, the *Kokkos* package supports both OpenMP and GPUs. This adds additional complexities in the command-line to invoke appropriate execution mode (OpenMP or GPU) when you decide to use *kokkos* for your LAMMPS runs. Though you can also invoke them through modifying the LAMMPS input file, but it is more convenient to do this through the command-line. In the following section, we'll touch a few general command-line features which are needed to call *Kokkos*. OpenMP specific or GPU specific command-line switches will be discussed in later episodes when we'll be discussing about them in more detail.
@@ -136,14 +156,14 @@ This is very much straight-forward to edit the above command-line to make it app
 
   1. The total number of MPI ranks is set in the usual way via *mpirun* or *mpiexec* or *srun* command. It has nothing to do with Kokkos.
     * `mpirun -np 40 -ppn 10` allows you to submit the job in 4 nodes each of them having 10 MPI processes.
-  2. To enable Kokkos package you need to use a switch `-k on`. 
-  3. To use Kokkos enabled styles (pair styles/fixes etc.), you need one additional switch `-sf kk`. This will append the "/kk" suffix to all the styles that Kokkos supports in LAMMPS. For example, when you use this, the *lj/charmm/coul/long* pair style would be read as *lj/charmm/coul/long/kk* at runtime. 
-  
+  2. To enable Kokkos package you need to use a switch `-k on`.
+  3. To use Kokkos enabled styles (pair styles/fixes etc.), you need one additional switch `-sf kk`. This will append the "/kk" suffix to all the styles that Kokkos supports in LAMMPS. For example, when you use this, the *lj/charmm/coul/long* pair style would be read as *lj/charmm/coul/long/kk* at runtime.
+
 With these points keeping in mind, the above command-line could be modified as following to make it ready for Kokkos:
 ```
 mpirun -np 40 -ppn 10 lmp -k on -sf kk -in in.rhodo
 ```
 But, this above command-line is still *incomplete*. We have not yet passed any information about the execution mode (OpenMP or GPU), or the number of OpenMP threads, or the number of GPUs that we want to use for this run, or the *package* arguments and keywords (and values) to the LAMMPS executable. We'll discussing about them in the following episodes.
 
- 
+
 {% include links.md %}

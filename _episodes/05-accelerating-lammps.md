@@ -408,10 +408,9 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > ```
 > {% capture mycode %}
 {% include /snippets/ep05/in.lj %}
-{% endcapture %}{{ mycode | strip | newline_to_br | replace: '<br />', '<br />> ' | strip_html | strip }}
+{% endcapture %}{{ mycode | append_to_newline: "> " }}
 > ```
 > {: .code}
->
 > > ## Solution
 > > *** I don't like this, it is currently far too system specific, can we generalise?***
 > > A job submission script is shown below. Note that the number of MPI ranks is fixed
