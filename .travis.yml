@@ -57,6 +57,5 @@ jobs:
         - pip install pyyaml
 
       script:
-        - make lesson-check
         - make lesson-check-all
         - make --always-make site
