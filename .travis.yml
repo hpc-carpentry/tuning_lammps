@@ -1,9 +1,12 @@
-dist: xenial  # Ubuntu 16.04 (required for python 3.7)
+# https://github.com/FZJ-JSC/tuning_lammps
 language: python
+
 python: 3.7
+
 branches:
   only:
   - gh-pages
+  - /.*/
 
 # Add spellchecking for PRs
 jobs:
@@ -45,18 +48,15 @@ jobs:
 
     - stage: check_and_build
       before_install:
-        - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-        - echo "deb https://cran.rstudio.com/bin/linux/ubuntu xenial/" | sudo tee -a /etc/apt/sources.list
         - sudo apt-get update -y
-        - sudo apt-get install -y --allow-unauthenticated r-base
-        - sudo Rscript -e "install.packages('knitr', repos = 'https://', dependencies = TRUE)"
-        - sudo Rscript -e "install.packages('stringr', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
-        - sudo Rscript -e "install.packages('checkpoint', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
-        - sudo Rscript -e "install.packages('ggplot2', repos = 'https://cran.rstudio.com', dependencies = TRUE)"
         - rvm default
-        - gem install json kramdown jekyll
+        - gem install bundler
+        - bundle install
+
       install:
         - pip install pyyaml
+
       script:
+        - make lesson-check
         - make lesson-check-all
         - make --always-make site

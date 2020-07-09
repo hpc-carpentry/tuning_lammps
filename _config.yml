@@ -12,9 +12,12 @@ carpentry: "swc"
 # Overall title for pages.
 title: "Running LAMMPS on HPC systems"
 
+# Email address, no mailto:
+email: "a.ocais@fz-juelich.de"
+
 # Life cycle stage of the lesson
 # possible values: "pre-alpha", "alpha", "beta", "stable"
-life_cycle: "pre-alpha"
+life_cycle: "alpha"
 
 #------------------------------------------------------------
 # Generic settings (should not need to change).
@@ -23,42 +26,61 @@ life_cycle: "pre-alpha"
 # What kind of thing is this ("workshop" or "lesson")?
 kind: "lesson"
 
-# Magic to make URLs resolve both locally and on GitHub.
-# See https://help.github.com/articles/repository-metadata-on-github-pages/.
-# Please don't change it: <USERNAME>/<PROJECT> is correct.
+# Start time in minutes (0 to be clock-independent, 540 to show a start at 09:00 am).
+start_time: 0
+
+# Magic to make URLs resolve both locally and on GitHub. Please don't change.
 repository: <USERNAME>/<PROJECT>
 
-# Email address, no mailto:
-email: "team@carpentries.org"
+# Invoke the Carpentries theme rather than copying into our repository.
+remote_theme: carpentries/carpentries-theme
 
 # Sites.
 amy_site: "https://amy.software-carpentry.org/workshops"
-carpentries_github: "https://github.com/carpentries"
-carpentries_pages: "https://carpentries.github.io"
-carpentries_site: "https://carpentries.org/"
 dc_site: "http://datacarpentry.org"
-example_repo: "https://github.com/carpentries/lesson-example"
-example_site: "https://carpentries.github.io/lesson-example"
-lc_site: "https://librarycarpentry.org/"
 swc_github: "https://github.com/swcarpentry"
-swc_pages: "https://swcarpentry.github.io"
 swc_site: "https://software-carpentry.org"
-template_repo: "https://github.com/carpentries/styles"
-training_site: "https://carpentries.github.io/instructor-training"
-workshop_repo: "https://github.com/carpentries/workshop-template"
-workshop_site: "https://carpentries.github.io/workshop-template"
-cc_by_human: "https://creativecommons.org/licenses/by/4.0/"
+swc_pages: "https://swcarpentry.github.io"
+lc_site: "http://librarycarpentry.github.io/"
+template_repo: "https://github.com/swcarpentry/styles"
+example_repo: "https://github.com/swcarpentry/lesson-example"
+example_site: "https://swcarpentry.github.com/lesson-example"
+workshop_repo: "https://github.com/swcarpentry/workshop-template"
+workshop_site: "https://swcarpentry.github.io/workshop-template"
+training_site: "https://swcarpentry.github.io/instructor-training"
 
-# Surveys.
-swc_pre_survey: "https://www.surveymonkey.com/r/swc_pre_workshop_v1?workshop_id="
-swc_post_survey: "https://www.surveymonkey.com/r/swc_post_workshop_v1?workshop_id="
-training_post_survey: "https://www.surveymonkey.com/r/post-instructor-training"
-dc_pre_survey: "https://www.surveymonkey.com/r/dcpreworkshopassessment?workshop_id="
-dc_post_survey: "https://www.surveymonkey.com/r/dcpostworkshopassessment?workshop_id="
-lc_pre_survey: "https://www.surveymonkey.com/r/lcpreworkshopsurvey?workshop_id="
-lc_post_survey: "https://www.surveymonkey.com/r/lcpostworkshopsurvey?workshop_id="
-instructor_pre_survey: "https://www.surveymonkey.com/r/instructor_training_pre_survey?workshop_id="
-instructor_post_survey: "https://www.surveymonkey.com/r/instructor_training_post_survey?workshop_id="
+# Specify that things in the Episodes and Extras collections should be output.
+collections:
+  episodes:
+    output: true
+    permalink: /:path/index.html
+  extras:
+    output: true
+    permalink: /:path/index.html
+# Set the default layout for things in the episodes collection.
+defaults:
+  - values:
+      root: .
+      layout: page
+  - scope:
+      path: ""
+      type: episodes
+    values:
+      root: ..
+      layout: episode
+  - scope:
+      path: ""
+      type: extras
+    values:
+      root: ..
+      layout: page
+# Files and directories that are not to be copied.
+exclude:
+  - Makefile
+  - bin/
+  - .Rproj.user/
+# Turn on built-in syntax highlighting.
+highlighter: rouge
 
 
 # Workshop Specific Values
@@ -67,7 +89,6 @@ instructor_post_survey: "https://www.surveymonkey.com/r/instructor_training_post
 # Host and scheduler options
 #
 # Other options can be found in _extras/snippets_library
-
 
 host_name: "Jureca"
 #host_login: "kay.ichec.ie"
@@ -101,42 +122,3 @@ gpu_env: "module use /usr/local/software/jureca/OtherStages \nmodule load Stages
 
 run_openmp: "srun"
 run_mpi: "srun"
-
-# Start time in minutes (0 to be clock-independent, 540 to show a start at 09:00 am).
-start_time: 0
-
-# Specify that things in the episodes collection should be output.
-collections:
-  episodes:
-    output: true
-    permalink: /:path/index.html
-  extras:
-    output: true
-    permalink: /:path/index.html
-
-# Set the default layout for things in the episodes collection.
-defaults:
-  - values:
-      root: .
-      layout: page
-  - scope:
-      path: ""
-      type: episodes
-    values:
-      root: ..
-      layout: episode
-  - scope:
-      path: ""
-      type: extras
-    values:
-      root: ..
-      layout: page
-
-# Files and directories that are not to be copied.
-exclude:
-  - Makefile
-  - bin/
-  - .Rproj.user/
-
-# Turn on built-in syntax highlighting.
-highlighter: rouge

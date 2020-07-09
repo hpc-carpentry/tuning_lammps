@@ -9,4 +9,9 @@ _site
 .Rproj.user
 .Rhistory
 .RData
-
+files/*.gtf
+files/*.fb
+files/*.fastq
+files/*.tsv
+Gemfile.lock
+scratch/
