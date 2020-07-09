@@ -394,6 +394,7 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 ```
 {: .bash}
 
+
 > ## Learn to call the **GPU** package from command-line
 >
 > In this exercise, we'll deal with a Lennard-Jones (LJ) system as described by the
@@ -405,12 +406,13 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > job submission file for this system such that it enables to use 2 GPUs with 24 MPI ranks.
 > Make sure that the neighbor is built on the CPUs and there is a dynamic load balancing
 > between the CPUs and the GPUs.
+>
+> {% capture mycode %}{% include /snippets/ep05/in.lj %}{% endcapture %}
+> {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
+> ```{% for member in lines_of_code %}
+> {{ member }}{% endfor %}
 > ```
-{% capture mycode %}
-{% include /snippets/ep05/in.lj %}
-{% endcapture %}{{ mycode | strip | multiline_string_in_callout: 1 }}
-> ```
-> {: .code}
+> {: .source}
 > > ## Solution
 > > *** I don't like this, it is currently far too system specific, can we generalise?***
 > > A job submission script is shown below. Note that the number of MPI ranks is fixed
