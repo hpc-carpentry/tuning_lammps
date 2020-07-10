@@ -301,7 +301,7 @@ Useful keywords to search for include:
 
 > ## Now run a benchmark...
 >
-> Now submit a LAMMPS job for the our input file using both 1 and 4 processors.
+> Submit a LAMMPS job for the our input file using both 1 and 4 processors.
 > Extract the loop times for your runs and see how the for this particular job compares
 > with LAMMPS standard benchmark and with the performance for two other HPC systems.
 >
@@ -351,7 +351,9 @@ resources.
 
 > ## Plotting strong scalability
 >
-> Use the original jobscript for 2 nodes and run it on {{ site.remote.name }}. Now that
+> Use the original jobscript for 2 nodes and run it on {{ site.remote.name }}.
+>
+> Now that
 > you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with
 > the number of CPU cores on the X-axis and the loop times on the Y-axis (use your
 > favourite plotting tool, an online plotter or even pen and paper).
