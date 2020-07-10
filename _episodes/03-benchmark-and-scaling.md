@@ -84,7 +84,7 @@ example with which you can follow the same workflow and compare your results wit
 
 The input file we need for the LJ-system is reproduced below:
 ~~~
-{% include {{ site.snippets }}/ep02/in.lj %}
+{% include {{ site.snippets }}/ep03/in.lj %}
 ~~~
 
 The timing information for this run with both 1 and 4 processors is also provided with
@@ -98,7 +98,7 @@ example job scripts to let you get started. We'll do the same and provide you wi
 
 First we need to tell the batch system what resources we need:
 ~~~
-{% include {{ site.snippets }}/ep02/job_resources_2nodeMPI.snip %}
+{% include {{ site.snippets }}/ep03/job_resources_2nodeMPI.snip %}
 ~~~
 in this case, we've asked for all the cores on 2 nodes of the system for 5 minutes.
 
@@ -109,7 +109,7 @@ a software package - it contains the settings required to run a software package
 usually, encodes required dependencies on other software packages. See below for an
 example set of `module` commands to load LAMMPS for this course:
 ~~~
-{% include {{ site.snippets }}/ep02/job_environment_lammps.snip %}
+{% include {{ site.snippets }}/ep03/job_environment_lammps.snip %}
 ~~~
 
 And finally we tell it how to actually run the LAMMPS executable on the system.
@@ -122,16 +122,16 @@ we will use the {{ site.mpi_runtime.implementation }} MPI implementation using
 `{{ site.mpi_runtime.launcher }}` to launch the MPI processes. Let's see how that looks
 like for our current use case:
 ~~~
-{% include {{ site.snippets }}/ep02/job_execution_2nodeMPI.snip %}
+{% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %}
 ~~~
 In this case we've indicated that it should use `in.lj` as the input file and use
 `out.lj` to store any output from the execution.
 
 Now let's put all that together to make our job script:
 ~~~
-{% include {{ site.snippets }}/ep02/job_resources_2nodeMPI.snip %}
-{% include {{ site.snippets }}/ep02/job_environment_lammps.snip %}
-{% include {{ site.snippets }}/ep02/job_execution_2nodeMPI.snip %}
+{% include {{ site.snippets }}/ep03/job_resources_2nodeMPI.snip %}
+{% include {{ site.snippets }}/ep03/job_environment_lammps.snip %}
+{% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %}
 ~~~
 {: .bash}
 
@@ -144,14 +144,14 @@ Now let's put all that together to make our job script:
 >
 > > ## Solution
 > > Our single core version is
-> > {% capture mycode %}{% include {{ site.snippets }}/ep02/1core_job_script %}{% endcapture %}
+> > {% capture mycode %}{% include {{ site.snippets }}/ep03/1core_job_script %}{% endcapture %}
 > > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
 > > ```{% for member in lines_of_code %}
 > > {{ member }}{% endfor %}
 > > ```
 > > {: .bash}
 > > and our 4 core version is
-> > {% capture mycode %}{% include {{ site.snippets }}/ep02/4core_job_script %}{% endcapture %}
+> > {% capture mycode %}{% include {{ site.snippets }}/ep03/4core_job_script %}{% endcapture %}
 > > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
 > > ```{% for member in lines_of_code %}
 > > {{ member }}{% endfor %}
