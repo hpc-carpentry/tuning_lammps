@@ -27,7 +27,7 @@ jobs:
           `# keep reporting to what is necessary`
           --quiet-level=2
           `# allow for some false positives`
-          --ignore-words-list="rouge,keyserver,coul,acn"
+          --ignore-words-list="rouge,keyserver,coul,acn,hist"
           `# do not return an error code`
           ||true
 
@@ -44,7 +44,7 @@ jobs:
           `# keep reporting to what is necessary`
           --quiet-level=2
           `# allow for some false positives`
-          --ignore-words-list="rouge,keyserver,coul,acn"
+          --ignore-words-list="rouge,keyserver,coul,acn,hist"
           `# only check files changed`
           $(git diff --name-only --diff-filter=AM $TRAVIS_BRANCH...HEAD|tr '\n' ' ')
 

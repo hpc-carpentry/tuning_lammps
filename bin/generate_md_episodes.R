@@ -1,7 +1,7 @@
 generate_md_episodes <- function() {
 
   library("methods")
-  
+
   if (!require("remotes", quietly = TRUE)) {
     install.packages("remotes", repos = c(CRAN = "https://cloud.r-project.org/"))
   }
@@ -13,7 +13,7 @@ generate_md_episodes <- function() {
   required_pkgs <- unique(c(
     ## Packages for episodes
     requirements:::req_dir("_episodes_rmd"),
-    ## Pacakges for tools
+    ## Packages for tools
     requirements:::req_dir("bin")
   ))
 
