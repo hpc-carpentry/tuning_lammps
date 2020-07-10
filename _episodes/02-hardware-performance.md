@@ -1,11 +1,11 @@
 ---
-title: "Acceleration Methods"
+title: "Connecting performance to hardware"
 teaching: 0
 exercises: 0
 questions:
-- "How can I accelerate performance?"
-- "What is the difference between multi-threading using OpenMP vs MPI?"
-- "How can I utilise more workers than available on a single node?"
+- "How can I use the hardware I have access to?"
+- "What is the difference between OpenMP and MPI?"
+- "How can I use GPUs and/or multiple nodes?"
 objectives:
 - "First learning objective. (FIXME)"
 keypoints:
