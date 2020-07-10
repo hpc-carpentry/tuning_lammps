@@ -55,7 +55,7 @@ timing breakdown table and this may provide us a way to optimally balance betwee
 
 
 ~~~
-{% include /snippets/ep04/in.lj %}
+{% include {{ site.snippets }}/ep04/in.lj %}
 ~~~
 {: .source}
 
@@ -190,7 +190,7 @@ Let us now work on another example from LAMMPS `bench` directory with the input 
 below. Let's run it using
 1 core (i.e., in *serial*) with `x = y = z = 1`, and `t = 10,000`.
 ~~~
-{% include /snippets/ep04/in.chain %}
+{% include {{ site.snippets }}/ep04/in.chain %}
 ~~~
 {: .source}
 
@@ -312,7 +312,7 @@ is performed for 20,000 timesteps.
 <p align="center"><img src="../fig/ep04/rhodo.png" width="50%"/></p>
 
 ~~~
-{% include /snippets/ep04/in.rhodo %}
+{% include {{ site.snippets }}/ep04/in.rhodo %}
 ~~~
 {: .output}
 

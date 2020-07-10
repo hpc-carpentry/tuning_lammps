@@ -6,12 +6,12 @@ questions:
 - "What is software performance?"
 - "Why is software performance important?"
 - "How can performance be measured?"
-- "What is meant by flops, walltime and cpuh?"
-- "What affects performance?"
+- "What is meant by flops, walltime and CPU hours?"
+- "What can affect performance?"
 objectives:
-- "Understand the necessity of code optimisation"
+- "Understand the link between software performance and hardware"
 - "Identify the different methods of enhancing performance"
-- "Calculate walltime, cpuh"
+- "Calculate walltime, CPU hours"
 keypoints:
 - "Understanding performance is the best way of utilising your HPC resources efficiently"
 - "There are many ways of enhancing performance"
@@ -49,15 +49,15 @@ while **minimising our resource usage**.
 
 This lesson is about taking a well-informed, systematic approach on how to do this.
 
-> ## Enchancing performance: rationale
+> ## Enhancing performance: rationale
 >
 > Imagine you had a `10x10x10` box like the one below, divided up into smaller boxes,
 > each measuring `1x1x1`. In one hour, one CPU core can simulate one hour of activity
 > inside the smaller box. If you wanted to simulate what was happening inside the large
-> box for 8 hours, how long will the example below take to run if we only use one CPU
+> box for 8 hours, how long will it take to run if we only use one CPU
 > core?
 >
-> ![10x10x10_cube](../fig/01/10x10x10_cube.png)
+> <p align="center"><img src="../fig/01/10x10x10_cube.png" width="40%"/></p>
 >
 > {: language-bash}
 >
@@ -90,13 +90,13 @@ and **CPU hours**.
 
 > ## Flops
 >
-> Flops (of flop/s) stands for floating point operations per second and they are
+> Flops (or sometimes flop/s) stands for floating point operations per second and they are
 > typically used to measure the (theoretical) performance of a computer's processor.
 >
 > The theoretical peak flops is given by
->
-> `Number of cores * Average frequency * Operations per cycle`
->
+> ~~~
+> Number of cores * Average frequency * Operations per cycle`
+> ~~~
 > What a software program can *achieve* in terms of flops is usually a surprisingly
 > small percentage of this value (e.g., 10% efficiency is not a bad number!).
 >
@@ -128,58 +128,35 @@ and **CPU hours**.
 
 > ## Calculate CPU hours
 >
-> In the following example, assume that you are utilising all the available core in a
-> node. Calculate the CPU hours requested to run the following job.
+> Assume that you are utilising all the available cores in a
+> node with 40 CPU cores. Calculate the CPU hours you would need if you expect to run
+> for 5 hours using 2 nodes.
 >
-> ```
-> {{ site.sched_comment }} {{ site.sched_flag_nodes }} = 2
-> {{ site.sched_comment }} {{ site.sched_flag_time }} = 05:00:00
-> ```
-> {: .bash}
+> How much walltime do you need?
 >
->> ## Solution
->>
->> 400 CPU hours.
->>
->{: .solution}
+> How do you ask the resource scheduler for that much time?
+>
+> > ## Solution
+> >
+> > 400 CPU hours are needed.
+> >
+> > We need to ask the scheduler for 5 hours (and 2 nodes worth of resources for that
+> > time). To ask for this from the scheduler we need to include the appropriate
+> > option in our job script:
+> > ~~~
+> > {{ site.sched.comment }} {{ site.sched.flag.time }} 5:00:00
+> > ~~~
+> {: .solution}
 {: .challenge}
 
-The `{{ site.sched_flag_time }}` variable used in the exercise is the **maximum** amount
-of walltime requested, which will differ from the actual walltime the code spends to
-run.
+The `{{ site.sched.flag.time }}` option to the scheduler used in the exercise indicates the
+*maximum* amount of walltime requested, which will differ from the *actual*
+walltime the code spends to run.
 
-> ## Requested CPU vs. Actual CPU
->
-> See the following LAMMPS output log file and the submission script file. What is the
-> requested walltime, the requested CPU hours and the actual CPU hours?
->
-> ```
-> run script
-> ```
-> {: .bash}
->
-> ```
-> LAMMPS output
-> ```
-> {: .bash}
->
-> `{{ site.exec_env_gpu }}`
->
-> ```
-> {{ site.exec_env_gpu }}
-> ```
-> {: .bash}
->
->> ## Solution
->>
->>
->>
->{: .solution}
-{: challenge}
+## How can we enhance performance?
 
-## How can performance be enhanced?
-
-You are the code *users*, not code *developers*, to enhance the code performance you
+If you are taking this course you are probably code *users*, not code *developers*. To
+enhance the code performance you
 need to trigger behaviour in the software that the *developers* will have put in place
 to *potentially* improve performance. To do that, you need to know what the triggers are
 and then try them out with your use case to see if they really do improve performance.
@@ -198,60 +175,62 @@ application.
 > 3. Reduce the frequency of file writing in the code
 > 4. Having a computer with higher flops
 >
->> ## Solution
->>
->> 1. Yes, potentially, the more cores and nodes you have, the more work can be
->>    distributed across those cores...but you need to ensure they are being used!
->> 2. No, increasing simulation walltime only increases the possible duration the code
->     will run for. It does not improve the code performance.
->> 3. Yes, IO is a very common *bottleneck* in software, it can be very expensive (in
->>    terms of time) to write files. Reducing the frequency of file writing can have a
->>    surprisingly large impact.
->> 4. Yes, the faster the computer, the faster the code can run. However, you may not be
->>    able to find a computer with higher flops, since higher individual CPU flops need
->>    disproportionately more power to run (so are not well suited to an HPC system).
->>
->>    In an HPC system, you will usually find a *lot* of lower flop cores because they
->>    make sense in terms of the use of electrical energy. This surprises people because
->>    when they move to an HPC system, they may initially find that their code is slower
->>    rather than faster. However, this is usually not about the resources but managing
->>    their understanding and expectations of them.
->>
->> As you can see, there are a lot of right answers, however some methods work better
->> than others, and it can entirely depend on the problem you are trying to solve.
->>
->{: .solution}
+> > ## Solution
+> >
+> > 1. Yes, potentially, the more cores and nodes you have, the more work can be
+> >    distributed across those cores...but you need to ensure they are being used!
+> > 2. No, increasing simulation walltime only increases the possible duration the code
+>      will run for. It does not improve the code performance.
+> > 3. Yes, IO is a very common *bottleneck* in software, it can be very expensive (in
+> >    terms of time) to write files. Reducing the frequency of file writing can have a
+> >    surprisingly large impact.
+> > 4. Yes, in a lot of cases the faster the computer, the faster the code can run.
+> >    However, you may not be
+> >    able to *find* a computer with higher flops, since higher individual CPU flops need
+> >    disproportionately more power to run (so are not well suited to an HPC system).
+> >
+> >    In an HPC system, you will usually find a *lot* of lower flop cores because they
+> >    make sense in terms of the use of electrical energy. This surprises people because
+> >    when they move to an HPC system, they may initially find that their code is slower
+> >    rather than faster. However, this is usually not about the resources but managing
+> >    their understanding and expectations of them.
+> >
+> > As you can see, there are a lot of right answers, however some methods work better
+> > than others, and it can entirely depend on the problem you are trying to solve.
+> >
+> {: .solution}
 {: .challenge}
 
 **FIXME** This really needs an intro
 
-> ## Increasing CPU core count
+> ## Using all available resources
 >
 > Say you've actually got a powerful desktop with multiple CPU cores and a GPU at your
 > disposal, what are good options for leveraging them?
 >
 > 1. Utilising MPI (Message Passing Interface)
 > 2. Utilising OpenMP (Open Multi-Processing)
-> 3. Using performance enhancing libraries
+> 3. Using performance enhancing libraries or plugins
 > 4. Use GPUs instead of CPUs
-> 5. Splitting code up into smaller segments that can be run sequentially
+> 5. Splitting code up into smaller individual parts
 >
->> ## Solution
->> 1. Yes, MPI can enable you to split your code into multiple processes distributed
->>    over multiple cores (and even multiple computers), known as parallel programming.
->>    This won't help you to use the GPU though.
->> 2. Yes, like MPI this is also parallel programming, but deals with threads instead of
->     processes, by splitting a process into multiple threads, each thread using a
->     single CPU core. OpenMP can potentially also leverage the GPU.
->> 3. Yes, that is their purpose. However, different libraries run on different
->>    architectures and with different capabilities, in this case you need a library
->>    that will leverage the additional cores and/or the GPU for you.
->> 4. Yes, GPUs are better at handling multiple simple tasks, whereas a CPU is better
->>    at running complex singular tasks quickly.
->> 5. No, if you have a simulation that needs to be run from start to completion,
->>    splitting the code into segments won't be of any benefit and will likely waste
->>    compute resources due to the associated overhead.
->{: .solution}
+> > ## Solution
+> > 1. Yes, MPI can enable you to split your code into multiple processes distributed
+> >    over multiple cores (and even multiple computers), known as parallel programming.
+> >    This won't help you to use the GPU though.
+> > 2. Yes, like MPI this is also parallel programming, but deals with threads instead of
+> >    processes, by splitting a process into multiple threads, each thread using a
+> >    single CPU core. OpenMP can potentially also leverage the GPU.
+> > 3. Yes, that is their purpose. However, different libraries/plugins run on different
+> >    architectures and with different capabilities, in this case you need something
+> >    that will leverage the additional cores and/or the GPU for you.
+> > 4. Yes, GPUs are better at handling multiple simple tasks, whereas a CPU is better
+> >    at running complex singular tasks quickly.
+> > 5. It depends, if you have a simulation that needs to be run from start to
+> >    completion, then
+> >    splitting the code into segments won't be of any benefit and will likely waste
+> >    compute resources due to the associated overhead. If some of the segments can be
+> >    run *simultaneously* then you will see benefit...but it is usually very hard to
+> >    balance this.
+> {: .solution}
 {: .challenge}
-
-{% include links.md %}

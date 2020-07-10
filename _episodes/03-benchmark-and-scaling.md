@@ -4,21 +4,19 @@ teaching: 0
 exercises: 0
 questions:
 - "What is benchmarking?"
-- "How do I perform a benchmarking analysis in LAMMPS"
+- "How do I benchmark an application?"
 - "What is scaling?"
-- "How do I perform a scaling analysis"
-- "!!! What is load-balancing? !!! (FIXME)"
+- "How do I perform a scaling analysis?"
 objectives:
-- "Be able to perform a benchmark analysis"
-- "Be able to perform a scaling analysis"
-- "Determine factors in load balancing(?!) (FIXME)"
+- "Be able to perform a benchmark analysis of an application"
+- "Be able to perform a scaling analysis of an application"
 keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
 
 ## What is benchmarking?
 
-To get a concept of what we mean by benchmarking, let's take the example of a sprint
+To get an idea of what we mean by benchmarking, let's take the example of a sprint
 athlete. The athlete runs a predetermined distance on a particular surface, and a time
 is recorded. Based on different conditions, such as how dry or wet the surface is, or
 what the surface is made of (grass, sand, or track) the times of the sprinter to cover
@@ -27,40 +25,55 @@ running, and what the conditions were like, when the sprinter sets a certain tim
 can cross-correlate it with the known times associated with certain surfaces (our
 **benchmarks**) to judge how well they are performing.
 
-Benchmarking in computing works in a similar way, as it is a way of assessing the
+Benchmarking in computing works in a similar way: it is a way of assessing the
 performance of a program (or set of programs), and benchmark tests are designed to mimic
 a particular type of workload on a component or system. They can also be used to measure
 differing performance across different systems. Usually codes are tested on different
-computer architectures to see how a code performs. Like our sprinter, the times of
+computer architectures to see how a code performs on each one. Like our sprinter, the times of
 benchmarks depends on a number of things: software, hardware or the computer itself and
 it's architecture.
 
 ## Case study: Benchmarking with LAMMPS
 
 As an example, let's create some benchmarks for you to compare the performance of some
-'standard' systems. Using a 'standard' system is a good idea as a first attempt, since
+'standard' systems in LAMMPS. Using a 'standard' system is a good idea as a first attempt, since
 we can measure our benchmarks against (published) information from others.  Knowing that
 our installation is "sane" is a critical first step before we embark on generating **our
 own benchmarks for our own use case**.
 
+> ## Installing your own software vs. system-wide installations
+>
+> Whenever you get access to an HPC system, there are usually two ways to get access to
+> software: either you use a system-wide installation or you install it yourself. For widely
+> used applications, it is likely that you should be able to find a system-wide installation.
+> In many
+> cases using the system-wide installation is the better option since the system
+> administrators will (hopefully) have configured the application to run optimally for
+> that system. If you can't easily find your application, contact user support for the
+> system to help you.
+>
+> You should still check the benchmark case though! Sometimes administrators are short
+> on time or background knowledge of applications and do not do thorough testing.
+{: .callout}
+
 As an example, we will start with the simplest Lennard-Jones (LJ) system as provided in
-the `bench` directory of the latest LAMMPS distribution. You will also be given another
+the `bench` directory of the LAMMPS distribution. You will also be given another
 example with which you can follow the same workflow and compare your results with some
 'known' benchmark.
 
-> ## Run a LAMMPS job in a HPC
+> ## Running a LAMMPS job on an HPC system
+>
 > Can you list the bare minimum files that you need to schedule a LAMMPS job on an HPC
 > system?
 >
 > > ## Solution
-> > For running a LAMMPS job, we need;
+> > For running a LAMMPS job, we need:
 > > 1. an input file
-> > 2. a job submission file
+> > 2. a job submission file - in general, each HPC system uses a *resource manager*
+> >    (frequently called *queueing system*) to manage all the jobs. Two popular ones
+> >    are PBS and SLURM.
 > >
-> >    In general, each HPC system uses a *resource manager* (frequently called
-> >    *queueing system*) to manage all the jobs. Two popular ones are PBS and SLURM.
-> >
-> > Optional files include;
+> > Optional files include:
 > > 1. Empirical potential file
 > > 2. Data file
 > >
@@ -69,129 +82,115 @@ example with which you can follow the same workflow and compare your results wit
 > {: .solution}
 {: .challenge}
 
-The input file for the LJ-system is reproduced below:
-```
-{% include /snippets/ep02/in.lj %}
-```
-{: .bash}
-
+The input file we need for the LJ-system is reproduced below:
+~~~
+{% include {{ site.snippets }}/ep03/in.lj %}
+~~~
 
 The timing information for this run with both 1 and 4 processors is also provided with
 the LAMMPS distribution. So, to benchmark it would be wise to run the same job with same
-processor settings. Let us now create a batch file to submit this job.
+settings as that of the distribution. Let us now create a job file (sometimes called a
+batch file) to submit this job.
 
+Writing a job file from scratch is error prone. Many computing sites offer a number of
+example job scripts to let you get started. We'll do the same and provide you with an example
+, but created specifically for our LAMMPS use case.
 
-> ## Editing a submission script for a LAMMPS job
->
-> Here is shown the header of a job script to submit a LAMMPS job using 2 nodes and 48
-> processors. What modification is needed to submit the job using 4 processors?
->
-> ```
-> #!/bin/bash -x
-> {{ site.sched_comment }} {{ site.sched_flag_account }}=myAccount
-> {{ site.sched_comment }} {{ site.sched_flag_nodes }}=2
-> {{ site.sched_comment }} {{ site.sched_flag_ntasks }}=24
-> {{ site.sched_comment }} {{ site.sched_flag_out }}=mpi-out.%j
-> {{ site.sched_comment }} {{ site.sched_flag_error }}=mpi-err.%j
-> {{ site.sched_comment }} {{ site.sched_flag_time }}=00:05:00
-> {{ site.sched_comment }} {{ site.sched_flag_partition }}=myQueue
->
-> ... ... ...
-> ... ... ...
-> ```
-> {: .bash}
->
-> > ## Solution
-> > ```
-> > {{ site.sched_comment }} {{ site.sched_flag_nodes }}=1
-> > {{ site.sched_comment }} {{ site.sched_flag_ntasks }}=4
-> > ```
-> > {: .input}
-> {: .solution}
-{: .challenge}
+First we need to tell the batch system what resources we need:
+~~~
+{% include {{ site.snippets }}/ep03/job_resources_2nodeMPI.snip %}
+~~~
+in this case, we've asked for all the cores on 2 nodes of the system for 5 minutes.
 
-The remainder of the file should now be used to set any LAMMPS environment variables and
-finally we need to invoke the LAMMPS executable for the run. In most modern HPC systems,
+Next we should tell it about the environment we need to run in. In most modern HPC systems,
 package specific environment variables are loaded or unloaded using *environment
-modules* are the solution to these problems. A module is a self-contained description of
+modules*. A module is a self-contained description of
 a software package - it contains the settings required to run a software package and,
 usually, encodes required dependencies on other software packages. See below for an
-example set of `module` commands to load LAMMPS for this course.
+example set of `module` commands to load LAMMPS for this course:
+~~~
+{% include {{ site.snippets }}/ep03/job_environment_lammps.snip %}
+~~~
 
-```
-{{ site.gpu_env }}
-```
-{: .source}
+And finally we tell it how to actually run the LAMMPS executable on the system.
+If we are using a single CPU core, we can either invoke LAMMPS directly with
+~~~
+{{ site.lammps.exec }} < in.lj
+~~~
+but in our case we are interested in using the MPI runtime across 2 nodes. On our system
+we will use the {{ site.mpi_runtime.implementation }} MPI implementation using
+`{{ site.mpi_runtime.launcher }}` to launch the MPI processes. Let's see how that looks
+like for our current use case:
+~~~
+{% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %}
+~~~
+In this case we've indicated that it should use `in.lj` as the input file and use
+`out.lj` to store any output from the execution.
 
-Now we'll invoke LAMMPS executable to do the job. Since we are using a single CPU core,
-we can either invoke LAMMPS directly with
-```
-{{ site.sched_lammps_exec }} < in.lj
-```
+Now let's put all that together to make our job script:
+~~~
+{% include {{ site.snippets }}/ep03/job_resources_2nodeMPI.snip %}
+{% include {{ site.snippets }}/ep03/job_environment_lammps.snip %}
+{% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %}
+~~~
 {: .bash}
 
-or through our *MPI runtime*
-```
-{{ site.run_mpi }} {{ site.mpi_runtime_single_core_flags }} {{ site.sched_lammps_exec }} < in.lj
-```
-{: .bash}
-
-Let's use the MPI runtime version so that we can easily change it to use 4 cores.
-
-> ## Submission script: full view
+> ## Edit a submission script for a LAMMPS job
 >
-> Create a file to submit a LAMMPS job for the above input file (`in.lj`) to 1 core
-> only. You will submit the job to a partition/queue named `{{ site.sched_queue }}`. The
-> job is expected to take less than 5 minutes.
+> Duplicate the job script we just created so that we have versions that will run on
+> 1 core and 4 cores.
+>
+> Run the 1 core job script on {{ site.remote.name }}.
 >
 > > ## Solution
-> > ~~~
-> > #!/bin/bash -x
-> > {{ site.sched_comment }} {{ site.sched_flag_account }}=ecam
-> > {{ site.sched_comment }} {{ site.sched_flag_nodes }}=1
-> > {{ site.sched_comment }} {{ site.sched_flag_ntasks }}=1
-> > {{ site.sched_comment }} {{ site.sched_flag_out }}=mpi-out.%j
-> > {{ site.sched_comment }} {{ site.sched_flag_in }}=mpi-err.%j
-> > {{ site.sched_comment }} {{ site.sched_flag_time }}=72:00:00
-> > {{ site.sched_comment }} {{ site.sched_flag_partition }}={{ site.sched_queue }}
-> >
-> > {{ site.gpu_env }}
-> >
-> > {{ site.run_mpi }} {{ site.sched_lammps_exec }} < in.lj > out.lj
-> > ~~~
-> > {: .input}
+> > Our single core version is
+> > {% capture mycode %}{% include {{ site.snippets }}/ep03/1core_job_script %}{% endcapture %}
+> > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
+> > ```{% for member in lines_of_code %}
+> > {{ member }}{% endfor %}
+> > ```
+> > {: .bash}
+> > and our 4 core version is
+> > {% capture mycode %}{% include {{ site.snippets }}/ep03/4core_job_script %}{% endcapture %}
+> > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
+> > ```{% for member in lines_of_code %}
+> > {{ member }}{% endfor %}
+> > ```
+> > {: .bash}
 > {: .solution}
 {: .challenge}
 
-## Understand the output files
+### Understanding the output files
 
 Let us now look at the output files. Here, three files have been created: `log.lammps`,
 `mpi-out.xxxxx`, and `mpi-err.xxxxx`. Among these three, `mpi-out.xxxxx` is mainly to
-capture the screen output that have been generated during the job execution. The purpose
+capture the screen output that would have been generated during the job execution. The purpose
 of the `mpi-err.xxxxx` file is to log entries if there is any error occurring during
 run-time. The one that is created by LAMMPS is called `log.lammps`.
 
 Once you open `log.lammps`, you will notice that it contains most of the important
-information starting from the LAMMPS version, number of processors used for runs,
-processor lay out, thermodynamic steps, and timing. The header of a `log.lammps` file
+information starting from the LAMMPS version (in our case we are using
+`{{ site.lammps.version }}`), the number of processors used for runs,
+the processor lay out, thermodynamic steps, and some timings. The header of your
+`log.lammps` file
 should be somewhat similar to this:
-```
+~~~
 LAMMPS (18 Feb 2020)
 OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:94)
 using 1 OpenMP thread(s) per MPI task
-```
+~~~
 {: .output}
 
 Note that it tells you about the LAMMPS version, and `OMP_NUM_THREADS` which is one of
-the important environment variables required to set for obtaining a performance boost.
-This will be discussed at a later stage. But for now, we'll focus mainly on the timing
+the important environment variables we need to know about to leverage OpenMP. But for
+now, we'll focus mainly on the timing
 information provided in this file.
 
 When the run concludes, LAMMPS prints the final thermodynamic state and a total run time
 for the simulation. It also appends statistics about the CPU time and storage
 requirements for the simulation. An example set of statistics is shown here:
 
-```
+~~~
 Loop time of 1.76553 on 1 procs for 100 steps with 32000 atoms
 
 Performance: 24468.549 tau/day, 56.640 timesteps/s
@@ -219,7 +218,7 @@ Ave neighs/atom = 37.5885
 Neighbor list builds = 5
 Dangerous builds not checked
 Total wall time: 0:00:01
-```
+~~~
 {: .output}
 
 Useful keywords to search for include:
@@ -230,46 +229,47 @@ Useful keywords to search for include:
     The following command can be used to extract this the relevant line from
     `log.lammps`:
 
-    ```
+    ~~~
     grep "Loop time" log.lammps
-    ```
+    ~~~
     {: .bash}
 
   * **Performance:** This is provided for convenience to help predict how long it will
-    take to run a desired physical simulation. (source: LAMMPS manual)
+    take to run a desired physical simulation. (source:
+    [LAMMPS manual](https://lammps.sandia.gov/doc/Manual.html))
 
     Use the following command line to extract line (we will use the value in units of
     `tau/day`):
 
-    ```
+    ~~~
     grep "Performance" log.lammps
-    ```
+    ~~~
     {: .bash}
 
   * **CPU use:** This provides the CPU utilization per MPI task; it should be close to
     100% times the number of OpenMP threads (or 1 of not using OpenMP). Lower numbers
     correspond to delays due to file I/O or insufficient thread utilization. (source:
-    LAMMPS manual)
+    [LAMMPS manual](https://lammps.sandia.gov/doc/Manual.html))
 
     Use the following command line to extract the relevant line:
 
-    ```
+    ~~~
     grep "CPU use" log.lammps
-    ```
+    ~~~
     {: .bash}
 
   * **Timing Breakdown** Next, we'll discuss about the timing breakdown table for CPU
     runtime. If we try the following command;
 
-    ```
+    ~~~
     # extract 8 lines after the occurrence of the "breakdown"
     grep -A 8 "breakdown" log.lammps
-    ```
+    ~~~
     {: .bash}
 
     you should see output similar to the following:
 
-    ```
+    ~~~
     MPI task timing breakdown:
     Section |  min time  |  avg time  |  max time  |%varavg| %total
     ---------------------------------------------------------------
@@ -279,12 +279,12 @@ Useful keywords to search for include:
     Output  | 7.2241e-05 | 7.2241e-05 | 7.2241e-05 |   0.0 |  0.00
     Modify  | 0.023852   | 0.023852   | 0.023852   |   0.0 |  1.35
     Other   |            | 0.005199   |            |       |  0.29
-    ```
+    ~~~
     {: .output}
 
     The above table shows the times taken by the major categories of a LAMMPS run. A
-    brief description of these categories has been provided in
-    [LAMMPS manual](https://lammps.sandia.gov/doc/Run_output.html):
+    brief description of these categories has been provided in the
+    [run output section of the LAMMPS manual](https://lammps.sandia.gov/doc/Run_output.html):
 
     * Pair = non-bonded force computations
     * Bond = bonded interactions: bonds, angles, dihedrals, impropers
@@ -295,13 +295,13 @@ Useful keywords to search for include:
     * Modify = fixes and computes invoked by fixes
     * Other = all the remaining time
 
-    This is very useful in the sense that it helps you to identify the where you spend
+    This is very useful in the sense that it helps you to identify where you spend
     most of your computing time (and so help you know what you should be targeting)! It
     will discussed later in more detail.
 
 > ## Now run a benchmark...
 >
-> Now submit a LAMMPS job for the above input file using both 1 and 4 processors.
+> Now submit a LAMMPS job for the our input file using both 1 and 4 processors.
 > Extract the loop times for your runs and see how the for this particular job compares
 > with LAMMPS standard benchmark and with the performance for two other HPC systems.
 >
@@ -319,26 +319,26 @@ Useful keywords to search for include:
 ## Scaling
 
 Scaling behaviour in computation is centred around the effective use of resources as you
-scale up the amount of computing resources you use. An example of "good" scaling would
+scale up the amount of computing resources you use. An example of "perfect" scaling would
 be that when we use twice as many CPUs, we get an answer in half the time. "Bad" scaling
 would be when the answer takes only 10% less time when we double the CPUs. This example
 is one of **strong scaling**, where the workload doesn't change as we increase our
-scaling.
+resources.
 
-For **weak scaling**, we want to increase our workload without increasing our walltime,
+For **weak scaling**, we want to increase our workload without increasing our *walltime*,
 and we do that by using additional resources. To look at this in more detail, let's head
-back to our chefs again from the previous episode, where we had more courses to serve
+back to our chefs again from the previous episode, where we had more people to serve
 but the same amount of time to do it in.
 
-Let us assume that they are all bound by secrecy, and are not allowed to reveal to you
+We hired extra chefs who have specialisations but let us assume that they are all bound
+by secrecy, and are not allowed to reveal to you
 what their craft is, pastry, meat, fish, soup, etc. You have to find out what their
 specialities are, what do you do? Do a test run and assign a chef to each course. Having
 a worker set to each task is all well and good, but there are certain combinations which
 work and some which do not, you might get away with your starter chef preparing a fish
 course, or your lamb chef switching to cook beef and vice versa, but you wouldn't put
 your pastry chef in charge of the main meat dish, you leave that to someone more
-qualified and better suited to the job. Eventually after a few test meals, you find out
-the best combination and you apply that to all your future meals.
+qualified and better suited to the job.
 
 Scaling in computing works in a similar way, thankfully not to that level of detail
 where one specific core is suited to one specific task, but finding the best combination
@@ -349,33 +349,13 @@ good weak scaling: an effective use of your resources. Poor weak scaling would r
 from having your pastry chef doing the main dish, which is an ineffective use of
 resources.
 
-**FIX ALL BELOW - do a simple scaling analysis for a full node and 2 nodes, and compare
-it with the results for 1 and 4 cores**
-
-> ## Plotting performance and number of cores
+> ## Plotting strong scalability
 >
-> Use the code template below to analyse how performance changes based on the setup (FIXME)
+> Use the original jobscript for 2 nodes and run it on {{ site.remote.name }}. Now that
+> you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with
+> the number of CPU cores on the X-axis and the loop times on the Y-axis (use your
+> favourite plotting tool, an online plotter or even pen and paper).
 >
-> ```
-> code
-> ```
-> What do you notice about this plot?
+> Are you close to "perfect" scalability?
 >
 {: .challenge}
-
-## How to perform a scaling analysis
-
-(FIXME)
-
-## Scaling data for LAMMPS run
-
-(FIXME)
-
-> ## Perform a scaling analysis
->
-> Using the data given, run a simple LJ run for LAMMPS and perform a scaling analysis
->
-> What is the speedup of the output?
-{: .challenge}
-
-{% include links.md %}

@@ -1,7 +1,7 @@
 generate_md_episodes <- function() {
 
   library("methods")
-  
+
   if (!require("remotes", quietly = TRUE)) {
     install.packages("remotes", repos = c(CRAN = "https://cloud.r-project.org/"))
   }
@@ -54,6 +54,18 @@ generate_md_episodes <- function() {
       return(paste("Warning added to YAML header of", y))
     },
     character(1))
+}
+
+generate_md_episodes()
+ead, please edit", basename(y), "in _episodes_rmd/"),
+      after = 2
+    )
+    writeLines(mdfile, con)
+    close(con)
+    return(paste("Warning added to YAML header of", y))
+  }
+
+  vapply(dest_md, add_no_edit_comment, character(1))
 }
 
 generate_md_episodes()

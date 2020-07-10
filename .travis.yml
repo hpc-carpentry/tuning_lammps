@@ -1,4 +1,7 @@
-# https://github.com/FZJ-JSC/tuning_lammps
+# Travis-CI config for https://github.com/FZJ-JSC/tuning_lammps
+# Results at https://travis-ci.org/github/FZJ-JSC/tuning_lammps
+
+dist: xenial
 language: python
 
 python: 3.7
@@ -10,10 +13,10 @@ branches:
 # Add spellchecking for PRs
 jobs:
   include:
-    - stage: spelling
+    - stage: "Check for typos and spelling mistakes"
       install:
         # Use codespell for spell checking
-        sudo pip install codespell
+        pip install codespell
       script:
         # Run a non-erroring version to report spelling errors using standard filters
         # (weird comment style is because of how travis joins lines)
@@ -24,7 +27,7 @@ jobs:
           `# keep reporting to what is necessary`
           --quiet-level=2
           `# allow for some false positives`
-          --ignore-words-list="rouge,keyserver,coul,acn"
+          --ignore-words-list="rouge,keyserver,coul,acn,hist"
           `# do not return an error code`
           ||true
 
@@ -41,15 +44,16 @@ jobs:
           `# keep reporting to what is necessary`
           --quiet-level=2
           `# allow for some false positives`
-          --ignore-words-list="rouge,keyserver,coul,acn"
+          --ignore-words-list="rouge,keyserver,coul,acn,hist"
           `# only check files changed`
           $(git diff --name-only --diff-filter=AM $TRAVIS_BRANCH...HEAD|tr '\n' ' ')
 
-    - stage: check_and_build
+    - stage: "Build the site"
       before_install:
         - sudo apt-get update -y
         - rvm default
-        - gem install bundler
+        - gem install bundler jekyll json kramdown
+        - bundle config build.nokogiri --use-system-libraries
         - bundle install
 
       install:

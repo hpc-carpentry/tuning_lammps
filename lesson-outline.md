@@ -7,7 +7,7 @@ title: Introduction to HPC Lesson Outline
 
 The following list of items is meant as a guide on what content should go where in this repo. This should work as a guide where you can contribute. If a bullet point is prefixed by a file name, this is the lesson where the listed content should go into. This document is meant as a concept map converted into a flow learning goals and questions.
 
-## Accelerating LAMMPS on a HPC 
+## Accelerating LAMMPS on a HPC
 
 * [index.md: Prelude](index.md):Why should I take this course?
     * Why should I bother about software performance?
@@ -25,7 +25,7 @@ The following list of items is meant as a guide on what content should go where 
     * What is benchmarking?
     * What are the factors that can affect a benchmark?
         * _**Case study 1:**_ A simple benchmarking example of LAMMPS in a HPC
-        * _**Hands-on 1:**_ Can you do it on your own?    
+        * _**Hands-on 1:**_ Can you do it on your own?
     * What is scaling?
     * How do I perform scaling analysis?
     * Quntifying speedup: t<sub>1</sub>/t<sub>p</sub>
@@ -131,27 +131,27 @@ It is as simple as this.
 
 Commands like `this` highlight a word as a code section.
 
-This can be done with abstractions too. Logging into your host can be done too. `{{ site.host_name }}` at `{{ site.host_location }}` will display as (Kay at ICHEC, Irish Centre for High End-Computing).
+This can be done with abstractions too. Logging into your remote system can be done too. `{{ site.remote.name }}` at `{{ site.host_location }}` will display as (Kay at ICHEC, Irish Centre for High End-Computing).
 
 Taking a step further, the lines of code can be highlighted using;
 
 ```
-{{ site.host_prompt }} ssh yourUsername@{{ site.host_login }}
+{{ site.local.prompt }} ssh yourUsername@{{ site.remote.login }}
 ```
 {: .bash}
 
-But say you want to get a block of code in, you include it from the snippets library, which is located in `_includes/snippets/lesson-outline/test.snip`. It has a short practical which can be included using;
+But say you want to get a block of code in, you include it from the snippets library, which is located in `_includes{{ site.snippets }}/lesson-outline/test.snip`. It has a short practical which can be included using;
 
-{% include /snippets/lesson-outline/test.snip %}
+{% include {{ site.snippets }}/lesson-outline/test.snip %}
 
 or if you just want to include a block of code for the content or part of a practical;
 
 ```
-{{ site.host_name }}
+{{ site.remote.name }}
 ```
 {: .bash }
 
-{% include /snippets/lesson-outline/code_block.snip %}
+{% include {{ site.snippets }}/lesson-outline/code_block.snip %}
 
 {: .output }
 
@@ -163,7 +163,7 @@ include figure.html url="" max-width="40%" file="/fig/01/40x40x40_cube.png" alt=
 
 
 > ## This is a callout
-> 
+>
 > For an important point to highlight, which will appear in the lesson as a lime-green box with a pin symbol
 >
 > You can direct to a website using [this](https://google.com) when referring to external material.
@@ -171,18 +171,18 @@ include figure.html url="" max-width="40%" file="/fig/01/40x40x40_cube.png" alt=
 {: .callout}
 
 > ## This is a practical question/challenge
-> 
+>
 > This can be a normal question
 >
 {: .challenge}
 
 > ## This is an MCQ
-> 
+>
 > MCQs are done as so;
-> 
+>
 > 1. {OPTION 1}
 > 2. {OPTION 2}
-> 
+>
 > > ## Solution
 > > 1. {SOLUTION 1}
 > > 2. {SOLUTION 2}

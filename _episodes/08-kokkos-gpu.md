@@ -216,5 +216,3 @@ these aspects to some extent.
 > {: .solution}
 {: .challenge}
 
-{% include links.md %}
-
