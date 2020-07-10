@@ -14,10 +14,8 @@ keypoints:
 FIXME
 
 > ## Discussion
-> 
+>
 > Nothing is perfect! Discuss amongst yourselves the limitations of different accelerator packages
 >
 {: .challenge}
-
-{% include links.md %}
 

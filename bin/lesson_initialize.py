@@ -19,6 +19,7 @@ BOILERPLATE = (
     '_extras/discuss.md',
     '_extras/figures.md',
     '_extras/guide.md',
+    'aio.md',
     'index.md',
     'reference.md',
     'setup.md',
@@ -43,6 +44,12 @@ def main():
         shutil.copyfile(
             "bin/boilerplate/{}".format(path),
             path
+        )
+
+
+if __name__ == '__main__':
+    main()
+ath
         )
 
 

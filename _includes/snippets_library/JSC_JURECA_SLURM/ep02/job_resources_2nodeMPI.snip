@@ -1,0 +1,7 @@
+#!/bin/bash -x
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=24
+#SBATCH --output=mpi-out.%j
+#SBATCH --error=mpi-err.%j
+#SBATCH --time=00:05:00
+#SBATCH --partition=batch

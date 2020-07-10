@@ -407,7 +407,7 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > Make sure that the neighbor is built on the CPUs and there is a dynamic load balancing
 > between the CPUs and the GPUs.
 >
-> {% capture mycode %}{% include /snippets/ep05/in.lj %}{% endcapture %}
+> {% capture mycode %}{% include {{ site.snippets }}/ep05/in.lj %}{% endcapture %}
 > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
 > ```{% for member in lines_of_code %}
 > {{ member }}{% endfor %}
@@ -460,7 +460,7 @@ It prints about the device information both in the screen-output and the log fil
 something like this:
 
 ```
-{% include /snippets/ep05/lammps-gpu-output-1.txt %}
+{% include {{ site.snippets }}/ep05/lammps-gpu-output-1.txt %}
 ```
 {: .output}
 
@@ -481,7 +481,7 @@ mentioned this as `pair_style  lj/cut 2.5`. This is what happens when you use th
 command-line switch. This automatically ensures that the correct accelerated version is called for
 this run.
 ```
-{% include /snippets/ep05/lammps-gpu-output-2.txt %}
+{% include {{ site.snippets }}/ep05/lammps-gpu-output-2.txt %}
 ```
 {: .output}
 
@@ -494,7 +494,7 @@ of information known as `Device Time Info (average)`. This gives you a total bre
 the devices (GPUs) have been utilised to do various parts of the job.
 
 ```
-{% include /snippets/ep05/lammps-gpu-output-3.txt %}
+{% include {{ site.snippets }}/ep05/lammps-gpu-output-3.txt %}
 ```
 {: .output}
 
@@ -648,5 +648,3 @@ before starting the production runs. This might save your lot of resource and ti
 > > of LAMMPS with MPI parallelization.
 > {: .solution}
 {: .challenge}
-
-{% include links.md %}

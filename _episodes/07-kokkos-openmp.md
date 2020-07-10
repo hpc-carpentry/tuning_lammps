@@ -243,5 +243,3 @@ settings, we can use them for all the runs needed to perform the scalability stu
 > >      scales better with increasing thread counts as compared to the **USER-OMP** package.
 > {: .solution}
 {: .challenge}
-
-{% include links.md %}

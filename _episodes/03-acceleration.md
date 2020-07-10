@@ -47,7 +47,7 @@ There are a number of ways multi-threading can be implemented, using OpenMP or C
 (FIXME) Include examples
 
 > ## Acceleration
-> 
+>
 > How can we accelerate the following code. Discuss with your neighbour(?)
 >
 > ```
@@ -56,6 +56,4 @@ There are a number of ways multi-threading can be implemented, using OpenMP or C
 > {: .bash}
 >
 {: .challenge}
-
-{% include links.md %}
 

@@ -217,6 +217,3 @@ information about the `package` `<arguments>`yet. These might include informatio
 the execution mode (OpenMP or GPU), or the number of OpenMP threads,
 or the number of GPUs that we want to use for this run, or any other keywords (and
 values). We'll discuss more about them in the following episodes.
-
-
-{% include links.md %}
