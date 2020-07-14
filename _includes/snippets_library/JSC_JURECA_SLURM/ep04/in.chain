@@ -1,6 +1,7 @@
 variable        x index 1
 variable        y index 1
 variable        z index 1
+variable        t index 10000
 
 units           lj
 atom_style      bond
