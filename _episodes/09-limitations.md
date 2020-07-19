@@ -1,5 +1,5 @@
 ---
-title: "Limitations and Thumbrules"
+title: "Limitations and Rules of Thumb"
 teaching: 0
 exercises: 0
 questions:
