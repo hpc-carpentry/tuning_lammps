@@ -4,14 +4,18 @@ teaching: 0
 exercises: 0
 questions:
 - "What are the various options to accelerate LAMMPS?"
-- "What hardware can LAMMPS be used on?"
-- "How can I enable architecture support at runtime?"
 - "What accelerator packages are compatible with which hardware?"
-- "What is Kokkos and why should I use it?"
+- "How do I invoke a package in a LAMMPS run?"
 objectives:
-- "First learning objective. (FIXME)"
+- "Understand the different accelerator packages available in LAMMPS"
+- "Learn how to invoke the different accelerator packages across different hardwares"
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "The five accelerator packages currently offered by LAMMPS are i) OPT, ii) USER-INTEL, 
+  iii) USER-OMP, iv) GPU, v) Kokkos"
+- "Kokkos is available for use on all types of hardware. Other accelerator packages are hardware
+  specific"
+- "To invoke a package in LAMMPS, the notation is `package <style> <arguments>`, where `style` is
+  the package you want to invoke"
 ---
 ## How can I accelerate LAMMPS performance?
 

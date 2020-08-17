@@ -7,15 +7,17 @@ questions:
 - "Why is software performance important?"
 - "How can performance be measured?"
 - "What is meant by flops, walltime and CPU hours?"
-- "What can affect performance?"
+- "How can performance be enhanced?"
 objectives:
 - "Understand the link between software performance and hardware"
 - "Identify the different methods of enhancing performance"
 - "Calculate walltime, CPU hours"
 keypoints:
+- "Software performance is the use of computational resources effectively to reduce runtime"
 - "Understanding performance is the best way of utilising your HPC resources efficiently"
-- "There are many ways of enhancing performance"
-- "Just because one way is correct doesn't always mean it is the best option"
+- "Performance can be measured by looking at flops, walltime, and CPU hours"
+- "There are many ways of enhancing performance, and there is no single 'correct' way. The 
+  performance of any software will vary depending on the tasks you want it to undertake."
 ---
 
 ## What is software performance?

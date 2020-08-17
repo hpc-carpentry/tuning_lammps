@@ -13,15 +13,14 @@ The following list of items is meant as a guide on what content should go where 
     * Why should I bother about software performance?
     * What can I expect to learn from this course?
 
-* [01-why-bother-performance.md: What is performance?](_episodes/01-why-bother-performance.md):brief notes on software performance
+* [01-why-bother-with-performance.md:](_episodes/01-why-bother-performance.md): Brief notes on software performance
+    * What is software performance?
     * Why is software performance important?
-    * How can I measure performance?
-        * What is Flop?
-        * What is walltime?
-        * What is cpuh?
-    * What are the factors affecting performance?
+    * How can performance be measured?
+    * What is meant by flops, walltime and CPU hours?
+    * What can affect performance?
 
-* [02-benchmark-and-scaling.md: How do I benchmark software performance in HPC?](_episodes/02-benchmark-and-scaling.md):about benchamark and scaling
+* [02-benchmark-and-scaling.md: How do I benchmark software performance in HPC?](_episodes/02-hardware-performance.md):about benchmark and scaling
     * What is benchmarking?
     * What are the factors that can affect a benchmark?
         * _**Case study 1:**_ A simple benchmarking example of LAMMPS in a HPC
@@ -33,7 +32,7 @@ The following list of items is meant as a guide on what content should go where 
         * _**Case Study 2:**_ Get scaling data for a LAMMPS run
         * _**Hands-on 2:**_ Do a scaling analysis
 
-* [03-acceleration.md: Can I accelerate performance?](_episodes/03-acceleration.md):brief discussion over various aspects of speeding up software performances
+* [03-acceleration.md: Can I accelerate performance?](_episodes/03-benchmark-and-scaling.md):brief discussion over various aspects of speeding up software performances
     * Hardware acceleration and software acceleration
         * multi-core cpu
         * GPU
@@ -98,94 +97,3 @@ The following list of items is meant as a guide on what content should go where 
     * _**Exercise 5:**_ Similar study with slightly different problem
 
 * [09-limitations.md: What are the limitatations of different accelerator packages?](_episodes/09-limitations.md):discuss the limitations of KOKKOS and other accelerator packages
-
-* [10-thumbrules.md: Knowing when LAMMPS is working efficiently](_episodes/10-thumbrules.md):thumbrules to follow
-    * Expected performance for given example
-    * Rule of thumbs for various accelerator packages
-
-# Writing practicals and content
-
-This guide shows all the styles that are used across Carpentry. **This section will need deleting after content is made so as to preserve the original purpose of `lesson-outline.md`**
-
-## Overview and key points
-
-Highlighted by the following format
-```
----
-title: "FIXME"
-teaching: 10
-exercises: 5
-questions:
-- "Why is software performance important?"
-objectives:
-- "Understand the necessity of code optimisation"
-keypoints:
-- "(FIXME)"
----
-```
-Keypoints has is own separate field at the bottom when seen on web browser.
-
-## For material
-
-It is as simple as this.
-
-Commands like `this` highlight a word as a code section.
-
-This can be done with abstractions too. Logging into your remote system can be done too. `{{ site.remote.name }}` at `{{ site.host_location }}` will display as (Kay at ICHEC, Irish Centre for High End-Computing).
-
-Taking a step further, the lines of code can be highlighted using;
-
-```
-{{ site.local.prompt }} ssh yourUsername@{{ site.remote.login }}
-```
-{: .bash}
-
-But say you want to get a block of code in, you include it from the snippets library, which is located in `_includes{{ site.snippets }}/lesson-outline/test.snip`. It has a short practical which can be included using;
-
-{% include {{ site.snippets }}/lesson-outline/test.snip %}
-
-or if you just want to include a block of code for the content or part of a practical;
-
-```
-{{ site.remote.name }}
-```
-{: .bash }
-
-{% include {{ site.snippets }}/lesson-outline/code_block.snip %}
-
-{: .output }
-
-**Include a different folder for each lesson entitled the number code of the lesson. Eg. 01 -> 01-why-bother-with-performance**
-
-For including images, the notation is as follows;
-
-include figure.html url="" max-width="40%" file="/fig/01/40x40x40_cube.png" alt="Figure" caption="this picture"
-
-
-> ## This is a callout
->
-> For an important point to highlight, which will appear in the lesson as a lime-green box with a pin symbol
->
-> You can direct to a website using [this](https://google.com) when referring to external material.
->
-{: .callout}
-
-> ## This is a practical question/challenge
->
-> This can be a normal question
->
-{: .challenge}
-
-> ## This is an MCQ
->
-> MCQs are done as so;
->
-> 1. {OPTION 1}
-> 2. {OPTION 2}
->
-> > ## Solution
-> > 1. {SOLUTION 1}
-> > 2. {SOLUTION 2}
-> >
->{: .solution}
-{: .challenge}

@@ -4,14 +4,18 @@ teaching: 0
 exercises: 0
 questions:
 - "What is benchmarking?"
-- "How do I benchmark an application?"
+- "How do I do a benchmark in LAMMPS?"
 - "What is scaling?"
 - "How do I perform a scaling analysis?"
 objectives:
-- "Be able to perform a benchmark analysis of an application"
-- "Be able to perform a scaling analysis of an application"
+- "Be able to perform a benchmark analysis of LAMMPS"
+- "Be able to perform a scaling analysis of LAMMPS"
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "Benchmarking is a way of assessing the performance of a program or set of programs"
+- "The `log.lammps` file shows important information about the timing, processor layout, etc. 
+  which you can use to record your benchmark"
+- "Scaling is the effective use of resources as you increase the amount of computation resouces 
+  you have."
 ---
 
 ## What is benchmarking?

@@ -4,10 +4,15 @@ teaching: 0
 exercises: 0
 questions:
 - "How can I identify the main bottlenecks in LAMMPS?"
+- "What is load balancing?"
+- "How do I come up with a strategy for the best optimisation?"
 objectives:
-- "Learn how to analyse timing data in LAMMPS"
+- "Learn how to analyse timing data in LAMMPS and determine bottlenecks"
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "The best way to identify bottlenecks is to run different benchmarks on a smaller system and 
+  "compare it to a representative system"
+- "Effective load balancing is being able to distribute an equal amount of work across processes
+  for inhomogeneous systems"
 usemathjax: true
 ---
 
@@ -26,17 +31,16 @@ performance *bottlenecks*. The term "bottleneck" refers to specific parts of an
 application that are unable to
 keep pace with the rest of the calculation, thus slowing overall performance.
 
-Therefore, you need to ask yourself a question these questions:
+Therefore, you need to ask yourself these questions:
 * Are my runs slower than expected?
 * What is it that is hindering us getting the expected scaling behaviour?
-
 
 ## Identify bottlenecks
 
 Identifying (and addressing) performance bottlenecks is important as this could save you
 a lot of
 computation time and resources. The best way to do this is to start with a reasonably
-representative system having a modest system size with run for a few hundreds/thousands
+representative system having a modest system size with run for a few hundred/thousand
 of timesteps.
 
 LAMMPS provides a timing breakdown table printed at the end of log file
@@ -60,7 +64,7 @@ Note that `%total` of the timing is giving for a range of different parts of the
 calculation. In the following section, we will work on a few examples and try to
 understand how to identify bottlenecks from this output.
 
-The very first thing to do is run the simulation with just one * 1 MPI rank and no
+The very first thing to do is run the simulation with just 1 MPI rank and no
 threads and find a way to minimise the walltime by adjusting the balance between
 `Pair`, `Neigh`, `Comm` and the other parts of the calculation.
 
@@ -322,7 +326,7 @@ communication overhead. It could lead to significant drop in performance if you 
 limited communication bandwidth, or load imbalance in your simulation, or if you wish
 to scale to a very large number of cores.
 
-While MPI offers domain based parallelization, one can also use paralleization over
+While MPI offers domain based parallelization, one can also use parallelization over
 particles. This can, for example, be done using OpenMP which is a different parallelization
 paradigm based on threading. This multi-threading is *conceptually* easy to implement.
 Moreover, OpenMP parallelization is orthogonal to MPI parallelization which means you can
@@ -357,7 +361,7 @@ Let us discuss a few situations:
      over particles using OpenMP threads, generally it does not hamper load balancing
      in a significant way. So, a sensible mix of MPI, OpenMP and the `balance` command
      can help you to fetch better performance from the same hardware.
-  4. In many MD problema, we need to deal with the calculation of electrostatic
+  4. In many MD problems, we need to deal with the calculation of electrostatic
      interactions. Unlike the pair forces, electrostatic interactions are long range by
      nature. To compute this long range interactions, very popular methods in MD are
      `ewald` and `pppm`. These long range solvers perform their computations in
