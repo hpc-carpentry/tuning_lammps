@@ -1,7 +1,7 @@
 ---
 title: "Kokkos with OpenMP"
 teaching: 30
-exercises: 60
+exercises: 15
 questions:
 - "How do I utilise Kokkos with OpenMP"
 objectives:
