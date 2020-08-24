@@ -4,6 +4,8 @@ teaching: 40
 exercises: 45
 questions:
 - "How can I identify the main bottlenecks in LAMMPS?"
+- "What is load balancing?"
+- "How do I come up with a strategy for the best optimisation?"
 objectives:
 - "Learn how to analyse timing data in LAMMPS"
 keypoints:
