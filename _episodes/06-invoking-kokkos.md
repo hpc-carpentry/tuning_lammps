@@ -1,7 +1,7 @@
 ---
 title: "Invoking Kokkos"
-teaching: 0
-exercises: 0
+teaching: 25
+exercises: 5
 questions:
 - "Why should I use Kokkos?"
 - "How do I invoke Kokkos within LAMMPS?"

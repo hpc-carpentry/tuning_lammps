@@ -1,7 +1,7 @@
 ---
 title: "Accelerating LAMMPS"
-teaching: 0
-exercises: 0
+teaching: 30
+exercises: 90
 questions:
 - "What are the various options to accelerate LAMMPS?"
 - "What accelerator packages are compatible with which hardware?"

@@ -1,6 +1,6 @@
 ---
 title: "Limitations and Rules of Thumb"
-teaching: 0
+teaching: 10
 exercises: 0
 questions:
 - "What are the limitations of KOKKOS and other accelerator packages?"

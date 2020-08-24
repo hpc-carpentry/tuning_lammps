@@ -1,7 +1,7 @@
 ---
 title: "Connecting performance to hardware"
-teaching: 0
-exercises: 0
+teaching: 15
+exercises: 5
 questions:
 - "How can I use the hardware I have access to?"
 - "What is the difference between OpenMP and MPI?"

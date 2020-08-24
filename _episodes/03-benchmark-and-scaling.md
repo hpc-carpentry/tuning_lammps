@@ -1,7 +1,7 @@
 ---
 title: "Benchmarking and Scaling"
-teaching: 0
-exercises: 0
+teaching: 15
+exercises: 15
 questions:
 - "What is benchmarking?"
 - "How do I do a benchmark in LAMMPS?"

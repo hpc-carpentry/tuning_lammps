@@ -1,7 +1,7 @@
 ---
 title: "Kokkos with GPUs"
-teaching: 0
-exercises: 0
+teaching: 15
+exercises: 45
 questions:
 - "How do I use Kokkos on a GPU?"
 objectives:
