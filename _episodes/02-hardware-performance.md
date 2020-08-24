@@ -15,7 +15,31 @@ usemathjax: true
 
 ## Accelerating performance
 
-This is $$\pi$$ in a sentence.
+To speed up a calculation in a computer you can either use a processor with higher clock-speed or use multiple processors to do parallel processing. Increasing clock-speed indefinitely is not possible, so the best option is to explore parallel computing. Conceptually this is simple: partition the job into small independent pieces and assign each independent part to different CPU core to do the computations in parallel, hence you get the speed-up. 
+
+Though conceptually this is simple, in practice this involves many complications. Consider the case when you are having just a single CPU core, associated RAM (primary memory: faster access of data), hard disk (secondary memory: slower access of data), input (keyboard, mouse) and output devices (screen). 
+
+Now consider you have two CPU cores and you would notice that there are many things that you need to take care of: 
+1.	Will each of these cores share the memory space, or will each of them be assigned private memory? 
+2.	How these cores are going to access the memory space?
+3.	How to divide and distribute the jobs among these two cores?
+4.	How these two cores will communicate with each other?
+5.	After the job is done where the final result will be saved? Is this the storage of core 1 or core 2? Or, will it be a central storage accessible to both?
+
+Shared memory vs Distributed memory
+When a system has a central memory and each CPU core has a uniform access to this memory space this is called a shared memory platform. In the contrary, when you partition this central memory and assign each partition as a private memory space to each CPU core, then we call this a distributed memory platform. A graphical could be as below:
+
+[image here]
+
+Depending upon what kind of memory a computer has, the parallelization approach of a code could vary. For example, in a distributed memory platform, when a CPU core accesses data from its private memory, it is fastest. But if this requires access to a data that resides in the private memory space assigned to another CPU core then it requires a ‘communication’ protocol and data access becomes slower. Therefore while coding or using a code that offers such fine control over memory space access you need to pay extra attention such that bulk data could be accessed by a CPU core from its own private memory space. 
+
+Similar situation arises for GPU coding too. In this case, the CPU is generally called the host and the GPUs are called the devices. When we submit a GPU job, it is launched in the CPU (host) which in turn directs it to be executed by the GPU cores (devices). While doing these calculations, data is copied from CPU memory to GPU’s first and processed subsequently. After finishing a calculation by a GPU, the result is copied back from GPU to CPU. This communication process is expensive and it could significantly slow down a calculation if care is not taken to minimize this communication. We’ll see later in this tutorial that communication is a major bottleneck in many LAMMPS calculations and we need to device strategies to reduce this communication overhead.  
+
+On the contrary, in a shared memory platforms, the central memory is being shared by all the processors. In this case, the processors communicate with each other through the shared memory. In a shared memory platform, each processor can access the memory location at the same speed. 
+
+When we say that we accelerate a job by parallelizing it, we actually mean a strategy that divide the whole job into pieces and assign each piece to a worker (CPU core) to solve. This parallelisation strategy also depends on the memory structure. (as discussed above) of your computing system. For example, OpenMP provides a thread level parallelism that is well-suited for a shared memory platform, but you can use it in a distributed memory system. For a distributed memory system, you need a message passing protocol like MPI to communicate between processors. 
+
+
 
 
 (FIXME)
