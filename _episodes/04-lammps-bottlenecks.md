@@ -7,22 +7,14 @@ questions:
 - "What is load balancing?"
 - "How do I come up with a strategy for the best optimisation?"
 objectives:
-- "Learn how to analyse timing data in LAMMPS"
-keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
-usemathjax: true
----
-
-- "How can I identify the main bottlenecks in LAMMPS?"
-- "What is load balancing?"
-- "How do I come up with a strategy for the best optimisation?"
-objectives:
 - "Learn how to analyse timing data in LAMMPS and determine bottlenecks"
 keypoints:
 - "The best way to identify bottlenecks is to run different benchmarks on a smaller system and
-  "compare it to a representative system"
+  compare it to a representative system"
 - "Effective load balancing is being able to distribute an equal amount of work across processes
-  for inhomogeneous systems"
+  for inhomogeneous systems"irst key point. Brief Answer to questions. (FIXME)"
+usemathjax: true
+---
 
 [Earlier]({{ page.root }}{% link _episodes/02-hardware-performance.md %}), you have
 learnt the basic philosophies behind various parallel
