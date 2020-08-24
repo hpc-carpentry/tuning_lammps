@@ -39,6 +39,17 @@ On the contrary, in a shared memory platforms, the central memory is being share
 
 When we say that we accelerate a job by parallelizing it, we actually mean a strategy that divide the whole job into pieces and assign each piece to a worker (CPU core) to solve. This parallelisation strategy also depends on the memory structure. (as discussed above) of your computing system. For example, OpenMP provides a thread level parallelism that is well-suited for a shared memory platform, but you can use it in a distributed memory system. For a distributed memory system, you need a message passing protocol like MPI to communicate between processors. 
 
+The two main parallelization strategies are data parallelism and task parallelism. In data parallelism same set of tasks are performed by each core on different subsets of the same data. You need to take extra care to eliminate data dependencies in data parallelism. On the contrary, when a task is multiple independent sub-tasks and each sub-task is assigned to different cores to do the job, this is known as task parallelism. In one sentence, in task parallelism different independent sub-tasks are performed on the same or different data. A simple graphical representation is given below:
+
+[image here]
+
+Before using a parallel code that  offers control to select either parallelization methods or parameters to have fine-grain control like choosing thread-counts, host-device communication, etc., we need to ask a few simple questions to ourselves:
+
+1.	What parallelization method should I use (OpenMP or MPI)? 
+2.	Should data parallelism or task parallelism be used? Does my code really provide support to choose this?
+3.	How many workers do I need to complete a job? This is important since if you employ less number of workers you are actually not utilizing the full potential, but if you employ more workers than what is needed, there is always a risk to loose performance due to communication overheads.
+
+
 
 
 
