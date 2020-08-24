@@ -1,13 +1,17 @@
 ---
 title: "Invoking Kokkos"
-teaching: 0
-exercises: 0
+teaching: 25
+exercises: 5
 questions:
-- "How do I invoke **Kokkos** within LAMMPS?"
+- "Why should I use Kokkos?"
+- "How do I invoke Kokkos within LAMMPS?"
 objectives:
+- "Learn how to invoke Kokkos in a LAMMPS run"
 - "Learn how to transition from a normal LAMMPS call to an accelerated call"
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "Kokkos is a templated C++ library which allows a *single implementation* of a software application
+  on different kinds of hardware"
+- "Kokkos allows one to write a single pair style in C++ without much prior knowledge of GPU programming"
 ---
 ## Kokkos
 

@@ -7,15 +7,18 @@ questions:
 - "Why is software performance important?"
 - "How can performance be measured?"
 - "What is meant by flops, walltime and CPU hours?"
-- "What can affect performance?"
+- "How can performance be enhanced?"
+- "How can I use compute resources effectively?" 
 objectives:
 - "Understand the link between software performance and hardware"
 - "Identify the different methods of enhancing performance"
 - "Calculate walltime, CPU hours"
 keypoints:
+- "Software performance is the use of computational resources effectively to reduce runtime"
 - "Understanding performance is the best way of utilising your HPC resources efficiently"
-- "There are many ways of enhancing performance"
-- "Just because one way is correct doesn't always mean it is the best option"
+- "Performance can be measured by looking at flops, walltime, and CPU hours"
+- "There are many ways of enhancing performance, and there is no single 'correct' way. The 
+  performance of any software will vary depending on the tasks you want it to undertake."
 ---
 
 ## What is software performance?
@@ -65,10 +68,11 @@ This lesson is about taking a well-informed, systematic approach on how to do th
 >>
 >> 8000 hours...close to a year!
 >>
->> This is way longer than anyone could bear! But remember, that is utilising just one
+>> This is way longer than is feasibly convenient! But remember, that is utilising just one
 >> core. If you had a machine that could simulate each of those smaller boxes
 >> simultaneously and a code that enables each box to effectively interact with each
->> other, the whole job would only take roughly an hour (but probably a little more).
+>> other, the whole job would only take roughly an hour (but probably a little more because of
+>> issues we will discuss in subsequent episodes).
 >>
 >{: .solution}
 {: .challenge}
@@ -201,7 +205,20 @@ application.
 > {: .solution}
 {: .challenge}
 
-**FIXME** This really needs an intro
+## How can I use compute resources effectively?
+
+Unfortunately there is no simple answer to this, because the art of getting the '*optimum*'
+performance is ambiguous. There is no 'one size fits all' method to performance optimization as
+you may not know what way is best to optimize something on first writing, as what can often happen
+is that a spontaneous optimization can reduce readability and can add code that is used only to
+improve performance. This can cause big complexities in large code, making them hard to maintain
+and debug. Hence, optimization should be done at the end of the development stage.
+
+During this development stage, and while testing your code, it is considered good practice to test
+your code on a small section of your problem first, optimize it to see how it performs 
+so then when you deal with a larger problem,
+
+
 
 > ## Using all available resources
 >

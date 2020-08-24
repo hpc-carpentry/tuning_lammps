@@ -1,13 +1,17 @@
 ---
 title: "Kokkos with OpenMP"
-teaching: 0
-exercises: 0
+teaching: 30
+exercises: 15
 questions:
 - "How do I utilise Kokkos with OpenMP"
 objectives:
 - "Utilise OpenMP and Kokkos on specific hardware"
+- "Do a scalability study on optimum command line settings"
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "The three command line switches, `-k on`, `-sf kk` and `-pk kokkos` are needed to run the Kokkos
+  package"
+- "Different values of the keywords `neigh`, `newton`, `comm` and `binsize` result in different
+  runtimes"
 ---
 
 ## Using OpenMP threading through the **Kokkos** package

@@ -1,13 +1,15 @@
 ---
 title: "Kokkos with GPUs"
-teaching: 0
-exercises: 0
+teaching: 15
+exercises: 15
 questions:
 - "How do I use Kokkos on a GPU?"
 objectives:
 - "Utilise Kokkos on a specific GPU"
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "Knowing the capabilities of your host, device and if you can use a CUDA-aware MPI runtime is 
+  required before starting a GPU run"
+- 
 ---
 
 ## Using GPU acceleration through the **Kokkos** package
@@ -71,7 +73,7 @@ the ```-k on``` switch as shown below:
 > ## A few tips on gaining speedup from **Kokkos**/GPU
 >
 > This information is collected from the
-> [LAMMPS website](https://lammps.sandia.gov/doc/Speed_kokkos.html))
+> [LAMMPS website](https://lammps.sandia.gov/doc/Speed_kokkos.html)
 >
 > 1. **Hardware comptibility**: For better performance, you must use *Kepler* or later
 >    generations of GPUs.
