@@ -12,7 +12,7 @@ keypoints:
 - "The best way to identify bottlenecks is to run different benchmarks on a smaller system and
   compare it to a representative system"
 - "Effective load balancing is being able to distribute an equal amount of work across processes
-  for inhomogeneous systems"irst key point. Brief Answer to questions. (FIXME)"
+  for inhomogeneous systems"
 usemathjax: true
 ---
 
