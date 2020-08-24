@@ -14,8 +14,7 @@ keypoints:
 - "Benchmarking is a way of assessing the performance of a program or set of programs"
 - "The `log.lammps` file shows important information about the timing, processor layout, etc. 
   which you can use to record your benchmark"
-- "Scaling is the effective use of resources as you increase the amount of computation resouces 
-  you have."
+- "Scaling is the effective use of computational resources as you increase the size of your workload"
 ---
 
 ## What is benchmarking?
