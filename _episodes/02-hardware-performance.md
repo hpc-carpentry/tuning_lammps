@@ -45,7 +45,7 @@ The two main parallelization strategies are data parallelism and task parallelis
 
 
 * Process vs. Threads
-Just imagine that you are doing some work with both of your hands. You are a process and your both hands are the threads. In a program, threads are seperate points of execution and depending on the circumstances these two threads either can work synchronously or in asynchronous manner.
+Just imagine that you are doing some work with both of your hands. You are a process and your both hands are the threads. In a program, threads are separate points of execution and depending on the circumstances these two threads either can work synchronously or in asynchronous manner.
 
 * Multithreading
 Since we mentioned about threads, its good to know that there are two main methods to introduce thread-based computation: either use OpenMP or CUDA. OpenMP is used for multi-core CPUs and CUDA is used to utlize threading for the GPU cores.
