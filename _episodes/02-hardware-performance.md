@@ -27,7 +27,7 @@ Now consider you have two CPU cores and you would notice that there are many thi
 5.	After the job is done where the final result will be saved? Is this the storage of core 1 or core 2? Or, will it be a central storage accessible to both?
 
 Shared memory vs Distributed memory
-When a system has a central memory and each CPU core has a uniform access to this memory space this is called a shared memory platform. In the contrary, when you partition this central memory and assign each partition as a private memory space to each CPU core, then we call this a distributed memory platform. A graphical could be as below:
+When a system has a central memory and each CPU core has a uniform access to this memory space this is called a shared memory platform. In the contrary, when you partition this central memory and assign each partition as a private memory space to each CPU core, then we call this a distributed memory platform. A graphical could be as shown below:
 
 <p align="center"><img src="../fig/02/memory_pattern.png" width="50%"/></p>
 
