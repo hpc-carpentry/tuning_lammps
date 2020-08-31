@@ -19,14 +19,14 @@ To speed up a calculation in a computer you can either use a faster processor or
 
 Though conceptually this is simple, in practice this involves many complications. Consider the case when you are having just a single CPU core, associated RAM (primary memory: faster access of data), hard disk (secondary memory: slower access of data), input (keyboard, mouse) and output devices (screen). 
 
-Now consider you have two CPU cores and you would notice that there are many things that you need to take care of: 
+Now consider you have two or more CPU cores and you would notice that there are many things that you need to take care of: 
 1.	Will each of these cores share the memory space, or will each of them be assigned private memory? 
 2.	How these cores are going to access the memory space?
 3.	How to divide and distribute the jobs among these two cores?
 4.	How these two cores will communicate with each other?
 5.	After the job is done where the final result will be saved? Is this the storage of core 1 or core 2? Or, will it be a central storage accessible to both?
 
-Shared memory vs Distributed memory
+* Shared memory vs Distributed memory
 When a system has a central memory and each CPU core has a uniform access to this memory space this is called a shared memory platform. In the contrary, when you partition this central memory and assign each partition as a private memory space to each CPU core, then we call this a distributed memory platform. A graphical could be as shown below:
 
 <p align="center"><img src="../fig/02/memory_pattern.png" width="50%"/></p>
@@ -60,10 +60,14 @@ Before using a parallel code that  offers control to select either parallelizati
 
 and there could be many!
 
-# LAMMPS Parallelisation
+* LAMMPS Parallelisation
 The main parallelisation technique that is used by LAMMPS is the domain decomposition method. In this process, the global domain is divided into many sub-domains and then each sub-domain is assigned to a processor. If your computer has N physical processor, you can initiate N MPI processes on your computer. This means each sub-domain is handled by a MPI process and when atoms move from one domain to another, the atom identities assigned to each MPI task will also be updated accordingly. In this method, for a (nearly) homogeneously distributed atomic system, we can expect almost uniform distribution of work across various MPI tasks. 
 
-You will discover that in LAMMPS, the MPI parallelisation is strongly integrated that it almost always offers better performance than the OpenMP based thread-level parallelism unless your system has a fair amount of load-imbalance. 
+In addition to MPI, LAMMPS also support thread level parallelism through OpenMP directives which offer parallelisation over particles rather than over domains. This works for only shared memory systems with multi-core processors. The working principle is based the "Fork-Join" model, as shown below. In thread-based parallelism, a block of code is executed by a bunch of threads where thread is the smallest processing unit scheduled by an operating system. In the 'Fork-Join' model, there exists a master thread which forks into multiple threads, and each of these forked-threads executes a part of the whole job and when all the threads are done with their assigned jobs, these threads join together again. Typically number of threads is equal to the number of core available, but this can be decided by the application or the programer at run-time using appropriate environment variables. We'll see that not always using the maximum possible threads provide the best performance. It depends on many factor as we will be discussing using some examples in this tutorial later, and more surprisingly you will discover that in LAMMPS, the MPI parallelisation is so strongly integrated that it almost always offers better performance than the OpenMP based thread-level parallelism unless your system has a fair amount of load-imbalance. 
+ 
+<p align="center"><img src="../fig/02/fork_join.png" width="50%"/></p>
+
+
 
 
 
