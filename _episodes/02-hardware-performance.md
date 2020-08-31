@@ -15,7 +15,7 @@ usemathjax: true
 
 ## Accelerating performance
 
-To speed up a calculation in a computer you can either use a processor with higher clock-speed or use multiple processors to do parallel processing. Increasing clock-speed indefinitely is not possible, so the best option is to explore parallel computing. Conceptually this is simple: partition the job into small independent pieces and assign each independent part to different CPU core to do the computations in parallel, hence you get the speed-up. 
+To speed up a calculation in a computer you can either use a faster processor or use multiple processors to do parallel processing. Increasing clock-speed indefinitely is not possible, so the best option is to explore parallel computing. Conceptually this is simple: partition the job into small independent pieces and assign each independent part to different CPU core to do the computations in parallel, hence you get the speed-up. 
 
 Though conceptually this is simple, in practice this involves many complications. Consider the case when you are having just a single CPU core, associated RAM (primary memory: faster access of data), hard disk (secondary memory: slower access of data), input (keyboard, mouse) and output devices (screen). 
 
@@ -29,7 +29,7 @@ Now consider you have two CPU cores and you would notice that there are many thi
 Shared memory vs Distributed memory
 When a system has a central memory and each CPU core has a uniform access to this memory space this is called a shared memory platform. In the contrary, when you partition this central memory and assign each partition as a private memory space to each CPU core, then we call this a distributed memory platform. A graphical could be as below:
 
-[image here]
+<p align="center"><img src="../fig/02/memory_pattern.png" width="50%"/></p>
 
 Depending upon what kind of memory a computer has, the parallelization approach of a code could vary. For example, in a distributed memory platform, when a CPU core accesses data from its private memory, it is fastest. But if this requires access to a data that resides in the private memory space assigned to another CPU core then it requires a ‘communication’ protocol and data access becomes slower. Therefore while coding or using a code that offers such fine control over memory space access you need to pay extra attention such that bulk data could be accessed by a CPU core from its own private memory space. 
 
