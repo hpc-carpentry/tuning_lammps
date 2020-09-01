@@ -27,6 +27,7 @@ Now consider you have two or more CPU cores and you would notice that there are 
 5.	After the job is done where the final result will be saved? Is this the storage of core 1 or core 2? Or, will it be a central storage accessible to both?
 
 * Shared memory vs Distributed memory
+
 When a system has a central memory and each CPU core has a uniform access to this memory space this is called a shared memory platform. In the contrary, when you partition this central memory and assign each partition as a private memory space to each CPU core, then we call this a distributed memory platform. A graphical could be as shown below:
 
 <p align="center"><img src="../fig/02/memory_pattern.png" width="50%"/></p>
@@ -45,9 +46,11 @@ The two main parallelization strategies are data parallelism and task parallelis
 
 
 * Process vs. Threads
+
 Just imagine that you are doing some work with both of your hands. You are a process and your both hands are the threads. In a program, threads are separate points of execution and depending on the circumstances these two threads either can work synchronously or in asynchronous manner.
 
 * Multithreading
+
 Since we mentioned about threads, its good to know that there are two main methods to introduce thread-based computation: either use OpenMP or CUDA. OpenMP is used for multi-core CPUs and CUDA is used to utlize threading for the GPU cores.
 
 Before using a parallel code that  offers control to select either parallelization methods or parameters to have fine-grain control like choosing thread-counts, host-device communication, etc., we need to ask a few simple questions to ourselves:
@@ -61,13 +64,16 @@ Before using a parallel code that  offers control to select either parallelizati
 and there could be many!
 
 * LAMMPS Parallelisation
+
 The main parallelisation technique that is used by LAMMPS is the domain decomposition method. In this process, the global domain is divided into many sub-domains and then each sub-domain is assigned to a processor. If your computer has N physical processor, you can initiate N MPI processes on your computer. This means each sub-domain is handled by a MPI process and when atoms move from one domain to another, the atom identities assigned to each MPI task will also be updated accordingly. In this method, for a (nearly) homogeneously distributed atomic system, we can expect almost uniform distribution of work across various MPI tasks. 
 
-In addition to MPI, LAMMPS also support thread level parallelism through OpenMP directives which offer parallelisation over particles rather than over domains. This works for only shared memory systems with multi-core processors. The working principle is based the "Fork-Join" model, as shown below. In thread-based parallelism, a block of code is executed by a bunch of threads where thread is the smallest processing unit scheduled by an operating system. In the 'Fork-Join' model, there exists a master thread which forks into multiple threads, and each of these forked-threads executes a part of the whole job and when all the threads are done with their assigned jobs, these threads join together again. Typically number of threads is equal to the number of core available, but this can be decided by the application or the programer at run-time using appropriate environment variables. We'll see that not always using the maximum possible threads provide the best performance. It depends on many factor as we will be discussing using some examples in this tutorial later, and more surprisingly you will discover that in LAMMPS, the MPI parallelisation is so strongly integrated that it almost always offers better performance than the OpenMP based thread-level parallelism unless your system has a fair amount of load-imbalance. 
+In addition to MPI, LAMMPS also support thread level parallelism through OpenMP directives which offer parallelisation over particles rather than over domains. In thread-based parallelism, a block of code is executed by a bunch of threads where thread is the smallest processing unit scheduled by an operating system. Using various OpenMP directives, library functionas and suitable environemnt variables one can decide what and how to parallelize a block of code. This type of parallelization works for only shared memory systems with multi-core processors where each thread has access to the shared data (RAM) and its own private data (cache, registers). These threads communicate via sharing data variables. Private memory (cache, registers) assigned to each thread helps it to access data quicker than accessing it from the shared memory. A very important issue of parallel programing on a shared-memory platform arises when multiple processors attempt to access the memory at same time. It gives rise to 'race' condition and a programer can resolve the issue using proper synchronization method. 
+
+The basic working principle in OpenMP is based the "Fork-Join" model, as shown below.  In the 'Fork-Join' model, there exists a master thread which forks into multiple threads, and each of these forked-threads executes a part of the whole job and when all the threads are done with their assigned jobs, these threads join together again. Typically number of threads is equal to the number of cores available, but this can be decided by the application or the programer at run-time using appropriate environment variables. We'll see that not always using the maximum possible threads provide the best performance. It depends on many factor as we will be discussing using some examples in this tutorial later, and more surprisingly you will discover that in LAMMPS, the MPI parallelisation is so strongly integrated that it almost always offers better performance than the OpenMP based thread-level parallelism unless your system has a fair amount of load-imbalance. 
  
 <p align="center"><img src="../fig/02/fork_join.png" width="50%"/></p>
 
-
+ 
 
 
 
