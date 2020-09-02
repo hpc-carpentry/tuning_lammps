@@ -73,11 +73,9 @@ The basic working principle in OpenMP is based the "Fork-Join" model, as shown b
  
 <p align="center"><img src="../fig/02/fork_join.png" width="50%"/></p>
 
+ Another major acceleration method which is offered by LAMMPS is through the grapgical processing units (GPUs). GPUs work together with the CPUs. While a CPU is specialized to perform complex tasks like flow control, emulating virtual machines, security, etc., a GPU is very efficient in doing simple repetative low level tasks. This functional difference between a GPU and CPU could be attributed to the massively parallel architecture that a GPU possesses. A modern CPU has only a few cores which are well optimized for performing sequential serial jobs. On the contrary, a GPU has thousands of cores that are highly efficient to do simple repeatative jobs in parallel. A graphical representation of the underlying architectural difference of a CPU and GPU is shown below:
  
-
-
-
-
+<p align="center"><img src="../fig/02/CPUvsGPU.png" width="50%"/></p> 
 
 
 
