@@ -77,7 +77,9 @@ The basic working principle in OpenMP is based the "Fork-Join" model, as shown b
  
 <p align="center"><img src="../fig/02/CPUvsGPU.png" width="50%"/></p> 
 
+How a CPU and GPU works together?
 
+<p align="center"><img src="../fig/02/CPUplusGPU.png" width="50%"/></p> 
 
 
 
