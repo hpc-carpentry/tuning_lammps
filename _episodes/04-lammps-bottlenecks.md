@@ -398,40 +398,41 @@ The submit this as a job using 4 processors, we can modify our previous job scri
 ~~~
 replacing the input file `in.lj` with the input file for the new system.
 
-> ## Devise a strategy
+> ## Investigating speedup
+> 
+> 1. Using the `log.lammps` files you have created in the previous exercises, write down the
+>    speedup factor for the `Pair`, `Comm` and `walltime` fields in the timing breakdowns. Use
+>    the below formula to calculate speedup.
+> 
+>    ```
+>    (Speedup factor) = 1.0 / ( (Time taken by n processors) / (Time taken by 1 processor) )
+>    ```
 >
-> 1. Using the above input and for a fixed system size (e.g. 32,000 atoms), I can run
->    multiple jobs with varying processor counts starting with 1 core. For example, I
->    did this study in Intel Skylake processor with 2 sockets and 20 cores each.
->    This means each node has 40 physical cores. So, you can
->    run jobs with 1, 4, 8, 16, 32, 40 processors first and then run with 80, 120,
->    160, 200, 240, 280, 320, 360, 400 cores, and so on. (depending on the
->    availability).
-> 2. For each of these jobs, you will get timing breakdown from the screen/log file.
->    Plot the *speedup factor* versus *number of cores* for the `Pair`, `Bond`,
->    `Kspace`, `Neigh`, `Comm` and `total wall time`. The speedup factor is given by
->    ~~~
->    (Speedup factor) = (average time taken by n processor) / (average time taken by 1 processor)
->    ~~~
-> 3. You won't have time to carry this analysis out now but pick a couple of cases to try.
->    Write down your observations about how different parts of the job (i.e. pair
->    calculation, long range solver, communication, etc.) scales with increasing number
->    of cores.
-> 4. Discuss with you neighbour about the bottlenecks in this calculation and devise a
->    strategy to unblock the bottleneck.
+> 2. Using a simple pen and paper, make a plot of speedup factor on the y-axis and number of
+>    processors on the x-axis.
+>
+> 3. What are your observations about this plot. Which fields show a good speedup factor?
+>    Discuss what could be a good approach in fixing this?
 >
 > > ## Solution
-> >
+> > You should have noticed that `Pair` shows almost perfect linear scaling, whereas `Comm` shows
+> > poor scalability. and the total walltime also suffers from the poor scalability when running
+> > with more number of cores.
+> > 
+> > However this is a very small sample size, as to get a better speedup, more nodes and cores need
+> > to be utilised. Take the example below of an effective scalability study.
+> > 
+> > This was carried out on an Intel Skylake processor which has 2 sockets and 20 cores each,
+> > meaning 40 physical cores per node. Here jobs were run with 1, 4, 8, 16, 32, 40 processors, and
+> > then scaled up to 80, 120, 160, 200, 240, 280, 320, 360, 400 cores. You can go further,
+> > depending on your system and availability.
+> > 
 > > <p align="center"><img src="../fig/ep04/rhodo_speedup_factor_scaling.png" width="50%"/></p>
 > >
-> > 1. In this calculation we used Intel Skylake processor with 40 physical cores. The
-> >    job was run with 1, 4, 8, 16, 32, 40, 80, 120, 160, 200, 240, 280, 320, 360 and
-> >    400 cores.
-> > 2. Speedup factors were calculated and plotted above.
-> > 3. `Pair` part and `Bond` part show almost perfect linear scaling, whereas `Neigh`
-> >    and `Kspace` show poor scalability, and the total walltime also suffers from the
-> >    poor scalability when running with more number of cores.
-> > 4. This resembles the situation 4 discussed above. A mix of MPI and OpenMP could be
-> >    a sensible approach.
+> > 
+> > As we can see, similar to your own example, `Pair` and `Bond` show almost perfect linear`
+> > scaling, whereas `Kspace` and `Comm` show poor scalability, and the total walltime also
+> > suffers from the poor scalability when running with more number of cores. This resembles the
+> > situation 4 discussed above. A mix of MPI and OpenMP could be a sensible approach.
 > {: .solution}
 {: .challenge}
