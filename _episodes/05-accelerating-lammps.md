@@ -312,15 +312,6 @@ i.e. through the command-line.
 > 4. Write down your observations based on this plot and make comments on any performance
 >    enhancement when you compare these results with the pure MPI runs.
 >
-> 3. A good metric to measure *strong* scalability is to compute the *parallel efficiency*
->    for each of these runs. *Parallel efficiency* is defined as:
->    ```
->    Parallel efficiency = (Time taken by a serial run / (Np * (Time taken by Np cores))
->    ```
->    Calculate *parallel efficiency* for each of these jobs.
-> 4. Make a plot of *parallel efficiency* versus *number of nodes* for the various
->    combinations.
->
 > > ## Solution
 > >
 > > For a system with 40 cores per node, the following combinations are possible:
