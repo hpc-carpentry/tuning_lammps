@@ -300,7 +300,7 @@ i.e. through the command-line.
 >    Parallel efficiency = (Time taken by a serial run / (Np * (Time taken by Np cores))
 >    ```
 >
->    Using the `log.lammps` files here (**FIXME WITH LINK**), calcualte the parallel efficiencies
+>    Using the `log.lammps` files here (**FIXME WITH LINK**), calculate the parallel efficiencies
 >    to complete the csv (**FIXME WITH LINK**) file.  To get the total time taken by each job,
 >    search for `wall time` in the log/screen output files. The value for the serial run can be taken
 >    as `7019`. **NOTE: This will differ between systems. If time permits, find out the time taken**
