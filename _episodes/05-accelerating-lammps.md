@@ -320,7 +320,6 @@ i.e. through the command-line.
 >    Calculate *parallel efficiency* for each of these jobs.
 > 4. Make a plot of *parallel efficiency* versus *number of nodes* for the various
 >    combinations.
-
 >
 > > ## Solution
 > >
