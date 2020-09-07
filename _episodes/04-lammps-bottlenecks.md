@@ -147,6 +147,12 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 >
 {: .challenge}
 
+> ## Important!
+>
+> For many of these exercises, the exact modifications you will need to implement are system
+> specific. Check with your instructor or your HPC institution's helpdesk for information specific
+> to your HPC system.
+
 > ## Example timing breakdown for 4000 atoms LJ-system with 40 MPI ranks
 >
 > ~~~
@@ -390,7 +396,7 @@ a 32000 atom system. The force cutoff for LJ force-field is 10.0 Angstroms, neig
 skin cutoff is 1.0 sigma, number of neighbors per atom is 440. NPT time integration
 is performed for 20,000 timesteps.
 
-<p align="center"><img src="../fig/ep04/rhodo.png" width="50%"/></p>
+<p align="center"><img src="../fig/04/rhodo.png" width="50%"/></p>
 
 The submit this as a job using 4 processors, we can modify our previous job script:
 ~~~
@@ -427,7 +433,7 @@ replacing the input file `in.lj` with the input file for the new system.
 > > then scaled up to 80, 120, 160, 200, 240, 280, 320, 360, 400 cores. You can go further,
 > > depending on your system and availability.
 > > 
-> > <p align="center"><img src="../fig/ep04/rhodo_speedup_factor_scaling.png" width="50%"/></p>
+> > <p align="center"><img src="../fig/04/rhodo_speedup_factor_scaling.png" width="50%"/></p>
 > >
 > > 
 > > As we can see, similar to your own example, `Pair` and `Bond` show almost perfect linear`
