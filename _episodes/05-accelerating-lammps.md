@@ -171,7 +171,7 @@ packages available currently (version 3Mar20):
 * `omp` : This calls the **USER-OMP** package
 * `kokkos`: This calls the **Kokkos** package
 
-### Example: How to invoke the **USER-OMP** package
+## Example: How to invoke the **USER-OMP** package
 
 To call **USER-OMP** in a LAMMPS run, use `omp` as `style`. Next you need to choose
 proper `<arguments>` for the `omp` style. `<arguments>` should be chosen as the number
@@ -240,7 +240,7 @@ i.e. through the command-line.
 
 > ## Case study: Rhodopsin (with **USER-OMP** package)
 >
-> We shall use the same input file for the rhodopsin system with lipid bilayer. The
+> We shall use the same input file for the rhodopsin system with lipid bilayer (**FIXME LINK**). The
 > settings for this run are described in a
 > [previous episode]({{page.root}}/04-lammps-bottlenecks/#situation-practice-rhodopsin-system).
 > In this episode, we'll run this using the **USER-OMP** package to mix MPI and OpenMP. For
@@ -248,45 +248,67 @@ i.e. through the command-line.
 >
 > 1. First, find out the number of cpu cores available per node in the HPC system that
 >    you are using and then figure out all the possible MPI/OpenMP combinations that you
->    can have per node. For example, I did this study using 2 Intel Xeon Gold 6148 (Skylake)
->    processors, each with with 20 cores. This means each node has 40 physical cores. So,
->    to satisfy
+>    can have per node. For example on a node with 40 physical cores, there are 8 combinations per
+>    node. Write down the different combinations for your machine, then choose one to run. Then run
+>    the code again with pure MPI settings, without **any** OpenMP threading, to avoid any overhead.
+>    Do you notice a difference in speedup?
+>
 >    ```
 >    (Number of MPI processes) x (Number of OpenMP threads) = (Number of cores per node)
 >    ```
->    I can have the following combinations per node:
->     * 1 MPI task with 40 OpenMP threads
->     * 2 MPI tasks with 20 OpenMP threads
->     * 4 MPI tasks with 10 OpenMP threads
->     * 5 MPI tasks with 8 OpenMP threads
->     * 8 MPI tasks with 5 OpenMP threads
->     * 10 MPI tasks with 4 OpenMP threads
->     * 20 MPI tasks with 2 OpenMP threads
->     * 40 MPI tasks with 1 OpenMP threads (in this case, it is better not to use OMP at all)
->    If I want to see scaling, say up to 10 nodes, this means that I have to run a total
->    80 calculations since I have 8 MPI/OpenMP combinations for each node count.
-> 2. Run the job for with pure-MPI settings. In my case this would be with 40 MPI tasks (1 node),
->    80 MPI tasks (2 nodes), and so on. Make sure not to use **any** OpenMP threading in these
->    runs, to avoid including any overhead due to the use of OpenMP.
+>
+> 2. On a system of a node with 40 cores, if we want to see scaling, say up to 10 nodes, this means
+>    that a total of 80 calculations would need to be run since we have 8 MPI/OpenMP combinations
+>    for each node. Thankfully, you don’t need to do the 80 calculations. A good metric to
+>    measure strong scalability is to compute the parallel efficiency for each of these runs, where;
+>
+>    ```
+>    Parallel efficiency = (Time taken by a serial run / (Np * (Time taken by Np cores))
+>    ```
+>
+>    Using the `log.lammps` files here (**FIXME WITH LINK**), calcualte the parallel efficiencies
+>    to complete the csv (**FIXME WITH LINK**) file.  To get the total time taken by each job,
+>    search for `wall time` in the log/screen output files. The value for the serial run can be taken
+>    as `7019`. **NOTE: This will differ between systems. If time permits, find out the time taken**
+>    **for a serial run on your system.**
+>
+> 3. Now that you have completed the csv, make a plot of parallel efficiency versus number of nodes
+>    from the various combinations by running the python script (**FIXME WITH LINK**).
+>
+> 4. Write down your observations based on this plot and make comments on any performance
+>    enhancement when you compare these results with the pure MPI runs.
+>
 > 3. A good metric to measure *strong* scalability is to compute the *parallel efficiency*
 >    for each of these runs. *Parallel efficiency* is defined as:
 >    ```
 >    Parallel efficiency = (Time taken by a serial run / (Np * (Time taken by Np cores))
 >    ```
->    Calculate *parallel efficiency* for each of these jobs. To get the total time taken
->    by each job, search for `wall time` in the log/screen output files.
+>    Calculate *parallel efficiency* for each of these jobs.
 > 4. Make a plot of *parallel efficiency* versus *number of nodes* for the various
 >    combinations.
-> 5. Write down your observations based on this plot and make comments on any performance
->    enhancement when you compare these results with the pure MPI runs.
+
 >
 > > ## Solution
+> >
+> > For a system with 40 cores per node, the following combinations are possible:
+> > 
+> > * 1 MPI task with 40 OpenMP threads
+> > * 2 MPI tasks with 20 OpenMP threads
+> > * 4 MPI tasks with 10 OpenMP threads
+> > * 5 MPI tasks with 8 OpenMP threads
+> > * 8 MPI tasks with 5 OpenMP threads
+> > * 10 MPI tasks with 4 OpenMP threads
+> > * 20 MPI tasks with 2 OpenMP threads
+> > * 40 MPI tasks with 1 OpenMP threads (in this case, it is better not to use OMP at all)
+> > 
 > > For a perfectly scalable system, parallel efficiency should be equal to 100%, and
 > > as it approaches zero we say that the parallel performance is poor.
+> > 
+> > Upon completing the exercise, you should have produced a plot similar to this, from which we
+> > can take a few observations.
 > >
 > > <p align="center"><img src="../fig/05/scaling_rhodo_user_omp.png" width="50%"/></p>
 > >
-> > A few observations from the following plot:
 > > 1. As we increase number of nodes, the parallel efficiency decreases considerably
 > >    for all the runs. This decrease in performance could be associated to the poor
 > >    scalability of the `Kspace` and `Neigh` computations. We have discussed about
@@ -309,7 +331,7 @@ i.e. through the command-line.
 > {: .solution}
 {: .challenge}
 
-###  Example: How to invoke the **GPU** package
+## Example: How to invoke the **GPU** package
 
 Using the **GPU** package in LAMMPS, one can achieve performance gain by coupling GPUs to
 one or many CPUS. Since supports both CUDA (which is vendor specific) and OpenCL (which
@@ -358,7 +380,7 @@ Before invoking the GPU package, you must ask the following questions:
 
 If the answer to these two questions is a *yes* then we you can proceed to the following section.
 
-#### Basic syntax: arguments and keywords
+### Basic syntax: arguments and keywords
 
 As discussed above, you need to use the `package` command to invoke the **GPU** package.
 To use the **GPU** package for an accelerator you need to select `gpu` as *style*. Next
