@@ -95,8 +95,8 @@ about what these packages offer. To do this we will learn:
 
 ### **USER-INTEL** package
 
-The **USER-INTEL** package supports *single*, *double* and *mixed* precision calculations
-***NEED TO EXPLAIN WHAT THIS MEANS IN CALLOUT***.
+The **USER-INTEL** package supports *single*, *double* and *mixed* precision calculations.
+
 Acceleration, in this case, is achieved in two different ways:
 
 * Use vectorisation on multi-core CPUs
@@ -121,6 +121,11 @@ If you would like to know how much speedup you can expect to achieve using USER-
 take a look in the
 [corresponding LAMMPS documentation](https://lammps.sandia.gov/doc/Speed_intel.html)
 
+> ## Single, double, mixed precision calculations
+>
+> ***NEED TO EXPLAIN WHAT THIS MEANS IN CALLOUT*** Explain me!
+{: .callout}
+
 ### **USER-OMP** package
 
 This accelerator package offers performance gain through optimisation and multi-threading
@@ -138,6 +143,35 @@ to use for a particular simulation is. Generally, the package gives better perfo
 when used for lower numbers of threads, for example 2-4. It is important to remember
 that the MPI implementation in LAMMPS is so robust that you may almost always expect this
 to be more effective than using OpenMP on multi-core CPUs.
+
+### **GPU** package
+
+Using the **GPU** package in LAMMPS, one can achieve performance gain by coupling GPUs to
+one or many CPUS. Since supports both CUDA (which is vendor specific) and OpenCL (which
+is an open standard), it can be used on a variety of GPU hardware.
+
+Calculations that require access to atomic data like coordinates, velocities, forces may suffer
+bottlenecks since at every step these data are communicated back and forth between the
+CPUs and GPUs. Calculations can be done in single, double or mixed precisions.
+
+In case of the **GPU** package, computations are shared between CPU and GPU
+(unlike the Kokkos package GPU implementation where the primary aim is to offload all of
+the calculations to the GPUs only). For example,
+asynchronous force calculations like **pair** vs **bond/angle/dihedral/improper** can be done
+simultaneously on GPUs and CPUs respectively. Similarly, for PPPM calculations the charge
+assignment and the force computations are done on GPUs whereas the FFT calculations that
+require MPI communications are done on CPUs. Neighbour lists can be built on either
+CPUs or GPUs. You can control this using specific flags in the command line of your job
+submission script. Thus the GPU package can provide a balanced mix of GPU and CPU usage for a
+particular simulation to achieve a performance gain.
+
+A list of functionalities enabled with this package can be found
+[here]({{page.root}}/reference/#package-GPU).
+
+### **Kokkos** package
+
+The Kokkos package in LAMMPS is implemented to gain performance with portability. This will be
+discussed in more depth in the next lesson (**FIXME ADD LINK**)
 
 ## How to invoke a package in LAMMPS run?
 
@@ -166,12 +200,12 @@ package <style> <arguments>
 `style` allows you to choose the accelerator package for your run. There are four different
 packages available currently (version 3Mar20):
 
-* `gpu`: This calls the **GPU** package
 * `intel`: This calls the **USER-INTEL** package
 * `omp` : This calls the **USER-OMP** package
+* `gpu`: This calls the **GPU** package
 * `kokkos`: This calls the **Kokkos** package
 
-## Example: How to invoke the **USER-OMP** package
+## How to invoke the **USER-OMP** package
 
 To call **USER-OMP** in a LAMMPS run, use `omp` as `style`. Next you need to choose
 proper `<arguments>` for the `omp` style. `<arguments>` should be chosen as the number
@@ -331,29 +365,7 @@ i.e. through the command-line.
 > {: .solution}
 {: .challenge}
 
-## Example: How to invoke the **GPU** package
-
-Using the **GPU** package in LAMMPS, one can achieve performance gain by coupling GPUs to
-one or many CPUS. Since supports both CUDA (which is vendor specific) and OpenCL (which
-is an open standard), it can be used on a variety of GPU hardware.
-
-Calculations that require access to atomic data like coordinates, velocities, forces may suffer
-bottlenecks since at every step these data are communicated back and forth between the
-CPUs and GPUs. Calculations can be done in single, double or mixed precisions.
-
-In case of the **GPU** package, computations are shared between CPU and GPU
-(unlike the Kokkos package GPU implementation where the primary aim is to offload all of
-the calculations to the GPUs only). For example,
-asynchronous force calculations like **pair** vs **bond/angle/dihedral/improper** can be done
-simultaneously on GPUs and CPUs respectively. Similarly, for PPPM calculations the charge
-assignment and the force computations are done on GPUs whereas the FFT calculations that
-require MPI communications are done on CPUs. Neighbour lists can be built on either
-CPUs or GPUs. You can control this using specific flags in the command line of your job
-submission script. Thus the GPU package can provide a balanced mix of GPU and CPU usage for a
-particular simulation to achieve a performance gain.
-
-A list of functionalities enabled with this package can be found
-[here]({{page.root}}/reference/#package-GPU).
+## How to invoke the **GPU** package
 
 A question that you may be asking is how much speed-up would you expect from the GPU package.
 Unfortunately there is no easy answer for this. This can depend on many things starting from
