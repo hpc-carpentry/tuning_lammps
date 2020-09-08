@@ -431,7 +431,7 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > conditions. What command/package keywords should we run so that neighbour list building and force
 > computation are done entirely on the GPUs
 > 
-> * Set `x=y=z=60`, `t=500`
+> * Set `x = y = z = 60`, `t = 500`
 > * Use 2 GPUs and 24 MPI ranks
 > * Neighbour built on CPUs
 > * Dynamic load balancing between CPUs and GPUs dynamic load balancing between the CPUs and the
@@ -534,44 +534,53 @@ instead of 4 GPUs may give better performance, and this is why it is advisable t
 out the best possible set of run-time parameters by following a thorough optimization
 before starting the production runs. This might save your lot of resource and time!
 
-> ## Exercise: Offload entire neighbor build and force computation to GPUs
-> As mentioned above, employing the full computing workforce to solve your problem may
-> not always return the most profit. We need to tune this before starting any production
-> run. In this exercise, we'll be using the above input file defining a LJ-system. Here
-> we'll do three sets of run where each set will have different numbers of atoms in the
-> box. Let the system sizes be defined by `x = y = z = 10`, `x = y = z = 40` and
-> `x = y = z = 140`. This implies that these three systems will have 4000, 256,000 and
-> nearly 11 million atoms in the box respectively. We can choose the length of the
-> simulation also using `t = 5000`. For each case, run it for different numbers of
-> GPU/MPI task combinations. For example, I ran these systems in a node having 4 K80
-> NVIDIA GPUs and 24 physical cores. I choose to employ all 4 GPUs abut different number
-> of MPI tasks. Since there are 4 GPUs, I must use at least 4 MPI ranks. So, I choose
-> the following combinations: 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks,
-> 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks, 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks.
-> For this exercise, choose `package` keywords such that neighbor list building and
-> force computations are done entirely on the GPUs. It can be done using
-> ```
-> -sf gpu -pk gpu 4 neigh yes newton off split 1.0
-> ```
-> where 4 GPUs are being used. After the runs are over, the performance data
-> is extracted from the log/screen output files using the command
-> ```
-> grep "Performance:" log.lammps
-> ```
-> {: .bash}
-> in units of `timestep/s`. Finally, plot a *normalized speed-up factor per node* versus
-> GPU/MPI choices for each of these configurations and write down the main observations.
+> ## Exercise: Offload entire neighbour build and force computation to GPUs
+> 
+> 1. Using the input file from the previous exercise, modify it so that your system contains **ONE**
+>    of the following sizes, letting `t = 5000`;
+>
+>    * `x = y = z = 10` = 4,000 atoms
+>    * `x = y = z = 40` = 256,000 atoms
+>    * `x = y = z = 140` = 11,000,000 atoms
+>
+>    Make sure the system you pick is different to that of your neighbour(s).
+>
+> 2. Find the different GPU/MPI task combinations on your system. For example, on a 4 GPU node and
+>    24 cores, there are 6 different combintaions, with a minimum of 4 MPI tasks being used. Choose
+>    2 (**CHECK ME, maybe 3?**) different GPU/MPI task combinations for your chosen system size and
+>    plot the normalised speedup (**CHECK MATH**) on a pen and paper. Choose package keywords such
+>    that neighbour list building and force computations are done entirely on the GPUs. It can be
+>    done using;
+>
+>    ```
+>    -sf gpu -pk gpu 4 neigh yes newton off split 1.0
+>    ```
+>
+>    where 4 GPUs are being used. Use `grep "Performance:" log.lammps` to extract the data in
+>    `timesteps/s`
+>
+> 3. Compare your results with that of your neighbour. Discuss the differences and note your main
+>    observations.
 >
 > > ## Solution
-> > I did this study in a Intel Xeon E5-2680 v3 Haswell CPU node having 2x12 cores per
-> > node and two NVIDIA K80 GPUs (which actually means four visible devices per node).
-> > Six GPU/MPI combinations were tried for each characteristic system size. These are
-> > 4 GPUs/4 MPI tasks, 4 GPUs/8 MPI tasks, 4 GPUs/12 MPI tasks, 4 GPUs/16 MPI tasks,
-> > 4 GPUs/20 MPI tasks and 4 GPUs/24 MPI tasks. The final plot is shown below.
+> >
+> > On a system with 2x12 cores per node and two GPUs (4 visible devices per node in this case),
+> > the different combinations are;
+> > 
+> > * 4 GPUs/4 MPI tasks
+> > * 4 GPUs/8 MPI tasks
+> > * 4 GPUs/12 MPI tasks
+> > * 4 GPUs/16 MPI tasks
+> > * 4 GPUs/20 MPI tasks
+> > * 4 GPUs/24 MPI tasks
+> >
+> > Across all GPU/MPI combinations and system sizes (4K, 256K, 11M), there are a total of 18 runs.
+> > The final plot is shown below.
 > >
 > > <p align="center"><img src="../fig/05/gpu_mpi_counts.png" width="50%"/></p>
 > >
-> > The main observations from the following plots are:
+> > The main observations you can take from this are:
+> >
 > > 1. For the system with 4000 atoms, increasing the number of MPI tasks actually
 > >    degrades the overall performance.
 > > 2. For the 256K system, we can notice an initial speed-up with increasing MPI task
@@ -581,9 +590,14 @@ before starting the production runs. This might save your lot of resource and ti
 > >    with increasing MPI tasks per GPU (in this case, 6 MPI tasks per GPU).
 > >
 > > Possible explanation:
+> >
 > > 1. For the smallest system, the number of atoms assigned to each GPU or MPI ranks is
-> >    very low. The system size is so small that considering GPU acceleration is practically meaningless. In this case you are emplying far too many workers to complete a small job and therefore it is not surprising that the scaling deteriorates with increasing MPI tasks. In fact, you may try to use 1 GPU and a few MPI task to see if the performance increases in this case.
-> > 2. Fix Me.
+> >    very low. The system size is so small that considering GPU acceleration is practically
+> >    meaningless. In this case you are emplying far too many workers to complete a small job and
+> >    therefore it is not surprising that the scaling deteriorates with increasing MPI tasks. In
+> >    fact, you may try to use 1 GPU and a few MPI task to see if the performance increases in
+> >    this case.
+> > 2. (**FIXME**).
 > {: .solution}
 {: .challenge}
 
