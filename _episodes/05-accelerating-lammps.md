@@ -431,7 +431,7 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > conditions. What command/package keywords should we run so that neighbour list building and force
 > computation are done entirely on the GPUs
 > 
-> * Set x=y=z=60. t=500
+> * Set `x=y=z=60`, `t=500`
 > * Use 2 GPUs and 24 MPI ranks
 > * Neighbour built on CPUs
 > * Dynamic load balancing between CPUs and GPUs dynamic load balancing between the CPUs and the
@@ -448,6 +448,9 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > > ```
 > > lmp -v x 60 -v y 60 -v z 60 -v t 500 -sf gpu -pk gpu 2 neigh no newton off split -1.0
 > > ```
+> >
+> > The breakdown of the command is as follows;
+> >
 > > * `-v x 60 -v y 60 -v z 60` - Setting system size
 > > * `-v t 500` - Setting length of run
 > > * `-pk gpu 2` - Setting **GPU** package and number of GPUs
