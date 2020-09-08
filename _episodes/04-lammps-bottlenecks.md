@@ -226,11 +226,9 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > This situation is more likely to expose itself as you scale up to a large
 > large number of processors.
 >
-> Is there any way to deal with load imbalance in LAMMPS?
-> > Yes, you can deal it up to a certain extent using `processors` and `balance`
-> > commands in LAMMPS. Detail usage is given in LAMMPS manual. (Fix Me: Might be
-> > discussed to some extent in later episodes)
-> {: .solution}
+> You can deal with load imbalance up to a certain extent using `processors` and `balance`
+> commands in LAMMPS. Detail usage is given in LAMMPS manual. (**Fix Me: Might be**
+> **discussed to some extent in later episodes**)
 {: .callout}
 
 > ## Analysing the large system
