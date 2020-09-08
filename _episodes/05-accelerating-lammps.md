@@ -366,8 +366,8 @@ tuning parameters for the simplest LJ-systems.
 
 The primary aim for this following exercise is:
 
-* To get a primary understanding of the various commandline arguments that can control how a job is
-  distributed among cpus/gpus, how to control cpu/gpu communications, etc. etc.
+* To get a primary understanding of the various command line arguments that can control how a job is
+  distributed among cpus/gpus, how to control cpu/gpu communications, etc.
 * To get an initial idea on how to play with different run-time parameters to get an optimum
   performance.
 * Finally, one can also make a fair comparison of performance between a *regular* LAMMPS run, the
@@ -442,50 +442,32 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > ```
 > {: .source}
 > > ## Solution
-> > *** I don't like this, it is currently far too system specific, can we generalise?***
-> > A job submission script is shown below. Note that the number of MPI ranks is fixed
-> > by `#SBATCH --ntasks-per-node=24`. You are requesting for 2 GPUs by using
-> > `#SBATCH --gres=gpu:2`. Rest of the input parameters can be passed to the LAMMPS
-> > executable using command-line switches. The system size can be chosen using
-> > `-v x 60 -v y 60 -v z 60`, length of the run can be decided by `-v t 500`, **GPU**
-> > package and the number of GPUs is chosen by `-pk gpu 2`, the **GPU** package
-> > related fix/pair styles can be chosen using `-sf gpu`, and other **GPU** package
-> > related keywords are chosen using `neigh no newton off split -1.0`. A `no` value of
-> > the `neigh` keyword ensures that the neighbor list is built in the *CPUs*. Dynamic
-> > load balancing option between CPUs and GPUs is chosen using `split -1.0`.
 > >
-> > ~~~
-> > #!/bin/bash -x
-> > #SBATCH --account=ecam
-> > #SBATCH --nodes=1
-> > #SBATCH --ntasks-per-node=24
-> > #SBATCH --output=mpi-out.%j
-> > #SBATCH --error=mpi-err.%j
-> > #SBATCH --time=01:00:00
-> > #SBATCH --partition=gpus
-> > #SBATCH --gres=gpu:2
+> > ```
+> > lmp -v x 60 -v y 60 -v z 60 -v t 500 -sf gpu -pk gpu 2 neigh no newton off split -1.0
+> > ```
+> > * `-v x 60 -v y 60 -v z 60` - Setting system size
+> > * `-v t 500` - Setting length of run
+> > * `-pk gpu 2` - Setting **GPU** package and number of GPUs
+> > * `-sf gpu` - **GPU** package related fix/pair styles
+> > * `neigh no` - A `no` value of `neigh` keyword indicates neighbour list built in the CPUs
+> > * `newton off` - **(FIXME - WHY?)**
+> > * `split -1.0` - Dynamic load balancing option between CPUs and GPUs when value = `-1`
+> > 
+> > **NB:** It is important to fix the number of MPI ranks in your submission script, and request
+> > the number of GPUs you wish to utilise. This will change depending on your system.
 > >
-> > module use /usr/local/software/jureca/OtherStages
-> > module load Stages/Devel-2019a
-> > module load intel-para/2019a
-> > module load LAMMPS/18Feb2020-cuda
-> >
-> > srun lmp -v x 60 -v y 60 -v z 60 -v t 500 -sf gpu -pk gpu 2 neigh no newton off split -1.0 -in in.lj
-> > ~~~
-> > {: .bash}
 > {: .solution}
 {: .challenge}
 
-#### Know about the **GPU** package output
+### Know about the **GPU** package output
 
 At this stage, once you complete a job successfully, it is time to look for a few things in the
 LAMMPS output file. The first of these is to check that  LAMMPS is doing the things
 that you asked for and the rest are to tell you about the performances.
 
-##### Device information
-
 It prints about the device information both in the screen-output and the log file. You would notice
-something like this:
+something similar to;
 
 ```
 {% include {{ site.snippets }}/ep05/lammps-gpu-output-1.txt %}
@@ -501,7 +483,7 @@ each GPU. The detail about the graphics card is also printed, along
 with the *numerical precision* used by the **GPU** package is also printed. In this case, it
 is using *double precision*. Next it shows how many MPI-processes are spawned per GPU.
 
-##### Accelerated version of pair-potential
+#### Accelerated version of pair-potential
 
 This section of the output shows you that it is actually using the *accelerated* version of the
 pair potential `lj/cut`. You can see that it is using `lj/cut/gpu` though in your input file you
