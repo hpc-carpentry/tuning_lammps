@@ -425,15 +425,17 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 
 > ## Learn to call the **GPU** package from command-line
 >
-> In this exercise, we'll deal with a Lennard-Jones (LJ) system as described by the
-> following input file. You can vary the system size and the length of the run using the
-> variables `x`, `y`, `z`, and `t`. For this exercise, let us choose `x = y = z = 60`. Since
-> this is a system with `fcc` lattice, the total number of atoms should be 864,000 for
-> the chosen values of `x`, `y`, and `z`. Let, `t` = 500.
-> We'll call the **GPU** package from the command-line in this case. Can you prepare a
-> job submission file for this system such that it enables to use 2 GPUs with 24 MPI ranks.
-> Make sure that the neighbor is built on the CPUs and there is a dynamic load balancing
-> between the CPUs and the GPUs.
+> Employing the full computing workforce to solve your problem may not always be the most
+> profitable. We need to tune this before starting any production run. Derive a command line to
+> submit a LAMMPS job for the LJ system described by the following input file with the following
+> conditions. What command/package keywords should we run so that neighbour list building and force
+> computation are done entirely on the GPUs
+> 
+> * Set x=y=z=60. t=500
+> * Use 2 GPUs and 24 MPI ranks
+> * Neighbour built on CPUs
+> * Dynamic load balancing between CPUs and GPUs dynamic load balancing between the CPUs and the
+>   GPUs.
 >
 > {% capture mycode %}{% include {{ site.snippets }}/ep05/in.lj %}{% endcapture %}
 > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
