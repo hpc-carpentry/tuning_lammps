@@ -206,7 +206,7 @@ settings, we can use them for all the runs needed to perform the scalability stu
 >
 > > ## Solution
 > >
-> > <p align="center"><img src="../fig/07/scaling_rhodo_kokkos_omp.png" width="50%"/></p>
+> > <p align="center"><img src="../fig/07/scaling_rhodo_kokkos_omp.png" width="75%"/></p>
 > >
 > > You should have produced a plot similar to this, from which you can take the following
 > > observations.

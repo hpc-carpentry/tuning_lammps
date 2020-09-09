@@ -331,7 +331,7 @@ i.e. through the command-line.
 > > Upon completing the exercise, you should have produced a plot similar to this, from which we
 > > can take a few observations.
 > >
-> > <p align="center"><img src="../fig/05/scaling_rhodo_user_omp.png" width="50%"/></p>
+> > <p align="center"><img src="../fig/05/scaling_rhodo_user_omp.png" width="75%"/></p>
 > >
 > > 1. As we increase number of nodes, the parallel efficiency decreases considerably
 > >    for all the runs. This decrease in performance could be associated to the poor
