@@ -56,16 +56,12 @@ the ```-k on``` switch as shown below:
 > the GPU package (***ADD REF***) such that it invokes the Kokkos GPU to
 > accelerate the job using 2 nodes having 24 cores each, 4 devices per node. Assign all
 > the MPI ranks available on a node to all the devices. Use  *default* package options.
+> 
 > > ## Solution
-> > ~~~
-> > #SBATCH --nodes=2
-> > #SBATCH --ntasks-per-node=24
-> > #SBATCH --partition=gpus
-> > #SBATCH --gres=gpu:4
-> > ... ... ...
-> > ... ... ...
-> > srun lmp -k on g 4 -sf kk -pk kokkos -in in.lj
-> > ~~~
+> >
+> > ```
+> > lmp -k on g 4 -sf kk -pk kokkos -in in.lj
+> > ```
 > > {: .input}
 > {: .solution}
 {: .challenge}
