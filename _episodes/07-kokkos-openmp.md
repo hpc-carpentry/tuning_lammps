@@ -82,13 +82,15 @@ switch just following the ```-k on``` switch as shown below:
 > Derive a command-line to submit a LAMMPS job for the rhodopsin system such that it
 > invokes the Kokkos OpenMP threading to accelerate the job using 2 nodes having 40 cores
 > each, 4 MPI ranks per nodes, 10 OpenMP threads per rank with *default* package options.
+> 
 > > ## Solution
-> > ~~~
+> > 
+> > ```
 > > export OMP_NUM_THREADS=10
 > > export OMP_PROC_BIND=spread
 > > export OMP_PLACES=threads
 > > mpirun -np 8 -ppn 4 --bind-to socket --map-by socket lmp -k on t $OMP_NUM_THREADS -sf kk -i in.rhodo
-> > ~~~
+> > ```
 > > {: .bash}
 > >
 > > This solution includes affinity using OpenMPI MPI runtime binding mechanisms
@@ -121,6 +123,7 @@ settings, we can use them for all the runs needed to perform the scalability stu
 > how these `package` related keywords can be invoked in your LAMMPS runs using the
 > command-line switches. Default `package` settings are overwritten here using
 > ```-pk kokkos neigh half newton on comm no```.
+>
 > ~~~
 > export OMP_NUM_THREADS=10
 > export OMP_PROC_BIND=spread
@@ -130,25 +133,22 @@ settings, we can use them for all the runs needed to perform the scalability stu
 > {: .bash}
 {: .callout}
 
-> ## Find out the optimum values of the keywords
+> ## The optimum values of the keywords
 >
 > Take the rhodopsin input files (`in.rhodo` and `data.rhodo` *** SHOULD BE LINKED *** ),
-> and run LAMMPS jobs on 1 node for the following set of parameters with the `package`
-> command settings as given in the table below. Fill in the blank spaces in the table with
-> the walltimes (in seconds) required for these runs. Comment on which set of values give
-> you the fastest runs. *** THIS WILL TAKE FOREVER, GET THEM TO DO 1-2 EXAMPLE RUNS THEN
-> SHOW THE TABLE ***
+> and run LAMMPS jobs for `40 MPI/1 OpenMP` thread on 1 node using the `package`command for the
+> following two set of parameters.
 >
-> |neigh|newton|comm|binsize|1MPI/40t|2MPI/40t|4MPI/10t|5MPI/8t |8MPI/5t|10MPI/4t|20MPI/2t|40MPI/1t|
-> |-----|------|----|-------|--------|--------|--------|--------|-------|-------|--------|--------|
-> |full | off  | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |
-> |full | off  |host|default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |
-> |full | off  |dev |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |
-> |full | on   | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |
-> |half | on   | no |default|    ?   |    ?   |   ?    |    ?   |   ?   |   ?   |    ?   |   ?    |
+> * `neigh full new town off comm no`
+> * `neigh half newton on comm host`
 >
-> > ## Results obtained from a Skylake (AVX 512) system with 40 cores
-> > For a Skylake (AVX 512) system with 40 cores, the results for this input is given below:
+> 1. What is the influence on `comm`? What is implied in the output file?
+>
+> 2. What difference does switching the values of `neigh` and `newton` have? Why?
+>
+> > ## Results obtained from a 40 core system
+> > For a HPC setup which has 40 cores per node, the runtimes for all the MPI/OpenMP combinations
+> > and combination of keywords is given below:
 > >
 > > |neigh|newton|comm|binsize|1MPI/40t|2MPI/40t|4MPI/10t|5MPI/8t |8MPI/5t|10MPI/4t|20MPI/2t|40MPI/1t|
 > > |-----|------|----|-------|--------|--------|--------|--------|-------|-------|--------|--------|
@@ -158,32 +158,31 @@ settings, we can use them for all the runs needed to perform the scalability stu
 > > |full | on   | no |default|  176   |  145   |  125   |  128   |  120  |  119  |  116   |  118   |
 > > |half | on   | no |default|  190   |  135   |  112   |  119   |  103  |  102  |  97    |  94    |
 > >
-> > Comments:
-> >   1. The choice of `comm` not making practical difference. Why?
+> > 1. The influence on `comm` can be seen in the output file, as it prints the following;
 > >
-> >      Examine the output file carefully. It prints the following:
-> >      ```
-> >      WARNING: Fixes cannot yet send data in Kokkos communication, switching to classic communication (src/KOKKOS/comm_kokkos.cpp:493)
-> >      ```
-> >      {: .output}
-> >      This means the fixes that we are using in this calculation are not yet supported
-> >      in **Kokkos** communication and hence using different values of the `comm` keyword
-> >      makes no difference.
+> >    ```
+> >    WARNING: Fixes cannot yet send data in Kokkos communication, switching to classic communication (src/KOKKOS/comm_kokkos.cpp:493)
+> >    ```
+> >    {: .output}
 > >
-> >   2. Switching on `newton` and using `half` neighbour list make the runs faster for
-> >      most of the MPI/OpenMP settings.
-> >      When `half` neighbour list and OpenMP is being used together in **Kokkos**, it
-> >      uses data duplication to make it thread-safe. When you use relatively few
-> >      numbers of threads (8 or less) this could be fastest and for more threads it
-> >      becomes memory-bound (since there are more copies of the same data filling up
-> >      RAM) and suffers from poor scalability with increasing thread-counts. If you
-> >      look at the data in the above table carefully, you will notice that using 40
-> >      OpenMP threads for `neigh=half` and `newton=on` makes the run slower. On the
-> >      other hand, when you use only 1 OpenMP thread per MPI rank, it requires no data
-> >      duplication or atomic operations, hence it produces the fastest run.
+> >    This means the fixes that we are using in this calculation are not yet supported
+> >    in **Kokkos** communication and hence using different values of the `comm` keyword
+> >    makes no difference.
 > >
-> >   So, we'll be using `neigh half newton on comm host`) for all the runs in the
-> >   scalability studies below.
+> > 2. Switching on `newton` and using `half` neighbour list make the runs faster for
+> >    most of the MPI/OpenMP settings.
+> >    When `half` neighbour list and OpenMP is being used together in **Kokkos**, it
+> >    uses data duplication to make it thread-safe. When you use relatively few
+> >    numbers of threads (8 or less) this could be fastest and for more threads it
+> >    becomes memory-bound (since there are more copies of the same data filling up
+> >    RAM) and suffers from poor scalability with increasing thread-counts. If you
+> >    look at the data in the above table carefully, you will notice that using 40
+> >    OpenMP threads for `neigh = half` and `newton = on` makes the run slower. On the
+> >    other hand, when you use only 1 OpenMP thread per MPI rank, it requires no data
+> >    duplication or atomic operations, hence it produces the fastest run.
+> >
+> > So, we'll be using `neigh half newton on comm host`) for all the runs in the scalability
+> > studies below.
 > {: .solution}
 {: .challenge}
 
