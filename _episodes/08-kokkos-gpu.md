@@ -173,20 +173,30 @@ these aspects to some extent.
 > {: .solution}
 {: .challenge}
 
+We have already discussed that the primary aim of developing the Kokkos package is to write a
+single C++ code that will run on both devices (like GPU) and hosts (CPU) with or without
+multi-threading. Targeting portability without losing the functionality and the performance of a
+code is the primary objective of Kokkos.
+
+
 > ## Exercise: Speed-up ( CPU versus GPU package versus Kokkos/GPU )
-> We have already discussed that the primary aim of developing the Kokkos package is to
-> write a single C++ code that will run on both devices (like GPU) and hosts (CPU) with
-> or without multi-threading. Targeting portability without losing the functionality and
-> the performance of a code is the primary objective of Kokkos.
 >
 > Let us see now see how the current Kokkos/GPU implementation within LAMMPS (version
 > `3Mar20`) achieves this goal by comparing its performance with the CPU and GPU package.
-> For this, we shall repeat the same set of tasks as described in ***ADD REF***. Take a
+> 
+> For this, we shall repeat the same set of tasks as described in 
+> [episode 5]({{page.root}}/05-accelerating-lammps). Take a
 > LJ-system with ~11 million atons by choosing `x = y = z = 140` and `t = 500`. We'll
-> use optimum number of GPU devices and MPI tasks to run the jobs with **Kokkos**/GPU
-> with several number of node counts. **Kokkos**/GPU is also specially designed to run
+> Use the optimum number of GPU devices and MPI tasks to run the jobs with **Kokkos**/GPU
+> with 1 node, then **any of** 2, 3, 4, 5 nodes (2 sets: one with
+> the **GPU** package enabled, and the other is the regular **MPI-based** runs **without any**
+> accelerator package). *For a better comparison of points, choose a different multi-node number*
+> *to that of your neighbour*.
+>
+> **Kokkos**/GPU is also specially designed to run
 > everything on the GPUs. We shall offload the entire force computation and neighbour
-> list building to the GPUs. This can be done using
+> list building to the GPUs using;
+>
 > ```
 > -k on g 4 -sf kk -pk kokkos newton off neigh full comm device
 > ```
@@ -196,22 +206,21 @@ these aspects to some extent.
 > ```
 > (if *CUDA-aware MPI* is not available to you).
 >
-> * Do a systematic study by running the job with different number of nodes with the
->   Kokkos/GPU package. For example, if five nodes are available to you, run this job
->   using all the physical cores available with 1 node, 2 nodes, 3 nodes, 4 nodes and
->   5 nodes.
 > * Extract the performance data from the log/screen output files from each of these
 >   runs. You can do this using the command
 >   ```
 >   grep "Performance:" log.lammps
 >   ```
 >   {: .bash}
->   and note down the performance value in units if `timestep/s`.
+>   and note down the performance value in units of `timestep/s`.
+>
 > * Make a plot to compare the performance of the **Kokkos**/GPU runs with the CPU runs
 >   (i.e. without any accelerator package) and the **GPU** runs (i.e. with the **GPU**
 >   package enabled) with number of nodes.
+>
 > * Plot the speed-up factor (= GPU performance/CPU performance) versus the number of
 >   nodes.
+>
 > * Discuss the main observations from these plots.
 >
 > > ## Solution
@@ -219,4 +228,3 @@ these aspects to some extent.
 > > <p align="center"><img src="../fig/08/CPUvsGPUvsKKGPU.png" width="50%"/></p>
 > {: .solution}
 {: .challenge}
-
