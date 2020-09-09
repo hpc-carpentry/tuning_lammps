@@ -187,62 +187,52 @@ settings, we can use them for all the runs needed to perform the scalability stu
 {: .challenge}
 
 > ## Do the scalability study
-> 1. Figure out all the possible MPI/OpenMP combinations that you can have per node. For
->    example, I did this study on an Intel
->    Skylake node with 2x20 cores. This means each node has 40 physical cores. So, to
->    satisfy
->    ```
->    (Number of MPI processes) * (Number of OpenMP threads) = (Number of cores per node)
->    ```
->    I can have the following combinations per node:
->    * 1 MPI task with 40 OpenMP threads
->    * 2MPI tasks with 20 OpenMP threads
->    * 4MPI tasks with 10 OpenMP threads
->    * 5MPI tasks with 8 OpenMP threads
->    * 8MPI tasks with 5 OpenMP threads
->    * 10MPI tasks with 4 OpenMP threads
->    * 20MPI tasks with 2 OpenMP threads
->    * 40MPI tasks with 1 OpenMP thread
->    I like to see scaling up  to say up to 10 nodes or more. This means that I have to
->    run a total 80 calculations for 10 nodes since I have 8 MPI/OpenMP combinations for
->    each node.
 >
->    Run the jobs for all possible combinations in your HPC system  ***THIS IS TOO MUCH
->    PICK 2 GOOD EXAMPLES***.
-> 2. Calculate *parallel efficiency* for each of these jobs ***GIVE SOME RESULTS SO THEY
->    CAN DO THIS***.
-> 4. Make a plot of *parallel efficiency* versus *number of nodes*.
-> 5. Also, make a comparison of the parallel performance between the **USER-OMP** and
->    **Kokkos** implementations of the OpenMP threading.
-> 5. Write down your observations and make comments on any performance enhancement when
->    you compare these results with the pure MPI runs.
+> As before, doing a scalability study would be a time consuming undertaking, so lets take an
+> example on nodes with 2x20 cores, as we did in a
+> [previous exercise](#case-study-rhodopsin-user-omp-package) **CHECK LINK**, where a total of
+> 80 calculations would be needed for the 10 nodes.
+>
+> 1. The results from this study can be found in the csv file (**INCLUDE LINK**). Using the
+>    parallel_eff.py (**INCLUDE LINK**), make a plot of parallel efficiency vs number of nodes.
+>    The code will calculate parallel efficiency for you.
+>
+> 2. Compare this plot with the plot you generated in a
+>    [previous exercise](#case-study-rhodopsin-user-omp-package) **CHECK LINK**. Write down your
+>    observations and make comments on any performance enhancement when you compare these results
+>    with the pure MPI runs.
+>
+> 3. Consider your own HPC system. How would a similar study look on your own system?
 >
 > > ## Solution
 > >
 > > <p align="center"><img src="../fig/07/scaling_rhodo_kokkos_omp.png" width="50%"/></p>
 > >
-> > The scalability plot is shown above. The main observations are outlined here:
-> >   1. Data for the pure MPI-based run is plotted with the thick blue line. Strikingly,
-> >      none of the Kokkos based MPI/OpenMP mixed runs show comparable parallel
-> >      performance with the pure MPI-based approach. The difference in parallel
-> >      efficiency is more pronounced for less node counts and this gap in performance
-> >      reduces slowly as we increase the number of nodes to run the job. This
-> >      indicates that to see
-> >      comparable performance with the pure MPI-based runs we need to increase the
-> >      number of nodes far beyond than what is used in the current study.
-> >   2. If we now compare the performance of **Kokkos** OpenMP with the threading
-> >      implemented with the **USER-OMP** package, there is quite a bit of difference.
+> > You should have produced a plot similar to this, from which you can take the following
+> > observations.
 > >
-> >      This difference could be due to vectorization. Currently (version `7Aug19` or
-> >      `3Mar20`) the **Kokkos** package in LAMMPS doesn't vectorize well as compared
-> >      to the vectorization implemented in the **USER-OMP** package. **USER-INTEL**
-> >      should be even better than **USER-OMP** at vectorizing *if the styles are
-> >      supported in that package*.
-> >   4. The 'deceleration' is probably due to Kokkos and OpenMP overheads to make the
-> >      kernels thread-safe.
-> >   5. If we just compare the performance among the **Kokkos** OpenMP runs, we see that
-> >      parallel efficiency values are converging even for more thread-counts (1 to 20)
-> >      as we increase the number of nodes. This is indicative that **Kokkos** OpenMP
-> >      scales better with increasing thread counts as compared to the **USER-OMP** package.
+> > * Data for the pure MPI-based run is plotted with the thick blue line. Strikingly, none of the
+> >   Kokkos based MPI/OpenMP mixed runs show comparable parallel performance with the pure
+> >   MPI-based approach. The difference in parallel efficiency is more pronounced for less node
+> >   counts and this gap in performance reduces slowly as we increase the number of nodes to run
+> >   the job. This indicates that to see comparable performance with the pure MPI-based runs weneed
+> >   need to increase the number of nodes far beyond than what is used in the current study.
+> >
+> > * If we now compare the performance of **Kokkos** OpenMP with the threading
+> >   implemented with the **USER-OMP** package, there is quite a bit of difference.
+> >
+> > * This difference could be due to vectorization. Currently (version `7Aug19` or
+> >   `3Mar20`) the **Kokkos** package in LAMMPS doesn't vectorize well as compared
+> >   to the vectorization implemented in the **USER-OMP** package. **USER-INTEL**
+> >   should be even better than **USER-OMP** at vectorizing *if the styles are
+> >   supported in that package*.
+> >
+> > * The 'deceleration' is probably due to Kokkos and OpenMP overheads to make the
+> >   kernels thread-safe.
+> >
+> > * If we just compare the performance among the **Kokkos** OpenMP runs, we see that
+> >   parallel efficiency values are converging even for more thread-counts (1 to 20)
+> >   as we increase the number of nodes. This is indicative that **Kokkos** OpenMP
+> >   scales better with increasing thread counts as compared to the **USER-OMP** package.
 > {: .solution}
 {: .challenge}
