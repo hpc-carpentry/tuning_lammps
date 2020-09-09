@@ -96,16 +96,24 @@ In the following discussion, we'll work on a few exercises to get familiarized o
 these aspects to some extent.
 
 > ## Exercise: Performance penalty due to use of mixed styles
->   1. First, let us take the input for the LJ-system from the Exercise 1 of the GPU
->      section in Episode 5 (***ADD REF***, let us call this as *Input1*). Run this input
->      using all
->      the visible devices in a node available to you and use **Kokkos**/GPU as the
->      accelerator package using the following settings ***THESE ARE SYSTEM SPECIFIC***:
->      `-k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off`. Use
->      the number of MPI tasks that equals to the number of devices.
->   2. Measure the performance of this run in units of `timesteps/s`.
->   3. Now, modify the above LJ-input file and append the following lines to the end of
->      the file:
+>
+> 1. First, let us take the input for the LJ-system from the Exercise 1 of the GPU
+>    section in [episode 5]({{page.root}}/05-accelerating-lammps) Run this input
+>    using all the visible devices in a node available to you and use **Kokkos**/GPU as the
+>    accelerator package using the following settings;
+>    **CHECK ME!**
+>    * 4 GPUs
+>    * Kokkos on
+>    * `newton off`
+>    * `neigh full`
+>    * `comm device`
+>    * `cude/aware off`
+>
+>    Use the number of MPI tasks that equals to the number of devices. Measure the performance of
+>    of this run in `timesteps/s`.
+>      
+> 2. Modify the LJ-input file and append the following lines to the end of the file.
+>
 >      ```
 >      ... ... ...
 >      ... ... ...
@@ -122,18 +130,15 @@ these aspects to some extent.
 >      thermo_style custom step time  temp press pe ke etotal density v_acn
 >      run		500
 >      ```
->      Let us name this modified input file as
->      *Input2*. Run *Input2* using the same identical Kokkos setting:
->      `-k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off`
->      and with identical number of GPU and MPI tasks as you did for the *Input1*.
->   4. Again, measure the performance of this run in units of `timesteps/s`.
->   5. Compare the performance between these two runs and comment on your observations.
+>
+> 3. Rename the input file and run it using the same Kokkos setting as before, and the identical 
+>    number of GPU and MPI tasks as previously. Measure the performance of this run in `timesteps/s`
+>    and compare the performance of these two runs and comment on your observations.
 >
 > > ## Solution
-> > I did this study in a Intel Haswell CPU node having 2x12 cores per
-> > node and two NVIDIA K80 GPUs (which is four visible devices per node). I have used
-> > 1 MPI tasks per GPU. This means that for four visible devices we have used four MPI
-> > tasks in total (per node).
+> >
+> > Taking an example from a HPC system with 2x12 cores per node and 2 GPUs (4 visible devices per
+> > node), using 1 MPI task per GPU, the following was observed.
 > >
 > > First, we ran with *Input1*. Second, we modified this input as mentioned above (to
 > > become *Input2*) and performance for both of these runs are measured in units of
@@ -160,6 +165,7 @@ these aspects to some extent.
 > >     bin: standard
 > > ~~~
 > > {: .output}
+> >
 > > In this case, the pair style is Kokkos-enabled (`pair lj/cut/kk`) while the compute
 > > style `compute coord/atom` is not. Whenever you make such a mix of Kokkos and
 > > non-Kokkos styles in the input of a Kokkos run, it costs you dearly since this
