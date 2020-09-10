@@ -42,7 +42,7 @@ When we say that we accelerate a job by parallelizing it, we actually mean a str
 
 The two main parallelization strategies are data parallelism and task parallelism. In data parallelism same set of tasks are performed by each core on different subsets of the same data. You need to take extra care to eliminate data dependencies in data parallelism. On the contrary, when a task is multiple independent sub-tasks and each sub-task is assigned to different cores to do the job, this is known as task parallelism. In one sentence, in task parallelism different independent sub-tasks are performed on the same or different data. A simple graphical representation is given below:
 
-[image here]
+<p align="center"><img src="../fig/02/task-data-parallelism.png" width="50%"/></p>
 
 
 * Process vs. Threads
