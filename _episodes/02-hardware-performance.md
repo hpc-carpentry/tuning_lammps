@@ -15,18 +15,19 @@ usemathjax: true
 
 ## Accelerating performance
 
-To speed up a calculation in a computer you can either use a faster processor or use multiple processors to do parallel processing. Increasing clock-speed indefinitely is not possible, so the best option is to explore parallel computing. Conceptually this is simple: partition the job into small independent pieces and assign each independent part to different CPU core to do the computations in parallel, hence you get the speed-up. 
+To speed up a calculation in a computer you can either use a faster processor or use multiple processors to do parallel processing. Increasing clock-speed indefinitely is not possible, so the best option is to explore parallel computing. Conceptually this is simple: split the computational task across different processors and run them all at once, hence you get the speed-up. 
 
-Though conceptually this is simple, in practice this involves many complications. Consider the case when you are having just a single CPU core, associated RAM (primary memory: faster access of data), hard disk (secondary memory: slower access of data), input (keyboard, mouse) and output devices (screen). 
+In practice, however, this involves many complications. Consider the case when you are having just a single CPU core, associated RAM (primary memory: faster access of data), hard disk (secondary memory: slower access of data), input (keyboard, mouse) and output devices (screen). 
 
 Now consider you have two or more CPU cores and you would notice that there are many things that you need to take care of: 
-1.	Will each of these cores share the memory space, or will each of them be assigned private memory? 
-2.	How these cores are going to access the memory space?
-3.	How to divide and distribute the jobs among these two cores?
-4.	How these two cores will communicate with each other?
-5.	After the job is done where the final result will be saved? Is this the storage of core 1 or core 2? Or, will it be a central storage accessible to both?
+1.	If there are two cores there are two possibilities: Either these two cores share the same RAM (shared memory) or each of these cores have their own RAM (private memory).
+2. In case these two cores share the same RAM and tend write at once, what would happen? This will create a race condition and the programmer needs to be very careful to avoid such situations!
+3.	How these cores are going to access the memory space?
+4.	How to divide and distribute the jobs among these two cores?
+5.	How these two cores will communicate with each other?
+6.	After the job is done where the final result will be saved? Is this the storage of core 1 or core 2? Or, will it be a central storage accessible to both?
 
-* Shared memory vs Distributed memory
+## Shared memory vs Distributed memory
 
 When a system has a central memory and each CPU core has a uniform access to this memory space this is called a shared memory platform. In the contrary, when you partition this central memory and assign each partition as a private memory space to each CPU core, then we call this a distributed memory platform. A graphical could be as shown below:
 
@@ -36,7 +37,7 @@ Depending upon what kind of memory a computer has, the parallelization approach 
 
 Similar situation arises for GPU coding too. In this case, the CPU is generally called the host and the GPUs are called the devices. When we submit a GPU job, it is launched in the CPU (host) which in turn directs it to be executed by the GPU cores (devices). While doing these calculations, data is copied from CPU memory to GPU’s first and processed subsequently. After finishing a calculation by a GPU, the result is copied back from GPU to CPU. This communication process is expensive and it could significantly slow down a calculation if care is not taken to minimize this communication. We’ll see later in this tutorial that communication is a major bottleneck in many LAMMPS calculations and we need to device strategies to reduce this communication overhead.  
 
-On the contrary, in a shared memory platforms, the central memory is being shared by all the processors. In this case, the processors communicate with each other through the shared memory. In a shared memory platform, each processor can access the memory location at the same speed. 
+On the contrary, in a shared memory platforms, the central memory is being shared by all the processors. In this case, the processors communicate with each other through the shared memory. 
 
 When we say that we accelerate a job by parallelizing it, we actually mean a strategy that divide the whole job into pieces and assign each piece to a worker (CPU core) to solve. This parallelisation strategy also depends on the memory structure. (as discussed above) of your computing system. For example, OpenMP provides a thread level parallelism that is well-suited for a shared memory platform, but you can not use it in a distributed memory system. For a distributed memory system, you need a message passing protocol like MPI to communicate between processors. 
 
@@ -45,9 +46,10 @@ The two main parallelization strategies are data parallelism and task parallelis
 <p align="center"><img src="../fig/02/task-data-parallelism.png" width="50%"/></p>
 
 
-* Process vs. Threads
-
-Just imagine that you are doing some work with both of your hands. You are a process and your both hands are the threads. In a program, threads are separate points of execution and depending on the circumstances these two threads either can work synchronously or in asynchronous manner.
+> #Process vs. Threads
+>
+>Just imagine that you are doing some work with both of your hands. You are a process and your both hands are the threads. In a program, threads are separate points of execution and depending on the circumstances these two threads either can work synchronously or in asynchronous manner.
+{: callout}
 
 * Multithreading
 
@@ -70,6 +72,7 @@ The main parallelisation technique that is used by any modern software is the do
 <p align="center"><img src="../fig/02/DD_cartoon.png" width="50%"/></p>
 
 > # What is MPI?
+>
 > A long time before we had smart phones, tablets or laptops, compute clusters were already around and consisted of interconnected computers that had merely enough memory to show the first two frames of a movie (2 x 1920 x 1080 x 4 Bytes = 16 MB). However, scientific problems back than were equally demanding more and more memory than today. To overcome the lack of available hardware memory, specialists from academia and industry came about with the idea to consider the memory of several interconnected compute nodes as one. Given a standardized software that synchronizes the various states of memory between the client/slave nodes during the execution of driver application through the network interfaces. With this performing large calculations that required more memory than each individual cluster node can offer was possible. Moreover, this technique by passing messages (hence Message Passing Interface or MPI) on memory updates in a controlled fashion allowed to write parallel programs that were capable of running on a diverse set of cluster architectures.(Reference: https://psteinb.github.io/hpc-in-a-day/bo-01-bonus-mpi-for-pi/ )
 {: callout}
 
