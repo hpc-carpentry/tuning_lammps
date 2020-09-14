@@ -50,7 +50,7 @@ The two main parallelization strategies are data parallelism and task parallelis
 >
 >Just imagine that you are doing some work with both of your hands. You are a process and your both hands are the threads. In a program, threads are separate points of execution and depending on the circumstances these two threads either can work synchronously or in asynchronous manner.
 >
-{: callout}
+{: .callout}
 
 * Multithreading
 
@@ -76,7 +76,7 @@ The main parallelisation technique that is used by any modern software is the do
 >
 > A long time before we had smart phones, tablets or laptops, compute clusters were already around and consisted of interconnected computers that had merely enough memory to show the first two frames of a movie (2 x 1920 x 1080 x 4 Bytes = 16 MB). However, scientific problems back than were equally demanding more and more memory than today. To overcome the lack of available hardware memory, specialists from academia and industry came about with the idea to consider the memory of several interconnected compute nodes as one. Given a standardized software that synchronizes the various states of memory between the client/slave nodes during the execution of driver application through the network interfaces. With this performing large calculations that required more memory than each individual cluster node can offer was possible. Moreover, this technique by passing messages (hence Message Passing Interface or MPI) on memory updates in a controlled fashion allowed to write parallel programs that were capable of running on a diverse set of cluster architectures.(Reference: https://psteinb.github.io/hpc-in-a-day/bo-01-bonus-mpi-for-pi/ )
 >
-{: callout}
+{: .callout}
 
 In addition to MPI, LAMMPS also support thread level parallelism through OpenMP directives which offer parallelisation over particles rather than over domains. In thread-based parallelism, a block of code is executed by a bunch of threads where thread is the smallest processing unit scheduled by an operating system. Using various OpenMP directives, library functionas and suitable environemnt variables one can decide what and how to parallelize a block of code. This type of parallelization works for only shared memory systems with multi-core processors where each thread has access to the shared data (RAM) and its own private data (cache, registers). These threads communicate via sharing data variables. Private memory (cache, registers) assigned to each thread helps it to access data quicker than accessing it from the shared memory. A very important issue of parallel programing on a shared-memory platform arises when multiple processors attempt to access the memory at same time. It gives rise to 'race' condition and a programer can resolve the issue using proper synchronization method. 
 
