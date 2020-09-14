@@ -139,7 +139,7 @@ settings, we can use them for all the runs needed to perform the scalability stu
 > and run LAMMPS jobs for `40 MPI/1 OpenMP` thread on 1 node using the `package`command for the
 > following two set of parameters.
 >
-> * `neigh full new town off comm no`
+> * `neigh full newton off comm no`
 > * `neigh half newton on comm host`
 >
 > 1. What is the influence on `comm`? What is implied in the output file?
@@ -215,7 +215,7 @@ settings, we can use them for all the runs needed to perform the scalability stu
 > >   Kokkos based MPI/OpenMP mixed runs show comparable parallel performance with the pure
 > >   MPI-based approach. The difference in parallel efficiency is more pronounced for less node
 > >   counts and this gap in performance reduces slowly as we increase the number of nodes to run
-> >   the job. This indicates that to see comparable performance with the pure MPI-based runs weneed
+> >   the job. This indicates that to see comparable performance with the pure MPI-based runs we
 > >   need to increase the number of nodes far beyond than what is used in the current study.
 > >
 > > * If we now compare the performance of **Kokkos** OpenMP with the threading

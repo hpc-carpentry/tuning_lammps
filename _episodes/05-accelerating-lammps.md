@@ -602,7 +602,7 @@ before starting the production runs. This might save your lot of resource and ti
 > {: .solution}
 {: .challenge}
 
-#### Load balancing: revisted
+#### Load balancing: revisited
 
 We have discussed load balancing in the previous episode due to the potential of underperformance
 in systems with an inhomogeneous distribution of particles. We discussed earlier that it can be
