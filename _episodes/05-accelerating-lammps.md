@@ -171,7 +171,7 @@ A list of functionalities enabled with this package can be found
 ### **Kokkos** package
 
 The Kokkos package in LAMMPS is implemented to gain performance with portability. This will be
-discussed in more depth in the [next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %})
+discussed in more depth in the [next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
 
 ## How to invoke a package in LAMMPS run?
 
@@ -194,12 +194,14 @@ in detail from the
 [LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
 
 The basic syntax for the additional options to the LAMMPS are:
+
 ```
 package <style> <arguments>
 ```
+{: .source}
 
 `style` allows you to choose the accelerator package for your run. There are four different
-packages available currently (version 3Mar20):
+packages available currently (version `3Mar20`):
 
 * `intel`: This calls the **USER-INTEL** package
 * `omp` : This calls the **USER-OMP** package
@@ -212,18 +214,19 @@ To call **USER-OMP** in a LAMMPS run, use `omp` as `style`. Next you need to cho
 proper `<arguments>` for the `omp` style. `<arguments>` should be chosen as the number
 of OpenMP threads that you like to associate with each MPI process. This is an integer
 and should be chosen sensibly. If you have N number of physical cores available per node
-then
+then;
 ```
 (Number of MPI processes) x (Number of OpenMP threads) = (Number of cores per node)
 ```
+
 `<arguments>` can potentially include a number of *keywords* and their corresponding *values*.
 These *keyword/values* provides with you enhanced flexibility to distribute your job among
 the MPI ranks and threads. For a quick reference, the following table could be useful:
 
 |Keyword   | values  | What it does? |
 |----------|---------|---------------|
-| neigh    | yes     | threaded neighbor list build (this is the default) |
-| neigh    | no      | non-threaded neighbor list build |
+| `neigh`    | `yes`     | threaded neighbor list build (this is the default) |
+| `neigh`    | `no`      | non-threaded neighbor list build |
 
 There are two alternate ways to add these options to your simulation:
 
@@ -232,11 +235,11 @@ There are two alternate ways to add these options to your simulation:
   the simulation box has been defined. This is because it specifies settings that the
   accelerator packages use in their initialization, before a simulation is defined.
 
-  An example of calling the *USER-OMP* package in a LAMMPS input file is given below:
+  An example of calling the *USER-OMP* package for a LAMMPS input file is given below:
   ```
   package omp 4 neigh no
   ```
-  {: .code}
+  {: .source}
 
   To distinguish the various styles of these accelerator packages from
   its 'regular' non-accelerated variants, LAMMPS has introduced *suffixes* for styles
@@ -246,18 +249,21 @@ There are two alternate ways to add these options to your simulation:
   example, if we take a pair potential that would normally be set with
   `lj/charmm/coul/long`, when using **USER-OMP** optimization it would be set in the input
   file as:
+
   ```
   pair_style      lj/charmm/coul/long/omp 8.0 10.0
   ```
-  {: .code}
+  {: .source}
 
 * A simpler way to do this is through the command-line when launching LAMMPS using the
   `-pk` command-line switch. The syntax would be essentially the same as when used in an
   input script:
+
   ```
    mpirun -np 10 -ppn 10 lmp -in in.rhodo -sf omp -pk omp 4 neigh no
   ```
   {: .bash}
+
   The second method appears to be convenient since you don't need to take the hassle to
   edit the input file (and possibly in many places)!
 
@@ -368,11 +374,11 @@ tuning parameters for the simplest LJ-systems.
 The primary aim for this following exercise is:
 
 * To get a primary understanding of the various command line arguments that can control how a job is
-  distributed among cpus/gpus, how to control cpu/gpu communications, etc.
+  distributed among CPUs/GPUs, how to control CPU/GPU communications, etc.
 * To get an initial idea on how to play with different run-time parameters to get an optimum
   performance.
 * Finally, one can also make a fair comparison of performance between a *regular* LAMMPS run, the
-  GPU package and (in the next episode) a Kokkos implementation of GPU functionality.
+  GPU package and a Kokkos implementation of GPU functionality.
 * Moreover, this exercise will also help the users to extend the knowledge of using the *package*
   command so that they can figure out by themselves how to use other accelerator packages in LAMMPS.
 
@@ -405,14 +411,14 @@ could be useful.
 >
 > | Keywords   |Use                                                                                                           |Default value |
 > |------------|--------------------------------------------------------------------------------------------------------------|--------------|
-> |`neigh`     | specifies where neighbor lists for pair style computation will be built: GPU or CPU.                         | yes          |
-> |`newton`    | sets the Newton flags for pairwise (not bonded) interactions to off or on. Only *off* value is supported with the GPU package currently (version 3Mar20)                                                                                           | off (only)          |
+> |`neigh`     | specifies where neighbor lists for pair style computation will be built: GPU or CPU.                         | `yes`          |
+> |`newton`    | sets the Newton flags for pairwise (not bonded) interactions to off or on. Only *off* value is supported with the GPU package currently (version `3Mar20`)                                                                                           | `off` (only)          |
 > |`binsize`   | sets the size of bins used to bin atoms in neighbor list builds performed on the GPU, if *neigh = yes* is set  | 0.0          |
-> |`split`     | used for load balancing force calculations between CPU and GPU cores in GPU-enabled pair styles              |  1.0 (all on GPU), -1.0 (dynamic load balancing), 0 <split<1.0 (custom)            |
+> |`split`     | used for load balancing force calculations between CPU and GPU cores in GPU-enabled pair styles              |  `1.0` (all on GPU), `-1.0` (dynamic load balancing), 0 <split<1.0 (custom)            |
 > |`gpuID`     | allows selection of which GPUs on each node will be used for a simulation                                    |              |
-> |`tpa`       | sets the number of GPU thread per atom used to perform force calculations. It is used for fining tuning of performance. When you use large cutoffs or do a simulation with a small number of particles per GPU, you may increase the value of this keyword to see if it can improve performance. The number of threads per atom must be chosen as a power of 2 and cannot be greater than 32 (with current version 3Mar20).                                    | 1            |
+> |`tpa`       | sets the number of GPU thread per atom used to perform force calculations. It is used for fining tuning of performance. When you use large cutoffs or do a simulation with a small number of particles per GPU, you may increase the value of this keyword to see if it can improve performance. The number of threads per atom must be chosen as a power of 2 and cannot be greater than 32 (version `3Mar20`).                                    | `1`            |
 > |`device`    | used to tune parameters optimized for a specific accelerator and platform when using OpenCL                  |              |
-> |`blocksize` | allows you to tweak the number of threads used per thread block                                              | minimum = 32 |
+> |`blocksize` | allows you to tweak the number of threads used per thread block                                              | minimum = `32` |
 >
 {: .callout}
 
@@ -440,6 +446,7 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 >
 > {% capture mycode %}{% include {{ site.snippets }}/ep05/in.lj %}{% endcapture %}
 > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
+>
 > ```{% for member in lines_of_code %}
 > {{ member }}{% endfor %}
 > ```
@@ -489,7 +496,7 @@ each GPU. The detail about the graphics card is also printed, along
 with the *numerical precision* used by the **GPU** package is also printed. In this case, it
 is using *double precision*. Next it shows how many MPI-processes are spawned per GPU.
 
-#### Accelerated version of pair-potential
+#### **Accelerated version of pair-potential**
 
 This section of the output shows you that it is actually using the *accelerated* version of the
 pair potential `lj/cut`. You can see that it is using `lj/cut/gpu` though in your input file you
@@ -502,7 +509,7 @@ this run.
 ```
 {: .output}
 
-#### Performance section
+#### **Performance section**
 
 The following screen-output tells you all about the performance. Some of these terms are already
 discussed in the [previous episode]({{page.root}}/04-lammps-bottlenecks). When you the **GPU**
@@ -603,7 +610,7 @@ before starting the production runs. This might save your lot of resource and ti
 > {: .solution}
 {: .challenge}
 
-#### Load balancing: revisited
+#### **Load balancing: revisited**
 
 We have discussed load balancing in the previous episode due to the potential of underperformance
 in systems with an inhomogeneous distribution of particles. We discussed earlier that it can be
@@ -634,7 +641,7 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 > 
 > By now we have idea about some of the 'preferred' tuning parameters for a LJ-sytem. For
 > the current exercise, let us take the system with ~11 million atoms, i.e.
-> `x = y = z = 140` and `t = 500` and for this size of atoms, we know from ***ADD REF***
+> `x = y = z = 140` and `t = 500` and for this size of atoms, we know from our previous example
 > that 4 GPUs/24 MPI tasks (i.e. 6 MPI tasks per GPU) gives the best performance. We
 > wish to see how much acceleration a GPU package can provide if we offload the entire
 > force computation and neighbour list building to the GPUs. This can be done using;
