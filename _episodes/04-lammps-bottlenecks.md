@@ -241,7 +241,7 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > ## Analysing the large system
 >
 > Now consider the following breakdown table for the 10 million atom system with 40
-> MPI-processes. You can see that in this case, still `Pair` term is dominating the
+> MPI-processes. You can see that in this case, the `Pair` term is still dominating the
 > table. Discuss about the rationale behind this.
 > ~~~
 > MPI task timing breakdown:
