@@ -235,7 +235,7 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 >
 > You can deal with load imbalance up to a certain extent using `processors` and `balance`
 > commands in LAMMPS. Detail usage is given in the 
-> (source:[LAMMPS manual](https://lammps.sandia.gov/doc/Manual.html)).
+> [LAMMPS manual](https://lammps.sandia.gov/doc/Manual.html).
 {: .callout}
 
 > ## Analysing the large system
