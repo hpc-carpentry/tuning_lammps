@@ -28,7 +28,7 @@ summation method for calculating long range Coulomb interactions effectively usi
 potential. Similarly there are a few FFT schemes offered by LAMMPS and a user has to make a
 trade-off between accuracy and performance depending on their computational needs. This lesson is
 not aimed to discuss such types of algorithm-based speed-up of LAMMPS, instead we'll focus on a few
-accelerator packages that is used to extract the most out of the available hardware of a HPC system.
+accelerator packages that are used to extract the most out of the available hardware of a HPC system.
 
 There are five accelerator packages currently offered by LAMMPS. These are;
 
@@ -39,8 +39,8 @@ There are five accelerator packages currently offered by LAMMPS. These are;
 5. **Kokkos**
 
 Specialized codes contained in these packages help LAMMPS to perform well on the
-spectrum of architectures found in modern HPC platforms. Therefore, the very next
-question that arises is: what hardware is supported by these packages?
+spectrum of architectures found in modern HPC platforms. Therefore, the next
+question that arises is: *What hardware is supported by these packages?*
 
 > ## Supported hardware
 >
@@ -118,8 +118,8 @@ pair style (say, `reax`) for which this is not implemented, its obvious that you
 going to have a performance gain for the `Pair` part of the calculation. If the
 majority of the computation time is coming from the `Pair` part then you are in trouble.
 If you would like to know how much speedup you can expect to achieve using USER-INTEL, you can
-take a look in the
-[corresponding LAMMPS documentation](https://lammps.sandia.gov/doc/Speed_intel.html)
+take a look in the corresponding
+[LAMMPS documentation](https://lammps.sandia.gov/doc/Speed_intel.html).
 
 > ## Single, double, mixed precision calculations
 >
@@ -147,14 +147,14 @@ to be more effective than using OpenMP on multi-core CPUs.
 ### **GPU** package
 
 Using the **GPU** package in LAMMPS, one can achieve performance gain by coupling GPUs to
-one or many CPUS. Since supports both CUDA (which is vendor specific) and OpenCL (which
+one or many CPUs. Since supports both CUDA (which is vendor specific) and OpenCL (which
 is an open standard), it can be used on a variety of GPU hardware.
 
 Calculations that require access to atomic data like coordinates, velocities, forces may suffer
 bottlenecks since at every step these data are communicated back and forth between the
 CPUs and GPUs. Calculations can be done in single, double or mixed precisions.
 
-In case of the **GPU** package, computations are shared between CPU and GPU
+In case of the **GPU** package, computations are shared between CPUs and GPUs
 (unlike the Kokkos package GPU implementation where the primary aim is to offload all of
 the calculations to the GPUs only). For example,
 asynchronous force calculations like **pair** vs **bond/angle/dihedral/improper** can be done
@@ -171,12 +171,13 @@ A list of functionalities enabled with this package can be found
 ### **Kokkos** package
 
 The Kokkos package in LAMMPS is implemented to gain performance with portability. This will be
-discussed in more depth in the next lesson (**FIXME ADD LINK**)
+discussed in more depth in the [next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %})
 
 ## How to invoke a package in LAMMPS run?
 
 Let us now come back to the *Rhodopsin* example for which we did a thorough scaling
-study in the previous episode. We found that the `Kspace` and `Neigh` calculations
+study in the [previous episode]({{ page.root }}{% link _episodes/04-lammps-bottlenecks.md %}).
+We found that the `Kspace` and `Neigh` calculations
 suffer from poor scalability as you increase number of cores to do the calculations. In
 such situation a hybrid approach combining parallelizing over domains (i.e. MPI-based)
 and parallelizing over atoms (i.e. thread-based OpenMP) could be more beneficial to

@@ -274,7 +274,7 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > {: .solution}
 {: .discussion}
 
-Let us now work on another example from LAMMPS `bench` directory with the input file
+Let us now work on another example from the LAMMPS `bench` directory with the input file
 below. Let's run it using
 1 core (i.e., in *serial*) with `x = y = z = 1`, and `t = 10,000`.
 ~~~
