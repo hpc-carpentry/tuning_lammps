@@ -48,6 +48,7 @@ and also within the screen output file generated at the end of each LAMMPS run. 
 timing breakdown table has already been introduced in
 [the previous episode]({{ page.root }}{% link _episodes/03-benchmark-and-scaling.md %})
 but let's take a look at it again:
+
 ~~~
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
@@ -60,6 +61,7 @@ Modify  | 0.023852   | 0.023852   | 0.023852   |   0.0 |  1.35
 Other   |            | 0.005199   |            |       |  0.29
 ~~~
 {: .output}
+
 Note that `%total` of the timing is giving for a range of different parts of the
 calculation. In the following section, we will work on a few examples and try to
 understand how to identify bottlenecks from this output.
@@ -72,10 +74,12 @@ To get a feeling for this process, let us start with a Lennard-Jones (LJ) system
 two systems: the first one is with 4,000 atoms only; and the other one would be quite
 large, almost 10 million atoms. The following input file is for a LJ-system with an fcc
 lattice:
+
 ~~~
 {% include {{ site.snippets }}/ep04/in.lj %}
 ~~~
 {: .source}
+
 We can vary the system size (i.e. number of atoms) by assigning appropriate
 values to the variables `x`, `y`, and `z` at the beginning of the input file.
 The length of the run can be decided by the
@@ -87,7 +91,8 @@ containing about 10M atoms. We have chosen this purposefully and let us do a
 OpenMP threads. Now let us have a look at an example of the timing breakdown table.
 
 > ## Example timing breakdown for 4000 atoms LJ-system
-> ~~~
+>
+> ```
 > MPI task timing breakdown:
 > Section |  min time  |  avg time  |  max time  |%varavg| %total
 > ---------------------------------------------------------------
@@ -97,8 +102,9 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > Output  | 7.4148e-05 | 7.4148e-05 | 7.4148e-05 |   0.0 |  0.00
 > Modify  | 0.20477    | 0.20477    | 0.20477    |   0.0 |  1.41
 > Other   |            | 0.04296    |            |       |  0.30
-> ~~~
+> ```
 > {: .output}
+>
 > This is for the small
 > system (having 4000 atoms). The last `%total` column in the table tells about the
 > percentage of the total loop time is spent in this category. Note that most of the CPU
@@ -111,14 +117,14 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > need to be supported).
 {: .callout}
 
-
 > ## Example timing breakdown for 10M atoms LJ-system
+>
 > The following table shows an example  timing breakup when the number of particles is about 10M
 > which is quite large! Note that, though the absolute time to complete the simulation
 > has increased significantly (it now takes about 1.5 hours), the distribution of
 > `%total` remains the same.
 >
-> ~~~
+> ```
 > MPI task timing breakdown:
 > Section |  min time  |  avg time  |  max time  |%varavg| %total
 > ---------------------------------------------------------------
@@ -128,7 +134,7 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > Output  | 0.1237     | 0.1237     | 0.1237     |   0.0 |  0.00
 > Modify  | 168.98     | 168.98     | 168.98     |   0.0 |  2.05
 > Other   |            | 43.95      |            |       |  0.53
-> ~~~
+> ```
 > {: .output}
 {: .callout}
 
@@ -152,6 +158,7 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > For many of these exercises, the exact modifications you will need to implement are system
 > specific. Check with your instructor or your HPC institution's helpdesk for information specific
 > to your HPC system.
+{: .callout}
 
 > ## Example timing breakdown for 4000 atoms LJ-system with 40 MPI ranks
 >
@@ -227,8 +234,8 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > large number of processors.
 >
 > You can deal with load imbalance up to a certain extent using `processors` and `balance`
-> commands in LAMMPS. Detail usage is given in LAMMPS manual. (**Fix Me: Might be**
-> **discussed to some extent in later episodes**)
+> commands in LAMMPS. Detail usage is given in the (source:
+> [LAMMPS manual](https://lammps.sandia.gov/doc/Manual.html)).
 {: .callout}
 
 > ## Analysing the large system
@@ -250,6 +257,7 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > {: .output}
 >
 > > ## Solution
+> >
 > > In this case, the system size is enormous. Each core will have enough atoms to deal
 > > with so it remains busy in computing and the time taken for the communication is
 > > still much smaller as compared to the "real" calculation time. In such cases, using
@@ -343,6 +351,7 @@ may not be as efficient as MPI unless you have situations where domain decomposi
 is no longer efficient (we will see below how to recognise such situations).
 
 Let us discuss a few situations:
+
   1. The LJ-system with 4000 atoms (discussed above): Communication bandwidth with more
      MPI processes. When you have too few atoms per domain, at some point LAMMPS will
      not scale, and may even run slower, if you use more processors via
@@ -383,9 +392,11 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 
 The input file (given below) is prepared following the inputs provided in the *bench*
 directory of the LAMMPS distribution (version `7Aug2019`):
+
 ~~~
 {% include {{ site.snippets }}/ep04/in.rhodo %}
 ~~~
+{: .source}
 
 Using this you can perform a simulation
 of an all-atom rhodopsin protein in solvated lipid bilayer with CHARMM force field,
@@ -398,9 +409,12 @@ is performed for 20,000 timesteps.
 <p align="center"><img src="../fig/04/rhodo.png" width="50%"/></p>
 
 The submit this as a job using 4 processors, we can modify our previous job script:
-~~~
+
+```
 {% include {{ site.snippets }}/ep03/4core_job_script %}
-~~~
+```
+{: .bash}
+
 replacing the input file `in.lj` with the input file for the new system.
 
 > ## Investigating speedup
