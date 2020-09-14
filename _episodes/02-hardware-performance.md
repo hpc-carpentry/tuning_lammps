@@ -46,7 +46,7 @@ The two main parallelization strategies are data parallelism and task parallelis
 <p align="center"><img src="../fig/02/task-data-parallelism.png" width="50%"/></p>
 
 
-> ##Process vs. Threads
+> ## Process vs. Threads
 >
 >Just imagine that you are doing some work with both of your hands. You are a process and your both hands are the threads. In a program, threads are separate points of execution and depending on the circumstances these two threads either can work synchronously or in asynchronous manner.
 >
