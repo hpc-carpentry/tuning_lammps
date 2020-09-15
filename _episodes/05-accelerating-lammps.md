@@ -556,8 +556,8 @@ before starting the production runs. This might save your lot of resource and ti
 >
 > 2. Find the different GPU/MPI task combinations on your system. For example, on a 4 GPU node and
 >    24 cores, there are 6 different combintaions, with a minimum of 4 MPI tasks being used. Submit jobs
->    for the **minimum** number of MPI tasks (`x GPUs/x MPI`) and for the maximum number of MPI tasks
->    (`x GPUs/y MPI`), where `y` is the number of cores in the node you are using. Then submit a job
+>    for the **minimum** number of MPI tasks (`A GPUs/B MPI`) and for the maximum number of MPI tasks
+>    (`A GPUs/B MPI`), where `B` is the number of cores in the node you are using. Then submit a job
 >    for another GPU/MPI task combinations for your chosen system size. Choose package keywords such
 >    that neighbour list building and force computations are done entirely on the GPUs. It can be
 >    done using;
@@ -627,8 +627,7 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 > ## Switch on dynamic load balancing
 >
 >
-> Let us repeat the entire exercise as described in the
-> [previous exercise](#exercise-offload-entire-neighbor-build-and-force-computation-to-gpus)
+> Let us repeat the entire exercise as described in the previous exercise
 > but this time we'll use dynamic load balancing, changing the value of `split` to `-1.0`. Run your
 > setup again and compare the performances.
 >
@@ -645,29 +644,25 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 > By now we have idea about some of the 'preferred' tuning parameters for a LJ-sytem. For
 > the current exercise, let us take the system with ~11 million atoms, i.e.
 > `x = y = z = 140` and `t = 500` and for this size of atoms, we know from our previous example
-> that 4 GPUs/24 MPI tasks (i.e. 6 MPI tasks per GPU) gives the best performance. We
-> wish to see how much acceleration a GPU package can provide if we offload the entire
-> force computation and neighbour list building to the GPUs. This can be done using;
+> that `A GPUs/B MPI` tasks (where `A` is number of GPUs and `B` is number of cores in a node) gives
+> the best performance. We wish to see how much acceleration a GPU package can provide if we offload
+> the entire force computation and neighbour list building to the GPUs. This can be done using;
 >
-> ```bash
+> ```
 > -sf gpu -pk gpu 4 neigh yes newton off split 1.0
 > ```
-> 
+> {: .bash}
+>
 >
 > * Run the job on 1 node and then a different number of nodes of your choosing, both with **AND**
 >   without the GPU package. For example, if five nodes are available to you, run this job using
 >   all the physical cores available with 1 node, then **any of** 2, 3, 4, 5 nodes (2 sets: one with
 >   the **GPU** package enabled, and the other is the regular **MPI-based** runs **without any**
 >   accelerator package). *For a better comparison of points, choose a different multi-node number*
->   *to that of your neighbour*
+>   *to that of your neighbour*.
 > * Extract the performance data from the log/screen output files from each of these
->   runs. You can do this using the command;
->
->   ```bash
->   grep "Performance:" log.lammps
->   ```
->
->   and note down the performance value in units of `timestep/s`.
+>   runs. You can do this using the command `grep "Performance:" log.lammps` and note down the
+>   performance value in units of `timestep/s`.
 > * Make a plot to compare the performance of the CPU runs (i.e. without any accelerator
 >   package) and the GPU runs (i.e. with the GPU package enabled) with number of nodes.
 > * Plot the speed-up factor (= GPU performance/CPU performance) versus the number of
@@ -676,9 +671,9 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 >
 > > ## Solution
 > > The plot below shows an HPC system with 2x12 CPU cores per node and 2 GPUs (4 visible devices)
-> > oer node. Two sets of runs (i.e. with and without the GPU package) were executed
+> > per node. Two sets of runs (i.e. with and without the GPU package) were executed
 > > with up to 8 nodes. Performance data was extracted from the log files in the unit of
-> > `timesteps/second`, and speed-up factors were calculated for each node.
+> > `timesteps/s`, and speed-up factors were calculated for each node.
 > >
 > > <p align="center"><img src="../fig/05/CPUvsGPU.png" width="50%"/></p>
 > >
