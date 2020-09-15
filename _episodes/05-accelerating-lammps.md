@@ -555,27 +555,30 @@ before starting the production runs. This might save your lot of resource and ti
 >    Make sure the system you pick is different to that of your neighbour(s).
 >
 > 2. Find the different GPU/MPI task combinations on your system. For example, on a 4 GPU node and
->    24 cores, there are 6 different combintaions, with a minimum of 4 MPI tasks being used. Choose
->    2 (**CHECK ME, maybe 3?**) different GPU/MPI task combinations for your chosen system size and
->    plot the normalised speedup (**CHECK MATH**) on a pen and paper. Choose package keywords such
+>    24 cores, there are 6 different combintaions, with a minimum of 4 MPI tasks being used. Submit jobs
+>    for the **minimum** number of MPI tasks (`x GPUs/x MPI`) and for the maximum number of MPI tasks
+>    (`x GPUs/y MPI`), where `y` is the number of cores in the node you are using. Then submit a job
+>    for another GPU/MPI task combinations for your chosen system size. Choose package keywords such
 >    that neighbour list building and force computations are done entirely on the GPUs. It can be
 >    done using;
 >
->    ```bash
+>    ```
 >    -sf gpu -pk gpu 4 neigh yes newton off split 1.0
 >    ```
+>    {: .bash}
 >
 >    where 4 GPUs are being used. Use `grep "Performance:" log.lammps` to extract the data in
 >    `timesteps/s`
 >
-> 3. Compare your results with that of your neighbour. Discuss the differences and note your main
+> 3. Plot the normalised speedup on a pen and paper using the formula `Time of run / Time of slowest run`
+>    and compare your results with that of your neighbour. Discuss the differences and note your main
 >    observations.
 >
 > > ## Solution
 > >
 > > On a system with 2x12 cores per node and two GPUs (4 visible devices per node in this case),
 > > the different combinations are;
-> > 
+> >
 > > * 4 GPUs/4 MPI tasks
 > > * 4 GPUs/8 MPI tasks
 > > * 4 GPUs/12 MPI tasks
