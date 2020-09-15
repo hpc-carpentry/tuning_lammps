@@ -30,6 +30,7 @@ through the **Kokkos** package is given below.
 srun lmp -in in.lj -k on g Ngpu -sf kk -pk kokkos <arguments>
 ```
 {: .bash}
+
 To run the **Kokkos** package, the following three command-line switches are very important:
   1. ```-k on``` : This enables Kokkos at runtime
   2. ```-sf kk``` : This appends the "/kk" suffix to Kokkos-supported LAMMPS styles
@@ -53,7 +54,8 @@ the ```-k on``` switch as shown below:
 > ## Get the full command-line
 >
 > Derive a command-line to submit a LAMMPS job for the LJ system that you studied for
-> the GPU package (***ADD REF***) such that it invokes the Kokkos GPU to
+> the [GPU package]({{page.root}}/05-accelerating-lammps/#learn-to-call-the-gpu-package-from-the-command-line)
+> such that it invokes the Kokkos GPU to
 > accelerate the job using 2 nodes having 24 cores each, 4 devices per node. Assign all
 > the MPI ranks available on a node to all the devices. Use  *default* package options.
 > 
@@ -62,7 +64,7 @@ the ```-k on``` switch as shown below:
 > > ```
 > > lmp -k on g 4 -sf kk -pk kokkos -in in.lj
 > > ```
-> > {: .input}
+> > {: .bash}
 > {: .solution}
 {: .challenge}
 
@@ -97,10 +99,10 @@ these aspects to some extent.
 
 > ## Exercise: Performance penalty due to use of mixed styles
 >
-> 1. First, let us take the input for the LJ-system from the Exercise 1 of the GPU
->    section in [episode 5]({{page.root}}/05-accelerating-lammps) Run this input
->    using all the visible devices in a node available to you and use **Kokkos**/GPU as the
->    accelerator package using the following settings;
+> 1. First, let us take the input for the LJ-system from
+>    [episode 5]({{page.root}}/05-accelerating-lammps/#learn-to-call-the-gpu-package-from-the-command-line).
+>    Run this input using all the visible devices in a node available to you and use **Kokkos**/GPU
+>    as the accelerator package using the following settings;
 >    **CHECK ME!**
 >    * 4 GPUs
 >    * Kokkos on
@@ -130,8 +132,9 @@ these aspects to some extent.
 >      thermo_style custom step time  temp press pe ke etotal density v_acn
 >      run		500
 >      ```
+>      {: .source}
 >
-> 3. Rename the input file and run it using the same Kokkos setting as before, and the identical 
+> 3. Rename the input file and run it using the same Kokkos setting as before, and the identical
 >    number of GPU and MPI tasks as previously. Measure the performance of this run in `timesteps/s`
 >    and compare the performance of these two runs and comment on your observations.
 >
@@ -200,10 +203,13 @@ code is the primary objective of Kokkos.
 > ```
 > -k on g 4 -sf kk -pk kokkos newton off neigh full comm device
 > ```
+ {: .bash}
 > or
 > ```
 > -k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off
 > ```
+> {: .bash}
+>
 > (if *CUDA-aware MPI* is not available to you).
 >
 > * Extract the performance data from the log/screen output files from each of these
@@ -226,5 +232,7 @@ code is the primary objective of Kokkos.
 > > ## Solution
 > >
 > > <p align="center"><img src="../fig/08/CPUvsGPUvsKKGPU.png" width="50%"/></p>
+> >
+> > **FIXME**
 > {: .solution}
 {: .challenge}
