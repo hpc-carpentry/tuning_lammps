@@ -195,7 +195,7 @@ OpenMP or GPU specific command-line switches will be discussed in later episodes
 
 Let us recall the command-line to submit a LAMMPS job that uses USER-OMP as an
 accelerator package (see
-[here]({{page.root}}/05-accelerating-lammps/#example-how-to-invoke-the-user-omp-package)
+[here]({{page.root}}/05-accelerating-lammps/#how-to-invoke-the-user-omp-package)
 to refresh your memory).
 
 ```

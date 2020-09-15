@@ -29,7 +29,7 @@ settings as we did it for the **USER-OMP** package.
 > 1. **Know your hardware:** get the number of physical cores per node available to you.
 >    Take care such that
 >    ```
->    (number of MPI tasks) * (OpenMP threads per task) <= (total number of **physical** cores per node)
+>    (number of MPI tasks) * (OpenMP threads per task) <= (total number of physical cores per node)
 >    ```
 > 2. **Check for hyperthreading:** Sometimes a CPU splits its each physical cores into
 >    multiple *virtual* cores. Intel's term for this is
@@ -39,7 +39,7 @@ settings as we did it for the **USER-OMP** package.
 >    node with 24 physical cores appears as 48 logical cores to the OS if HT is enabled.
 >    In this case,
 >    ```
->    (number of MPI tasks) * (OpenMP threads per task) <= (total number of **virtual** cores per node)
+>    (number of MPI tasks) * (OpenMP threads per task) <= (total number of virtual cores per node)
 >    ```
 > 3. **CPU affinity:** CPU affinity decides whether a thread running on a particular core is
 >    allowed to migrate to another core (if the operating system thinks that is a good
@@ -69,13 +69,16 @@ switch just following the ```-k on``` switch as shown below:
      export OMP_NUM_THREADS=4
      ```
      {: .bash}
+
      if you like to use 4 threads per node (`Nt` is 4). You should also set some other
      environment variables to help with thread placement. For best performance with
-     OpenMP 4.0 or later set
+     OpenMP 4.0 or later set;
+
      ```
      export OMP_PROC_BIND=spread
      export OMP_PLACES=threads
      ```
+     {: .bash}
 
 > ## Get the full command-line
 >
@@ -119,7 +122,7 @@ settings, we can use them for all the runs needed to perform the scalability stu
 > may not provide the fastest runs. Before jumping to production runs, we need to check
 > for optimum settings for these values to avoid wastage of our time and valuable
 > computing resources. In the very next section, we'll be showing how to do this with
-> rhodopsin example. Before that, here I show you an example of command-line which shows
+> rhodopsin example. Before that, here is an example of command-line which shows
 > how these `package` related keywords can be invoked in your LAMMPS runs using the
 > command-line switches. Default `package` settings are overwritten here using
 > ```-pk kokkos neigh half newton on comm no```.
@@ -135,8 +138,8 @@ settings, we can use them for all the runs needed to perform the scalability stu
 
 > ## The optimum values of the keywords
 >
-> Take the rhodopsin input files (`in.rhodo` and `data.rhodo` *** SHOULD BE LINKED *** ),
-> and run LAMMPS jobs for `40 MPI/1 OpenMP` thread on 1 node using the `package`command for the
+> Take the rhodopsin input files (`in.rhodo` and `data.rhodo` ***SHOULD BE LINKED*** ),
+> and run LAMMPS jobs for `40 MPI/1 OpenMP` thread on 1 node using the `package` command for the
 > following two set of parameters.
 >
 > * `neigh full newton off comm no`
@@ -177,7 +180,7 @@ settings, we can use them for all the runs needed to perform the scalability stu
 > >    becomes memory-bound (since there are more copies of the same data filling up
 > >    RAM) and suffers from poor scalability with increasing thread-counts. If you
 > >    look at the data in the above table carefully, you will notice that using 40
-> >    OpenMP threads for `neigh = half` and `newton = on` makes the run slower. On the
+> >    OpenMP threads for `neigh` = `half` and `newton` = `on` makes the run slower. On the
 > >    other hand, when you use only 1 OpenMP thread per MPI rank, it requires no data
 > >    duplication or atomic operations, hence it produces the fastest run.
 > >
@@ -189,7 +192,7 @@ settings, we can use them for all the runs needed to perform the scalability stu
 > ## Do the scalability study
 >
 > As before, doing a scalability study would be a time consuming undertaking, so lets take an
-> example on nodes with 2x20 cores, as we did in a
+> example on nodes with 2x20 cores, as we did a [few episodes ago]
 > [previous exercise](#case-study-rhodopsin-user-omp-package) **CHECK LINK**, where a total of
 > 80 calculations would be needed for the 10 nodes.
 >
