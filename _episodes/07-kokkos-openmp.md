@@ -21,7 +21,7 @@ multi-core CPUs. First we'll get familiarized with the command-line options to r
 **Kokkos** OpenMP job in LAMMPS. This will be followed by a case study to gain some
 hands-on experience to use this package. For the hands-on part, we'll take the same
 rhodopsin system which we studied in previous episodes. We shall use the same input
-file ***ADD LINK*** and repeat similar scalability studies for the mixed MPI/OpenMP
+file ***ADD LINK to in.rhodo*** and repeat similar scalability studies for the mixed MPI/OpenMP
 settings as we did it for the **USER-OMP** package.
 
 > ## Factors that will impact performance
@@ -29,7 +29,7 @@ settings as we did it for the **USER-OMP** package.
 > 1. **Know your hardware:** get the number of physical cores per node available to you.
 >    Take care such that
 >    ```
->    (number of MPI tasks) X (OpenMP threads per task) <= (total number of physical cores per node)
+>    (number of MPI tasks) * (OpenMP threads per task) <= (total number of **physical** cores per node)
 >    ```
 > 2. **Check for hyperthreading:** Sometimes a CPU splits its each physical cores into
 >    multiple *virtual* cores. Intel's term for this is
@@ -39,7 +39,7 @@ settings as we did it for the **USER-OMP** package.
 >    node with 24 physical cores appears as 48 logical cores to the OS if HT is enabled.
 >    In this case,
 >    ```
->    (number of MPI tasks) * (OpenMP threads per task) <= (total number of virtual cores per node)
+>    (number of MPI tasks) * (OpenMP threads per task) <= (total number of **virtual** cores per node)
 >    ```
 > 3. **CPU affinity:** CPU affinity decides whether a thread running on a particular core is
 >    allowed to migrate to another core (if the operating system thinks that is a good
