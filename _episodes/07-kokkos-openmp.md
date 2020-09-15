@@ -192,28 +192,29 @@ settings, we can use them for all the runs needed to perform the scalability stu
 > ## Do the scalability study
 >
 > As before, doing a scalability study would be a time consuming undertaking, so lets take an
-> example on nodes with 2x20 cores, as we did in an exercise [few episodes ago]({{page.root}}/05-accelerating-lammps/#how-to-invoke-the-user-omp-package)
-> [few episodes ago]({{page.root}}/05-accelerating-lammps/#case-study:-rhodopsin-(with-user-omp-package))
-> [few episodes ago]({{page.root}}/05-accelerating-lammps/#case-study-rhodopsin-with-user-omp-package) **CHECK LINK**, where a total of
-> 80 calculations would be needed for the 10 nodes.
+> example on nodes with 2x20 cores, as we did in an exercise a
+> [few episodes ago]({{page.root}}/05-accelerating-lammps/#case-study-rhodopsin-with-user-omp-package),
+> where a total of 80 calculations would be needed for the 10 nodes.
 >
 > 1. The results from this study can be found in the csv file (**INCLUDE LINK**). Using the
 >    parallel_eff.py (**INCLUDE LINK**), make a plot of parallel efficiency vs number of nodes.
 >    The code will calculate parallel efficiency for you.
 >
 > 2. Compare this plot with the plot you generated in a
->    [previous exercise](#case-study-rhodopsin-user-omp-package) **CHECK LINK**. Write down your
->    observations and make comments on any performance enhancement when you compare these results
->    with the pure MPI runs.
+>    [previous exercise]({{page.root}}/05-accelerating-lammps/#case-study-rhodopsin-with-user-omp-package).
+>    Write down your observations and make comments on any performance enhancement when you compare
+>    these results with the pure MPI runs.
 >
 > 3. Consider your own HPC system. How would a similar study look on your own system?
 >
 > > ## Solution
 > >
+> > **FIX SCALES**
 > > <p align="center"><img src="../fig/07/scaling_rhodo_kokkos_omp.png" width="75%"/></p>
 > >
-> > You should have produced a plot similar to this, from which you can take the following
-> > observations.
+> > Consider this plot of a full scalability study, comparing it with that seen in a
+> > [previous exercise]({{page.root}}/05-accelerating-lammps/#case-study-rhodopsin-with-user-omp-package),
+> > from which you can take the following observations.
 > >
 > > * Data for the pure MPI-based run is plotted with the thick blue line. Strikingly, none of the
 > >   Kokkos based MPI/OpenMP mixed runs show comparable parallel performance with the pure
