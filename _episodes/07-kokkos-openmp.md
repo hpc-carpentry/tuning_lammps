@@ -192,8 +192,9 @@ settings, we can use them for all the runs needed to perform the scalability stu
 > ## Do the scalability study
 >
 > As before, doing a scalability study would be a time consuming undertaking, so lets take an
-> example on nodes with 2x20 cores, as we did a [few episodes ago]
-> [previous exercise](#case-study-rhodopsin-user-omp-package) **CHECK LINK**, where a total of
+> example on nodes with 2x20 cores, as we did in an exercise [few episodes ago]({{page.root}}/05-accelerating-lammps/#how-to-invoke-the-user-omp-package)
+> [few episodes ago]({{page.root}}/05-accelerating-lammps/#case-study:-rhodopsin-(with-user-omp-package))
+> [few episodes ago]({{page.root}}/05-accelerating-lammps/#case-study-rhodopsin-with-user-omp-package) **CHECK LINK**, where a total of
 > 80 calculations would be needed for the 10 nodes.
 >
 > 1. The results from this study can be found in the csv file (**INCLUDE LINK**). Using the
