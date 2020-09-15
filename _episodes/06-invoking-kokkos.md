@@ -68,7 +68,7 @@ achieve this goal?
 > > and requires significantly less programming expertise in vectorization and directive
 > > based SIMD programming or CPU computing. Also support for a new kind of computing
 > > hardware will primarily need additional code in the Kokkos library and just a
-> > little bit of programming setup/management in LAMMPS."
+> > little bit of programming setup/management in LAMMPS.
 > {: .solution}
 {: .discussion}
 
@@ -88,7 +88,7 @@ supports currently?
   threading for many-core CPUs and Phi), and CUDA (for NVIDIA GPUs)
 * It provides reasonable scalability to many OpenMP threads.
 * It is currently designed for one-to-one CPU to GPU ratio
-* Care has been taken to minimize performance overhead due to cpu-gpu communication.
+* Care has been taken to minimize performance overhead due to CPU-GPU communication.
   This can be achieved by ensuring
   that most of the codes can be run on GPUs once assigned by the CPU and when all the
   jobs are done, it is communicated
@@ -114,19 +114,22 @@ The list of LAMMPS features that is supported by Kokkos (as of July 2020) is giv
 |             |              | Setforce    |               |             |              |                 |                 |                |
 |             |              | Wall/reflect|               |             |              |                 |                 |                |
 
-Please note that this list is likely to be subject to significant changes over time.
+This list is likely to be subject to significant changes over time as newer versions of Kokkos are released.
 
 ## How to invoke **Kokkos** package in a LAMMPS run?
 
 In the [previous episode]({{page.root}}/05-accelerating-lammps) you learned how to call
 an accelerator package in LAMMPS.
-The basic syntax of this command is
+The basic syntax of this command is;
+
 ```
 package <style> <arguments>
 ```
+{: .source}
+
 where `<arguments>` can potentially include a number of *keywords* and their corresponding
 *values*.
-In this case, you willneed to use *kokkos* as *style* with suitable arguments/keywords.
+In this case, you will need to use *kokkos* as *style* with suitable arguments/keywords.
 
 For **Kokkos** these *keyword/values* provides you enhanced flexibility to distribute your
 job among CPUs and GPUs in an optimum way. As a quick reference, the following table could
@@ -139,11 +142,11 @@ be useful:
  |`neigh/thread`|  |  |
  |`newton`|sets the Newton flags for pairwise and bonded interactions to off or on |`off` for GPU and `on` for CPU |
  |`binsize`|sets the size of bins used to bin atoms in neighbor list builds|`0.0` for CPU and 2x larger binsize equal to the pairwise+neighbour skin|
- |`comm`|It determines whether the cpu or gpu performs the packing and unpacking of data  when communicating per-atom data between processors. values could be `no`, `host` or `device`. `no` means pack/unpack will be done in non-Kokkos mode| |
+ |`comm`|It determines whether the CPU or GPU performs the packing and unpacking of data when communicating per-atom data between processors. Values could be `no`, `host` or `device`. `no` means pack/unpack will be done in non-Kokkos mode| |
  |`comm/exchange`|This defines 'exchange' communication which happens only when neighbour lists are rebuilt. Values could be `no`, `host` or `device` | |
  |`comm/forward`|This defines forward communication and it occurs at every timestep. Values could be `no`, `host` or `device` | |
- |`comm/reverse`| If the *newton* option is set to *on*, this occurs at every timestep. Values could be `no`, `host` or `device`| |
- |`cuda/aware`|This keyword is used to choose whether CUDA-aware MPI will be used. In cases where CUDA-aware MPI is not available, you must explicitly set it to `off` value otherwise it will result is an error.|off |
+ |`comm/reverse`| If the `newton` option is set to `on`, this occurs at every timestep. Values could be `no`, `host` or `device`| |
+ |`cuda/aware`|This keyword is used to choose whether CUDA-aware MPI will be used. In cases where CUDA-aware MPI is not available, you must explicitly set it to `off` value otherwise it will result is an error.|`off` |
 
 
 ## Rules of thumb
@@ -159,7 +162,7 @@ be useful:
    processors. This results in more computation and less communication. Definitely for
    GPUs, less communication is usually the better situation. Therefore, a value of `off`
    for GPUs is efficient while a value of `on` could be faster for CPUs.
-3. `binsize`: Default value is given in the above Table. But there could be exception.
+3. `binsize`: Default value is given in the above table. But there could be exceptions.
    For example, if you use a larger cutoff for the pairwise potential than the normal,
    you need to override the default value of `binsize` with a smaller value.
 4. `comm`, `comm/exchange`, `comm/forward`, `comm/reverse`: From the table you can already
@@ -194,30 +197,35 @@ Let us recall the command-line to submit a LAMMPS job that uses USER-OMP as an
 accelerator package (see
 [here]({{page.root}}/05-accelerating-lammps/#example-how-to-invoke-the-user-omp-package)
 to refresh your memory).
+
 ```
 mpirun -np 40 -ppn 10 lmp -sf omp -pk omp 4 -in in.rhodo neigh no
 ```
+{: .bash}
 
 We can perform a straight-forward to edit the above command-line to try to make it
 appropriate for a **Kokkos** run. A few points to keep in mind:
 
-  1. The total number of MPI ranks is set in the usual way via *mpirun* or *mpiexec* or
-     *srun* command. It has nothing to do with Kokkos.
+  1. The total number of MPI ranks is set in the usual way via `mpirun`, `mpiexec` or
+     `srun` command. It has nothing to do with Kokkos and will depend on your HPC system.
      * `mpirun -np 40 -ppn 10` allows you to submit the job in 4 nodes each of them
      having 10 MPI processes.
   2. To enable **Kokkos** package you need to use a switch `-k on`.
   3. To use **Kokkos** enabled styles (pair styles/fixes etc.), you need one additional
-     switch `-sf kk`. This will append the "/kk" suffix to all the styles that
+     switch `-sf kk`. This will append the `/kk` suffix to all the styles that
      **Kokkos** supports in LAMMPS. For example, when you use this, the
      `lj/charmm/coul/long` pair style would be read as `lj/charmm/coul/long/kk` at runtime.
 
 With these points keeping in mind, the above command-line could be modified
 to make it ready for Kokkos:
+
 ```
 mpirun -np 40 -ppn 10 lmp -k on -sf kk -in in.rhodo
 ```
+{: .bash}
+
 But, unfortunately, this above command-line is still *incomplete*. We have not yet passed any
-information about the `package` `<arguments>`yet. These might include information about
+information about the `package` `<arguments>` yet. These might include information about
 the execution mode (OpenMP or GPU), or the number of OpenMP threads,
 or the number of GPUs that we want to use for this run, or any other keywords (and
 values). We'll discuss more about them in the following episodes.
