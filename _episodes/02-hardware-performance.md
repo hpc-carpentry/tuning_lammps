@@ -52,10 +52,10 @@ The two main parallelization strategies are data parallelism and task parallelis
 >
 {: .callout}
 
-* Multithreading
+## Multithreading
 
-Since we mentioned about threads, its good to know that there are two main methods to introduce thread-based computation: either use OpenMP or CUDA. OpenMP is used for multi-core CPUs and CUDA is used to utlize threading for the GPU cores.
-
+Multithreading allows a single process to contain multiple threads which share the process's resources but execute independently. This is important since it allows a single process to execute parallel processing using many threads on multiprocessor systems. In practice, this involves many difficulties. OpenMP and CUDA are two very popular thread-level execution model of parallel processing. OpenMP is used for multi-core/manycore CPUs and CUDA is used to utilize threading for the GPU cores.
+ 
 Before using a parallel code that  offers control to select either parallelization methods or parameters to have fine-grain control like choosing thread-counts, host-device communication, etc., we need to ask a few simple questions to ourselves:
 
 1.	What parallelization method should I choose (OpenMP or MPI)? 
@@ -66,7 +66,7 @@ Before using a parallel code that  offers control to select either parallelizati
 
 and there could be many!
 
-* General parallelisation strategies
+## Popular parallelisation strategies
 
 The main parallelisation technique that is used by any modern software is the domain decomposition method. In this process, the global domain is divided into many sub-domains and then each sub-domain is assigned to a processor. If your computer has N physical processor, you can initiate N MPI processes on your computer. This means each sub-domain is handled by a MPI process and when atoms move from one domain to another, the atom identities assigned to each MPI task will also be updated accordingly. In this method, for a (nearly) homogeneously distributed atomic system, we can expect almost uniform distribution of work across various MPI tasks. 
 
@@ -93,27 +93,6 @@ How a CPU and GPU works together?
 
 (FIXME)
 
-### Hardware acceleration
-
-(FIXME)
-
-Using multi-core CPUs and GPUs, positives, negatives of each
-
-### Software acceleration
-
-(FIXME)
-
-## Multithreading
-
-There are a number of ways multi-threading can be implemented, using OpenMP or CUDA.
-
-### OpenMP & MPI
-
-(FIXME)
-
-### CUDA
-
-(FIXME)
 
 ### Pool of workers
 
