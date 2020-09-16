@@ -90,18 +90,6 @@ How a CPU and GPU works together?
 <p align="center"><img src="../fig/02/CPUplusGPU.png" width="50%"/></p> 
 
 
-
-(FIXME)
-
-
-### Pool of workers
-
-(FIXME)
-
-## Optimising libraries
-
-(FIXME) Include examples
-
 > ## Acceleration
 >
 > How can we accelerate the following code. Discuss with your neighbour(?)
