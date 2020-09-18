@@ -48,6 +48,7 @@ and also within the screen output file generated at the end of each LAMMPS run. 
 timing breakdown table has already been introduced in
 [the previous episode]({{ page.root }}{% link _episodes/03-benchmark-and-scaling.md %})
 but let's take a look at it again:
+
 ~~~
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
@@ -60,6 +61,7 @@ Modify  | 0.023852   | 0.023852   | 0.023852   |   0.0 |  1.35
 Other   |            | 0.005199   |            |       |  0.29
 ~~~
 {: .output}
+
 Note that `%total` of the timing is giving for a range of different parts of the
 calculation. In the following section, we will work on a few examples and try to
 understand how to identify bottlenecks from this output.
@@ -72,22 +74,25 @@ To get a feeling for this process, let us start with a Lennard-Jones (LJ) system
 two systems: the first one is with 4,000 atoms only; and the other one would be quite
 large, almost 10 million atoms. The following input file is for a LJ-system with an fcc
 lattice:
+
 ~~~
 {% include {{ site.snippets }}/ep04/in.lj %}
 ~~~
 {: .source}
+
 We can vary the system size (i.e. number of atoms) by assigning appropriate
 values to the variables `x`, `y`, and `z` at the beginning of the input file.
 The length of the run can be decided by the
 variable `t`. We'll choose two different system sizes here: the one given is tiny just
 having 4000 atoms (`x = y = z = 10`, `t = 1000`). If we take this input and modify it
 such that `x = y = z = 140` the other one would be huge
-containing about 10M atoms. We have chosen this purposefully and let us do a
+containing about 10 million atoms. We have chosen this purposefully and let us do a
 *serial* run (i.e. on a single core), in our case this is with 1 MPI rank and without any
 OpenMP threads. Now let us have a look at an example of the timing breakdown table.
 
 > ## Example timing breakdown for 4000 atoms LJ-system
-> ~~~
+>
+> ```
 > MPI task timing breakdown:
 > Section |  min time  |  avg time  |  max time  |%varavg| %total
 > ---------------------------------------------------------------
@@ -97,8 +102,9 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > Output  | 7.4148e-05 | 7.4148e-05 | 7.4148e-05 |   0.0 |  0.00
 > Modify  | 0.20477    | 0.20477    | 0.20477    |   0.0 |  1.41
 > Other   |            | 0.04296    |            |       |  0.30
-> ~~~
+> ```
 > {: .output}
+>
 > This is for the small
 > system (having 4000 atoms). The last `%total` column in the table tells about the
 > percentage of the total loop time is spent in this category. Note that most of the CPU
@@ -111,14 +117,14 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > need to be supported).
 {: .callout}
 
-
-> ## Example timing breakdown for 10M atoms LJ-system
-> The following table shows an example  timing breakup when the number of particles is about 10M
-> which is quite large! Note that, though the absolute time to complete the simulation
+> ## Example timing breakdown for 10 million atoms LJ-system
+>
+> The following table shows an example timing breakdown for a large, 10 million atom system.
+> Note that, though the absolute time to complete the simulation
 > has increased significantly (it now takes about 1.5 hours), the distribution of
 > `%total` remains the same.
 >
-> ~~~
+> ```
 > MPI task timing breakdown:
 > Section |  min time  |  avg time  |  max time  |%varavg| %total
 > ---------------------------------------------------------------
@@ -128,7 +134,7 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > Output  | 0.1237     | 0.1237     | 0.1237     |   0.0 |  0.00
 > Modify  | 168.98     | 168.98     | 168.98     |   0.0 |  2.05
 > Other   |            | 43.95      |            |       |  0.53
-> ~~~
+> ```
 > {: .output}
 {: .callout}
 
@@ -146,6 +152,13 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > as a starting point.
 >
 {: .challenge}
+
+> ## Important!
+>
+> For many of these exercises, the exact modifications you will need to implement are system
+> specific. Check with your instructor or your HPC institution's helpdesk for information specific
+> to your HPC system.
+{: .callout}
 
 > ## Example timing breakdown for 4000 atoms LJ-system with 40 MPI ranks
 >
@@ -198,7 +211,7 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > > We have 4000 total atoms. When we run this with 1 core, this handles calculations
 > > (i.e. calculating pair terms, building neighbour list etc.) for all 4000 atoms. Now
 > > when you run this with 40 MPI processes, the particles will be distributed among
-> > these 40 cores "ideally" equally (if there is no *load imbalance*). These cores then do
+> > these 40 cores "ideally" equally (if there is no *load imbalance* (see below)). These cores then do
 > > the calculations in parallel, sharing information when necessary. This leads to the
 > > speedup. But this comes at a cost of communication between these MPI processes. So,
 > > communication becomes a bottleneck for such systems where you have a small number of
@@ -220,16 +233,15 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > This situation is more likely to expose itself as you scale up to a large
 > large number of processors.
 >
-> Is there any way to deal with load imbalance in LAMMPS?
-> > Yes, you can deal it up to a certain extent using `processors` and `balance`
-> > commands in LAMMPS. Detail usage is given in LAMMPS manual. (Fix Me: Might be
-> > discussed to some extent in later episodes)
+> You can deal with load imbalance up to a certain extent using `processors` and `balance`
+> commands in LAMMPS. Detailed usage is given in the
+> [LAMMPS manual](https://lammps.sandia.gov/doc/Manual.html).
 {: .callout}
 
 > ## Analysing the large system
 >
-> Now consider the following breakdown table for 1 million atom system with 40
-> MPI-processes. You can see that in this case, still `Pair` term is dominating the
+> Now consider the following breakdown table for the 10 million atom system with 40
+> MPI-processes. You can see that in this case, the `Pair` term is still dominating the
 > table. Discuss about the rationale behind this.
 > ~~~
 > MPI task timing breakdown:
@@ -245,6 +257,7 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > {: .output}
 >
 > > ## Solution
+> >
 > > In this case, the system size is enormous. Each core will have enough atoms to deal
 > > with so it remains busy in computing and the time taken for the communication is
 > > still much smaller as compared to the "real" calculation time. In such cases, using
@@ -261,7 +274,7 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > {: .solution}
 {: .discussion}
 
-Let us now work on another example from LAMMPS `bench` directory with the input file
+Let us now work on another example from the LAMMPS `bench` directory with the input file
 below. Let's run it using
 1 core (i.e., in *serial*) with `x = y = z = 1`, and `t = 10,000`.
 ~~~
@@ -286,7 +299,7 @@ below. Let's run it using
 >
 > Note that, in this case,
 > the time spent in solving the `Pair` part is quite low as compared to the `Neigh`
-> part. What do you thank about that may have caused such an outcome?
+> part. What do you think may have caused such an outcome?
 >
 > > ## Solution
 > > This kind of timing breakdown generally indicates either there is something wrong
@@ -310,7 +323,7 @@ below. Let's run it using
 
 ## MPI vs OpenMP
 
-By now probably you have developed some understanding on how can you use the timing
+By now you should have developed some understanding on how can you use the timing
 breakdown table to identify performance bottlenecks in a LAMMPS run. But identifying
 the bottleneck is not enough, you need to decide what strategy would 'probably' be more
 sensible to apply in order to unblock the bottlenecks. The usual method of speeding
@@ -323,7 +336,7 @@ MPI based parallelism using domain decomposition lies at the core of LAMMPS. Ato
 in each domain are associated to 1 MPI task. This domain decomposition approach comes
 with a cost however, keeping track and coordinating things among these domains requires
 communication overhead. It could lead to significant drop in performance if you have
-limited communication bandwidth, or load imbalance in your simulation, or if you wish
+limited communication bandwidth, load imbalance in your simulation, or if you wish
 to scale to a very large number of cores.
 
 While MPI offers domain based parallelization, one can also use parallelization over
@@ -338,21 +351,22 @@ may not be as efficient as MPI unless you have situations where domain decomposi
 is no longer efficient (we will see below how to recognise such situations).
 
 Let us discuss a few situations:
-  1. The LJ-system with 4000 atoms (discussed above): Communication bandwidth with more
+
+  1. **The LJ-system with 4000 atoms (discussed above)**: Communication bandwidth with more
      MPI processes. When you have too few atoms per domain, at some point LAMMPS will
      not scale, and may even run slower, if you use more processors via
      MPI only. With a pair style like `lj/cut` this will happen at a rather small number
      of atoms.
-  2. The LJ-system with with 10M atoms (discussed above): More atoms per processor,
+  2. **The LJ-system with with 10M atoms (discussed above)**: More atoms per processor,
      still communication is not a big deal in this case. This happens because you have
      a dense, homogeneous, well behaved system with a sufficient number of atoms, so
      that the MPI parallelization can be at its most efficient.
-  3. For inhomogeneous system or slab systems where there could be lots of empty spaces
+  3. **Inhomogeneous or slab systems**: In systems where there could be lots of empty spaces
      in the simulation cell, the number of atoms handled across these domains will vary
      a lot resulting in severe load balancing issue. While some of the domains will be
      over-subscribed, some of them will remain under-subscribed causing these domains
      (cores) to be less efficient in terms of performance. Often this could be improved by
-     using the `processor`s keyword in a smart fashion, beyond that, there are the load
+     using the `processor` keyword in a smart fashion, beyond that, there are the load
      balancing commands (`balance` command) and changing the communication using
      recursive bisecting and decomposition strategy. This might not help always since
      some of the systems are pathological. In such cases, a combination of MPI and
@@ -361,14 +375,14 @@ Let us discuss a few situations:
      over particles using OpenMP threads, generally it does not hamper load balancing
      in a significant way. So, a sensible mix of MPI, OpenMP and the `balance` command
      can help you to fetch better performance from the same hardware.
-  4. In many MD problems, we need to deal with the calculation of electrostatic
+  4. **MD problems**: For these, we need to deal with the calculation of electrostatic
      interactions. Unlike the pair forces, electrostatic interactions are long range by
      nature. To compute this long range interactions, very popular methods in MD are
      `ewald` and `pppm`. These long range solvers perform their computations in
      K-space. In case of `pppm`, extra overhead results from the 3d-FFT, where as the
-     Ewald method suffers from the poor $$O(N^\frac{3}{2})$$ scaling and this will drag down the
-     overall performance when you use more cores to do your calculation even though the
-     pair part exhibits linear scaling. This is also a potential case where a hybrid
+     Ewald method suffers from the poor $$O(N^\frac{3}{2})$$ scaling, which will drag down the
+     overall performance when you use more cores to do your calculation, even though
+     Pair exhibits linear scaling. This is also a potential case where a hybrid
      run comprising of MPI and  OpenMP might give you better performance and improve
      the scaling.
 
@@ -378,9 +392,11 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 
 The input file (given below) is prepared following the inputs provided in the *bench*
 directory of the LAMMPS distribution (version `7Aug2019`):
+
 ~~~
 {% include {{ site.snippets }}/ep04/in.rhodo %}
 ~~~
+{: .source}
 
 Using this you can perform a simulation
 of an all-atom rhodopsin protein in solvated lipid bilayer with CHARMM force field,
@@ -390,48 +406,52 @@ a 32000 atom system. The force cutoff for LJ force-field is 10.0 Angstroms, neig
 skin cutoff is 1.0 sigma, number of neighbors per atom is 440. NPT time integration
 is performed for 20,000 timesteps.
 
-<p align="center"><img src="../fig/ep04/rhodo.png" width="50%"/></p>
+<p align="center"><img src="../fig/04/rhodo.png" width="50%"/></p>
 
-The submit this as a job using 4 processors, we can modify our previous job script:
-~~~
+To submit this as a job using 4 processors, we can modify our previous job script:
+
+```
 {% include {{ site.snippets }}/ep03/4core_job_script %}
-~~~
+```
+{: .bash}
+
 replacing the input file `in.lj` with the input file for the new system.
 
-> ## Devise a strategy
+> ## Investigating speedup
+> 
+> 1. Using the `log.lammps` files you have created in the previous exercises, write down the
+>    speedup factor for the `Pair`, `Comm` and `walltime` fields in the timing breakdowns. Use
+>    the below formula to calculate speedup.
+> 
+>    ```
+>    (Speedup factor) = 1.0 / ( (Time taken by n processors) / (Time taken by 1 processor) )
+>    ```
 >
-> 1. Using the above input and for a fixed system size (e.g. 32,000 atoms), I can run
->    multiple jobs with varying processor counts starting with 1 core. For example, I
->    did this study in Intel Skylake processor with 2 sockets and 20 cores each.
->    This means each node has 40 physical cores. So, you can
->    run jobs with 1, 4, 8, 16, 32, 40 processors first and then run with 80, 120,
->    160, 200, 240, 280, 320, 360, 400 cores, and so on. (depending on the
->    availability).
-> 2. For each of these jobs, you will get timing breakdown from the screen/log file.
->    Plot the *speedup factor* versus *number of cores* for the `Pair`, `Bond`,
->    `Kspace`, `Neigh`, `Comm` and `total wall time`. The speedup factor is given by
->    ~~~
->    (Speedup factor) = (average time taken by n processor) / (average time taken by 1 processor)
->    ~~~
-> 3. You won't have time to carry this analysis out now but pick a couple of cases to try.
->    Write down your observations about how different parts of the job (i.e. pair
->    calculation, long range solver, communication, etc.) scales with increasing number
->    of cores.
-> 4. Discuss with you neighbour about the bottlenecks in this calculation and devise a
->    strategy to unblock the bottleneck.
+> 2. Using a simple pen and paper, make a plot of speedup factor on the y-axis and number of
+>    processors on the x-axis.
+>
+> 3. What are your observations about this plot? Which fields show a good speedup factor?
+>    Discuss what could be a good approach in fixing this.
 >
 > > ## Solution
+> > You should have noticed that `Pair` shows almost perfect linear scaling, whereas `Comm` shows
+> > poor scalability. and the total walltime also suffers from the poor scalability when running
+> > with more number of cores.
+> > 
+> > However this is a very small sample size, as to get a better speedup, more nodes and cores need
+> > to be utilised. Take the example below of an effective scalability study.
+> > 
+> > This was carried out on an Intel Skylake processor which has 2 sockets and 20 cores each,
+> > meaning 40 physical cores per node. Here jobs were run with 1, 4, 8, 16, 32, 40 processors, and
+> > then scaled up to 80, 120, 160, 200, 240, 280, 320, 360, 400 cores. You can go further,
+> > depending on your system and availability.
+> > 
+> > <p align="center"><img src="../fig/04/rhodo_speedup_factor_scaling.png" width="50%"/></p>
 > >
-> > <p align="center"><img src="../fig/ep04/rhodo_speedup_factor_scaling.png" width="50%"/></p>
-> >
-> > 1. In this calculation we used Intel Skylake processor with 40 physical cores. The
-> >    job was run with 1, 4, 8, 16, 32, 40, 80, 120, 160, 200, 240, 280, 320, 360 and
-> >    400 cores.
-> > 2. Speedup factors were calculated and plotted above.
-> > 3. `Pair` part and `Bond` part show almost perfect linear scaling, whereas `Neigh`
-> >    and `Kspace` show poor scalability, and the total walltime also suffers from the
-> >    poor scalability when running with more number of cores.
-> > 4. This resembles the situation 4 discussed above. A mix of MPI and OpenMP could be
-> >    a sensible approach.
+> > 
+> > As we can see, similar to your own example, `Pair` and `Bond` show almost perfect linear
+> > scaling, whereas `Kspace` and `Comm` show poor scalability, and the total walltime also
+> > suffers from the poor scalability when running with more number of cores. This resembles
+> > situation 4 discussed above. A mix of MPI and OpenMP could be a sensible approach.
 > {: .solution}
 {: .challenge}

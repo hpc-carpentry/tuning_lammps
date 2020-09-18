@@ -30,6 +30,7 @@ through the **Kokkos** package is given below.
 srun lmp -in in.lj -k on g Ngpu -sf kk -pk kokkos <arguments>
 ```
 {: .bash}
+
 To run the **Kokkos** package, the following three command-line switches are very important:
   1. ```-k on``` : This enables Kokkos at runtime
   2. ```-sf kk``` : This appends the "/kk" suffix to Kokkos-supported LAMMPS styles
@@ -53,20 +54,17 @@ the ```-k on``` switch as shown below:
 > ## Get the full command-line
 >
 > Derive a command-line to submit a LAMMPS job for the LJ system that you studied for
-> the GPU package (***ADD REF***) such that it invokes the Kokkos GPU to
+> the [GPU package]({{page.root}}/05-accelerating-lammps/#learn-to-call-the-gpu-package-from-the-command-line)
+> such that it invokes the Kokkos GPU to
 > accelerate the job using 2 nodes having 24 cores each, 4 devices per node. Assign all
 > the MPI ranks available on a node to all the devices. Use  *default* package options.
+> 
 > > ## Solution
-> > ~~~
-> > #SBATCH --nodes=2
-> > #SBATCH --ntasks-per-node=24
-> > #SBATCH --partition=gpus
-> > #SBATCH --gres=gpu:4
-> > ... ... ...
-> > ... ... ...
-> > srun lmp -k on g 4 -sf kk -pk kokkos -in in.lj
-> > ~~~
-> > {: .input}
+> >
+> > ```
+> > lmp -k on g 4 -sf kk -pk kokkos -in in.lj
+> > ```
+> > {: .bash}
 > {: .solution}
 {: .challenge}
 
@@ -100,16 +98,24 @@ In the following discussion, we'll work on a few exercises to get familiarized o
 these aspects to some extent.
 
 > ## Exercise: Performance penalty due to use of mixed styles
->   1. First, let us take the input for the LJ-system from the Exercise 1 of the GPU
->      section in Episode 5 (***ADD REF***, let us call this as *Input1*). Run this input
->      using all
->      the visible devices in a node available to you and use **Kokkos**/GPU as the
->      accelerator package using the following settings ***THESE ARE SYSTEM SPECIFIC***:
->      `-k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off`. Use
->      the number of MPI tasks that equals to the number of devices.
->   2. Measure the performance of this run in units of `timesteps/s`.
->   3. Now, modify the above LJ-input file and append the following lines to the end of
->      the file:
+>
+> 1. First, let us take the input for the LJ-system from
+>    [episode 5]({{page.root}}/05-accelerating-lammps/#learn-to-call-the-gpu-package-from-the-command-line).
+>    Run this input using all the visible devices in a node available to you and use **Kokkos**/GPU
+>    as the accelerator package using the following settings;
+>    **CHECK ME!**
+>    * 4 GPUs
+>    * Kokkos on
+>    * `newton off`
+>    * `neigh full`
+>    * `comm device`
+>    * `cude/aware off`
+>
+>    Use the number of MPI tasks that equals to the number of devices. Measure the performance of
+>    of this run in `timesteps/s`.
+>      
+> 2. Modify the LJ-input file and append the following lines to the end of the file.
+>
 >      ```
 >      ... ... ...
 >      ... ... ...
@@ -126,18 +132,16 @@ these aspects to some extent.
 >      thermo_style custom step time  temp press pe ke etotal density v_acn
 >      run		500
 >      ```
->      Let us name this modified input file as
->      *Input2*. Run *Input2* using the same identical Kokkos setting:
->      `-k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off`
->      and with identical number of GPU and MPI tasks as you did for the *Input1*.
->   4. Again, measure the performance of this run in units of `timesteps/s`.
->   5. Compare the performance between these two runs and comment on your observations.
+>      {: .source}
+>
+> 3. Rename the input file and run it using the same Kokkos setting as before, and the identical
+>    number of GPU and MPI tasks as previously. Measure the performance of this run in `timesteps/s`
+>    and compare the performance of these two runs and comment on your observations.
 >
 > > ## Solution
-> > I did this study in a Intel Haswell CPU node having 2x12 cores per
-> > node and two NVIDIA K80 GPUs (which is four visible devices per node). I have used
-> > 1 MPI tasks per GPU. This means that for four visible devices we have used four MPI
-> > tasks in total (per node).
+> >
+> > Taking an example from a HPC system with 2x12 cores per node and 2 GPUs (4 visible devices per
+> > node), using 1 MPI task per GPU, the following was observed.
 > >
 > > First, we ran with *Input1*. Second, we modified this input as mentioned above (to
 > > become *Input2*) and performance for both of these runs are measured in units of
@@ -164,6 +168,7 @@ these aspects to some extent.
 > >     bin: standard
 > > ~~~
 > > {: .output}
+> >
 > > In this case, the pair style is Kokkos-enabled (`pair lj/cut/kk`) while the compute
 > > style `compute coord/atom` is not. Whenever you make such a mix of Kokkos and
 > > non-Kokkos styles in the input of a Kokkos run, it costs you dearly since this
@@ -171,50 +176,63 @@ these aspects to some extent.
 > {: .solution}
 {: .challenge}
 
+We have already discussed that the primary aim of developing the Kokkos package is to write a
+single C++ code that will run on both devices (like GPU) and hosts (CPU) with or without
+multi-threading. Targeting portability without losing the functionality and the performance of a
+code is the primary objective of Kokkos.
+
+
 > ## Exercise: Speed-up ( CPU versus GPU package versus Kokkos/GPU )
-> We have already discussed that the primary aim of developing the Kokkos package is to
-> write a single C++ code that will run on both devices (like GPU) and hosts (CPU) with
-> or without multi-threading. Targeting portability without losing the functionality and
-> the performance of a code is the primary objective of Kokkos.
 >
 > Let us see now see how the current Kokkos/GPU implementation within LAMMPS (version
 > `3Mar20`) achieves this goal by comparing its performance with the CPU and GPU package.
-> For this, we shall repeat the same set of tasks as described in ***ADD REF***. Take a
+> 
+> For this, we shall repeat the same set of tasks as described in 
+> [episode 5]({{page.root}}/05-accelerating-lammps). Take a
 > LJ-system with ~11 million atons by choosing `x = y = z = 140` and `t = 500`. We'll
-> use optimum number of GPU devices and MPI tasks to run the jobs with **Kokkos**/GPU
-> with several number of node counts. **Kokkos**/GPU is also specially designed to run
+> Use the optimum number of GPU devices and MPI tasks to run the jobs with **Kokkos**/GPU
+> with 1 node, then **any of** 2, 3, 4, 5 nodes (2 sets: one with
+> the **GPU** package enabled, and the other is the regular **MPI-based** runs **without any**
+> accelerator package). *For a better comparison of points, choose a different multi-node number*
+> *to that of your neighbour*.
+>
+> **Kokkos**/GPU is also specially designed to run
 > everything on the GPUs. We shall offload the entire force computation and neighbour
-> list building to the GPUs. This can be done using
+> list building to the GPUs using;
+>
 > ```
 > -k on g 4 -sf kk -pk kokkos newton off neigh full comm device
 > ```
+ {: .bash}
 > or
 > ```
 > -k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off
 > ```
+> {: .bash}
+>
 > (if *CUDA-aware MPI* is not available to you).
 >
-> * Do a systematic study by running the job with different number of nodes with the
->   Kokkos/GPU package. For example, if five nodes are available to you, run this job
->   using all the physical cores available with 1 node, 2 nodes, 3 nodes, 4 nodes and
->   5 nodes.
 > * Extract the performance data from the log/screen output files from each of these
 >   runs. You can do this using the command
 >   ```
 >   grep "Performance:" log.lammps
 >   ```
 >   {: .bash}
->   and note down the performance value in units if `timestep/s`.
+>   and note down the performance value in units of `timestep/s`.
+>
 > * Make a plot to compare the performance of the **Kokkos**/GPU runs with the CPU runs
 >   (i.e. without any accelerator package) and the **GPU** runs (i.e. with the **GPU**
 >   package enabled) with number of nodes.
+>
 > * Plot the speed-up factor (= GPU performance/CPU performance) versus the number of
 >   nodes.
+>
 > * Discuss the main observations from these plots.
 >
 > > ## Solution
 > >
 > > <p align="center"><img src="../fig/08/CPUvsGPUvsKKGPU.png" width="50%"/></p>
+> >
+> > **FIXME**
 > {: .solution}
 {: .challenge}
-
