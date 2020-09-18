@@ -464,7 +464,8 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > > * `-pk gpu 2` - Setting **GPU** package and number of GPUs
 > > * `-sf gpu` - **GPU** package related fix/pair styles
 > > * `neigh no` - A `no` value of `neigh` keyword indicates neighbour list built in the CPUs
-> > * `newton off` - **(FIXME - WHY?)**
+> > * `newton off` - Currently, only an off value is allowed as all GPU package pair styles require
+> >                  this setting.
 > > * `split -1.0` - Dynamic load balancing option between CPUs and GPUs when value = `-1`
 > > 
 > > **NB:** It is important to fix the number of MPI ranks in your submission script, and request
@@ -491,7 +492,7 @@ The first thing that you should notice here is that it's using an *acceleration*
 pair potential lj/cut
 and for this purpose it is using two devices (`Device 0` and `Device 1`) and 12 MPI-processes per
 device. That is what you asked for: 2 GPUs (```-pk gpu 2```) and
-`{{ site.sched_comment }} {{ site.sched_flag_ntasks }}=24`. The number of tasks is shared equally by
+` {{ site.sched_comment }} {{ site.sched_flag_ntasks }} =24 `. The number of tasks is shared equally by
 each GPU. The detail about the graphics card is also printed, along
 with the *numerical precision* used by the **GPU** package is also printed. In this case, it
 is using *double precision*. Next it shows how many MPI-processes are spawned per GPU.
@@ -609,7 +610,10 @@ before starting the production runs. This might save your lot of resource and ti
 > >    therefore it is not surprising that the scaling deteriorates with increasing MPI tasks. In
 > >    fact, you may try to use 1 GPU and a few MPI task to see if the performance increases in
 > >    this case.
-> > 2. (**FIXME**).
+> > 2. As the system size increases, normalied speed-up factor per node increases with increasing
+> >    MPI tasks per GPU since in these cases the MPI tasks are busy in computing rather than
+> >    spending time in communicating each other, i.e. computational overhead exceeds the
+> >    communication overheads.
 > {: .solution}
 {: .challenge}
 
@@ -632,8 +636,9 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 > setup again and compare the performances.
 >
 > > ## Solution
-> > 
-> > Using the same setup as previously, you can see how the plot has changed. **(FIX ME)** This needs to be done!
+> >
+> > Using the same setup as previously, you can see how the plot has changed due to dynamic load
+> > increasing the performance.
 > >
 > > <p align="center"><img src="../fig/05/gpu_mpi_counts_LB.png" width="50%"/></p>
 > {: .solution}
