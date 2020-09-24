@@ -208,36 +208,3 @@ While preparing for *production* use of software, it is considered good practice
 performance on manageable portion of your problem first, attempt to optimize
 it (using some of the recommendations we outline in this lesson, for example) and then
 make a decision about how to run things in production.
-
-
-> ## Using all available resources
->
-> Say you've actually got a powerful desktop with multiple CPU cores and a GPU at your
-> disposal, what are good options for leveraging them?
->
-> 1. Utilising MPI (Message Passing Interface)
-> 2. Utilising OpenMP (Open Multi-Processing)
-> 3. Using performance enhancing libraries or plugins
-> 4. Use GPUs instead of CPUs
-> 5. Splitting code up into smaller individual parts
->
-> > ## Solution
-> > 1. Yes, MPI can enable you to split your code into multiple processes distributed
-> >    over multiple cores (and even multiple computers), known as parallel programming.
-> >    This won't help you to use the GPU though.
-> > 2. Yes, like MPI this is also parallel programming, but deals with threads instead of
-> >    processes, by splitting a process into multiple threads, each thread using a
-> >    single CPU core. OpenMP can potentially also leverage the GPU.
-> > 3. Yes, that is their purpose. However, different libraries/plugins run on different
-> >    architectures and with different capabilities, in this case you need something
-> >    that will leverage the additional cores and/or the GPU for you.
-> > 4. Yes, GPUs are better at handling multiple simple tasks, whereas a CPU is better
-> >    at running complex singular tasks quickly.
-> > 5. It depends, if you have a simulation that needs to be run from start to
-> >    completion, then
-> >    splitting the code into segments won't be of any benefit and will likely waste
-> >    compute resources due to the associated overhead. If some of the segments can be
-> >    run *simultaneously* or on different hardware then you will see benefit...but
-> >    it is usually very hard to balance this.
-> {: .solution}
-{: .challenge}
