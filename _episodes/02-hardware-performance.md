@@ -111,7 +111,7 @@ and then each sub-domain is assigned to a processor.
 <p align="center"><img src="../fig/02/DD_cartoon.png" width="50%"/></p>
 
 If your computer has `N` physical
-processors, you can initiate
+processors, you could initiate
 `N` MPI processes on your computer. This means each sub-domain is handled by an MPI process
 and usually the domains communicate with their "closest" neighbours to exchange information.
 
