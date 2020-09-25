@@ -8,7 +8,7 @@ questions:
 - "How can performance be measured?"
 - "What is meant by flops, walltime and CPU hours?"
 - "How can performance be enhanced?"
-- "How can I use compute resources effectively?" 
+- "How can I use compute resources effectively?"
 objectives:
 - "Understand the link between software performance and hardware"
 - "Identify the different methods of enhancing performance"
@@ -17,7 +17,7 @@ keypoints:
 - "Software performance is the use of computational resources effectively to reduce runtime"
 - "Understanding performance is the best way of utilising your HPC resources efficiently"
 - "Performance can be measured by looking at flops, walltime, and CPU hours"
-- "There are many ways of enhancing performance, and there is no single 'correct' way. The 
+- "There are many ways of enhancing performance, and there is no single 'correct' way. The
   performance of any software will vary depending on the tasks you want it to undertake."
 ---
 
@@ -25,12 +25,12 @@ keypoints:
 
 Before getting into the software side of things, lets take a few steps back. The concept
 of performance is generic and can apply to many factors in our lives, such as our own
-physical and mental performance. With *software performance* the emphasis is not on the
+physical and mental performance. With *software performance* the emphasis is not on
 using the most powerful machine, but on how best to utilise the power that you have.
 
 Say you are the chef in a restaurant and every dish that you do is perfect. You would be
 able to produce a set 7 course meal for a table of 3-6 without too much difficulty. If
-you catering a conference dinner though, it becomes more difficult, as people would be
+you are catering a conference dinner though, it becomes more difficult, as people would be
 waiting many hours for their food. However, if you could delegate tasks to a team of 6
 additional chefs who could assist you (while also communicating with each other), you
 have a much higher chance of getting the food out on time and coping with a large
@@ -50,7 +50,7 @@ software that is developed by someone else, we can take a self-centred and simpl
 approach: all we care about is **reducing the time to solution** to an acceptable level
 while **minimising our resource usage**.
 
-This lesson is about taking a well-informed, systematic approach on how to do this.
+This lesson is about taking a well-informed, systematic approach towards how to do this.
 
 > ## Enhancing performance: rationale
 >
@@ -110,12 +110,6 @@ and **CPU hours**.
 >
 {: .callout}
 
-> ## Calculate Flops
->
-> Can you find how many flops your computer is capable of at maximum efficiency?
->
-{: .challenge}
-
 > ## CPU Hours
 >
 > CPU hours is the amount of CPU time spent processing. For example, if I execute for a
@@ -159,13 +153,13 @@ walltime the code spends to run.
 
 ## How can we enhance performance?
 
-If you are taking this course you are probably code *users*, not code *developers*. To
-enhance the code performance you
+If you are taking this course you are probably application *users*, not application
+*developers*. To enhance the code performance you
 need to trigger behaviour in the software that the *developers* will have put in place
 to *potentially* improve performance. To do that, you need to know what the triggers are
 and then try them out with your use case to see if they really do improve performance.
 
-Some triggers will be hardware related, like the use of OpenMP, MPI, or GPUs. Others
+Some triggers will be hardware related, like the use of *OpenMP*, *MPI*, or *GPU*s. Others
 might relate to alternative libraries or algorithms that could be used by the
 application.
 
@@ -208,46 +202,9 @@ application.
 ## How can I use compute resources effectively?
 
 Unfortunately there is no simple answer to this, because the art of getting the '*optimum*'
-performance is ambiguous. There is no 'one size fits all' method to performance optimization as
-you may not know what way is best to optimize something on first writing, as what can often happen
-is that a spontaneous optimization can reduce readability and can add code that is used only to
-improve performance. This can cause big complexities in large code, making them hard to maintain
-and debug. Hence, optimization should be done at the end of the development stage.
+performance is ambiguous. There is no 'one size fits all' method to performance optimization.
 
-During this development stage, and while testing your code, it is considered good practice to test
-your code on a small section of your problem first, optimize it to see how it performs 
-so then when you deal with a larger problem,
-
-
-
-> ## Using all available resources
->
-> Say you've actually got a powerful desktop with multiple CPU cores and a GPU at your
-> disposal, what are good options for leveraging them?
->
-> 1. Utilising MPI (Message Passing Interface)
-> 2. Utilising OpenMP (Open Multi-Processing)
-> 3. Using performance enhancing libraries or plugins
-> 4. Use GPUs instead of CPUs
-> 5. Splitting code up into smaller individual parts
->
-> > ## Solution
-> > 1. Yes, MPI can enable you to split your code into multiple processes distributed
-> >    over multiple cores (and even multiple computers), known as parallel programming.
-> >    This won't help you to use the GPU though.
-> > 2. Yes, like MPI this is also parallel programming, but deals with threads instead of
-> >    processes, by splitting a process into multiple threads, each thread using a
-> >    single CPU core. OpenMP can potentially also leverage the GPU.
-> > 3. Yes, that is their purpose. However, different libraries/plugins run on different
-> >    architectures and with different capabilities, in this case you need something
-> >    that will leverage the additional cores and/or the GPU for you.
-> > 4. Yes, GPUs are better at handling multiple simple tasks, whereas a CPU is better
-> >    at running complex singular tasks quickly.
-> > 5. It depends, if you have a simulation that needs to be run from start to
-> >    completion, then
-> >    splitting the code into segments won't be of any benefit and will likely waste
-> >    compute resources due to the associated overhead. If some of the segments can be
-> >    run *simultaneously* then you will see benefit...but it is usually very hard to
-> >    balance this.
-> {: .solution}
-{: .challenge}
+While preparing for *production* use of software, it is considered good practice to test
+performance on manageable portion of your problem first, attempt to optimize
+it (using some of the recommendations we outline in this lesson, for example) and then
+make a decision about how to run things in production.
