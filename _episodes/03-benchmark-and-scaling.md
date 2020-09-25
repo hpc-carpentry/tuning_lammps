@@ -12,11 +12,12 @@ objectives:
 - "Be able to perform a scaling analysis of an application"
 keypoints:
 - "Benchmarking is a way of assessing the performance of a program or set of programs"
-- "The `log.lammps` file shows important information about the timing, processor layout, etc. 
+- "The `log.lammps` file shows important information about the timing, processor layout, etc.
   which you can use to record your benchmark"
-- "Scaling concerns the effective use of computational resources. Two types are typically discused: 
+- "Scaling concerns the effective use of computational resources. Two types are typically discussed:
   strong scaling (where we increase the compute resources but keep the problem size the same) and
-  weak scaling (where we increase the problem size in proportion to our increase of compute resources"
+  weak scaling (where we increase the problem size in proportion to our increase of compute
+  resources"
 ---
 
 ## What is benchmarking?
@@ -93,11 +94,13 @@ The input file we need for the LJ-system is reproduced below:
 ~~~
 
 The timing information for this run with both 1 and 4 processors is also provided with
-the LAMMPS distribution. So, to benchmark it would be wise to run the same job with same
-settings as that of the distribution. Let us now create a job file (sometimes called a
-batch file) to submit this job.
+the LAMMPS distribution. To do an initial benchmark our installation it would be wise to
+run the test case with the same number of processors in order to compare with the timing
+information provided by LAMMPS.
 
-Writing a job file from scratch is error prone. Many computing sites offer a number of
+Let us now create a job file (sometimes called a batch file) to submit a job for a larger
+test case. Writing
+a job file from scratch is error prone. Many computing sites offer a number of
 example job scripts to let you get started. We'll do the same and provide you with an example
 , but created specifically for our LAMMPS use case.
 
@@ -105,6 +108,7 @@ First we need to tell the batch system what resources we need:
 ~~~
 {% include {{ site.snippets }}/ep03/job_resources_2nodeMPI.snip %}
 ~~~
+{: .source}
 in this case, we've asked for all the cores on 2 nodes of the system for 5 minutes.
 
 Next we should tell it about the environment we need to run in. In most modern HPC systems,
@@ -116,21 +120,22 @@ example set of `module` commands to load LAMMPS for this course:
 ~~~
 {% include {{ site.snippets }}/ep03/job_environment_lammps.snip %}
 ~~~
+{: .language-bash}
 
 And finally we tell it how to actually run the LAMMPS executable on the system.
-If we are using a single CPU core, we can either invoke LAMMPS directly with
+If we were using a single CPU core, we can invoke LAMMPS directly with
 ~~~
-{{ site.lammps.exec }} < in.lj
+{{ site.lammps.exec }} -in in.lj
 ~~~
+{: .language-bash}
 but in our case we are interested in using the MPI runtime across 2 nodes. On our system
 we will use the {{ site.mpi_runtime.implementation }} MPI implementation using
 `{{ site.mpi_runtime.launcher }}` to launch the MPI processes. Let's see how that looks
-like for our current use case:
+like for our current use case (with `in.lj` as the input file):
 ~~~
 {% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %}
 ~~~
-In this case we've indicated that it should use `in.lj` as the input file and use
-`out.lj` to store any output from the execution.
+{: .language-bash}
 
 Now let's put all that together to make our job script:
 ~~~
@@ -138,14 +143,17 @@ Now let's put all that together to make our job script:
 {% include {{ site.snippets }}/ep03/job_environment_lammps.snip %}
 {% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %}
 ~~~
-{: .bash}
+{: .language-bash}
 
 > ## Edit a submission script for a LAMMPS job
 >
 > Duplicate the job script we just created so that we have versions that will run on
 > 1 core and 4 cores.
 >
-> Run the 1 core job script on {{ site.remote.name }}.
+> Make a new directories (called `4core_lj` and `1core_lj`) and for each directory *copy*
+> inside your input file and the relevant job script. For each case, enter that directory
+> (so that all output from your job is stored in the same place) and run the job script on
+> {{ site.remote.name }}.
 >
 > > ## Solution
 > > Our single core version is
@@ -154,14 +162,14 @@ Now let's put all that together to make our job script:
 > > ```{% for member in lines_of_code %}
 > > {{ member }}{% endfor %}
 > > ```
-> > {: .bash}
+> > {: .language-bash}
 > > and our 4 core version is
 > > {% capture mycode %}{% include {{ site.snippets }}/ep03/4core_job_script %}{% endcapture %}
 > > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
 > > ```{% for member in lines_of_code %}
 > > {{ member }}{% endfor %}
 > > ```
-> > {: .bash}
+> > {: .language-bash}
 > {: .solution}
 {: .challenge}
 
@@ -170,8 +178,11 @@ Now let's put all that together to make our job script:
 Let us now look at the output files. Here, three files have been created: `log.lammps`,
 `mpi-out.xxxxx`, and `mpi-err.xxxxx`. Among these three, `mpi-out.xxxxx` is mainly to
 capture the screen output that would have been generated during the job execution. The purpose
-of the `mpi-err.xxxxx` file is to log entries if there is any error occurring during
-run-time. The one that is created by LAMMPS is called `log.lammps`.
+of the `mpi-err.xxxxx` file is to log entries if there is any error (and sometimes other
+information) that occurred during
+run-time. The one that is created by LAMMPS is called `log.lammps`. Note that LAMMPS
+overwrites the default `log.lammps` file with every execution, but the information we
+are concerned with there is also stored in our `mpi-out.xxxxx` file.
 
 Once you open `log.lammps`, you will notice that it contains most of the important
 information starting from the LAMMPS version (in our case we are using
@@ -187,7 +198,7 @@ using 1 OpenMP thread(s) per MPI task
 {: .output}
 
 Note that it tells you about the LAMMPS version, and `OMP_NUM_THREADS` which is one of
-the important environment variables we need to know about to leverage OpenMP. But for
+the important environment variables we need to know about to leverage OpenMP. For
 now, we'll focus mainly on the timing
 information provided in this file.
 
@@ -237,7 +248,7 @@ Useful keywords to search for include:
     ~~~
     grep "Loop time" log.lammps
     ~~~
-    {: .bash}
+    {: .language-bash}
 
   * **Performance:** This is provided for convenience to help predict how long it will
     take to run a desired physical simulation. (source:
@@ -249,7 +260,7 @@ Useful keywords to search for include:
     ~~~
     grep "Performance" log.lammps
     ~~~
-    {: .bash}
+    {: .language-bash}
 
   * **CPU use:** This provides the CPU utilization per MPI task; it should be close to
     100% times the number of OpenMP threads (or 1 of not using OpenMP). Lower numbers
@@ -261,7 +272,7 @@ Useful keywords to search for include:
     ~~~
     grep "CPU use" log.lammps
     ~~~
-    {: .bash}
+    {: .language-bash}
 
   * **Timing Breakdown** Next, we'll discuss about the timing breakdown table for CPU
     runtime. If we try the following command;
@@ -270,7 +281,7 @@ Useful keywords to search for include:
     # extract 8 lines after the occurrence of the "breakdown"
     grep -A 8 "breakdown" log.lammps
     ~~~
-    {: .bash}
+    {: .language-bash}
 
     you should see output similar to the following:
 
@@ -306,11 +317,11 @@ Useful keywords to search for include:
 
 > ## Now run a benchmark...
 >
-> Submit a LAMMPS job for the our input file using both 1 and 4 processors.
-> Extract the loop times for your runs and see how the for this particular job compares
-> with LAMMPS standard benchmark and with the performance for two other HPC systems.
+> From the jobs that you ran previously,
+> extract the loop times for your runs and see how they compare
+> with the LAMMPS standard benchmark and with the performance for two other HPC systems.
 >
-> | HPC system | 1 proc (sec) | 4 proc (sec) |
+> | HPC system | 1 core (sec) | 4 core (sec) |
 > |----------- | ------------ |------------- |
 > | LAMMPS     | 2.26185      | 0.635957     |
 > | HPC 1      | 2.24207      | 0.592148     |
@@ -330,8 +341,24 @@ would be when the answer takes only 10% less time when we double the CPUs. This 
 is one of **strong scaling**, where the workload doesn't change as we increase our
 resources.
 
-For **weak scaling**, we want to increase our workload without increasing our *walltime*,
-and we do that by using additional resources. To look at this in more detail, let's head
+> ## Plotting strong scalability
+>
+> Use the original job script for 2 nodes and run it on {{ site.remote.name }}.
+>
+> Now that
+> you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with
+> the number of CPU cores on the X-axis and the loop times on the Y-axis (use your
+> favourite plotting tool, an online plotter or even pen and paper).
+>
+> Are you close to "perfect" scalability?
+>
+{: .challenge}
+
+### Weak scaling
+
+For **weak scaling**, we want usually want to increase our workload without increasing
+our *walltime*,
+and we do that by using additional resources. To consider this in more detail, let's head
 back to our chefs again from the previous episode, where we had more people to serve
 but the same amount of time to do it in.
 
@@ -350,19 +377,5 @@ where one specific core is suited to one specific task, but finding the best com
 is important and can hugely impact your code's performance. As ever with enhancing
 performance, you may have the resources, but the effective use of the resources is
 where the challenge lies. Having each chef cooking their specialised dishes would be
-good weak scaling: an effective use of your resources. Poor weak scaling would result
-from having your pastry chef doing the main dish, which is an ineffective use of
-resources.
-
-> ## Plotting strong scalability
->
-> Use the original jobscript for 2 nodes and run it on {{ site.remote.name }}.
->
-> Now that
-> you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with
-> the number of CPU cores on the X-axis and the loop times on the Y-axis (use your
-> favourite plotting tool, an online plotter or even pen and paper).
->
-> Are you close to "perfect" scalability?
->
-{: .challenge}
+good weak scaling: an effective use of your additional resources. Poor weak scaling
+will likely result from having your pastry chef doing the main dish.
