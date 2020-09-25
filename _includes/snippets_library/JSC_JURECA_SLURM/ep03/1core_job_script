@@ -12,4 +12,4 @@ module load Stages/Devel-2019a
 module load intel-para/2019a
 module load LAMMPS/9Jan2020-cuda
 
-srun lmp < in.lj > out.lj
+srun lmp -in in.lj
