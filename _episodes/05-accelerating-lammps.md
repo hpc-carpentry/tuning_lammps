@@ -10,7 +10,7 @@ objectives:
 - "Understand the different accelerator packages available in LAMMPS"
 - "Learn how to invoke the different accelerator packages across different hardwares"
 keypoints:
-- "The five accelerator packages currently offered by LAMMPS are i) OPT, ii) USER-INTEL, 
+- "The five accelerator packages currently offered by LAMMPS are i) OPT, ii) USER-INTEL,
   iii) USER-OMP, iv) GPU, v) Kokkos"
 - "Kokkos is available for use on all types of hardware. Other accelerator packages are hardware
   specific"
@@ -28,7 +28,7 @@ summation method for calculating long range Coulomb interactions effectively usi
 potential. Similarly there are a few FFT schemes offered by LAMMPS and a user has to make a
 trade-off between accuracy and performance depending on their computational needs. This lesson is
 not aimed to discuss such types of algorithm-based speed-up of LAMMPS, instead we'll focus on a few
-accelerator packages that are used to extract the most out of the available hardware of a HPC system.
+accelerator packages that are used to extract the most out of the available hardware of an HPC system.
 
 There are five accelerator packages currently offered by LAMMPS. These are;
 
@@ -43,8 +43,9 @@ spectrum of architectures found in modern HPC platforms. Therefore, the next
 question that arises is: *What hardware is supported by these packages?*
 
 > ## Supported hardware
+> Here are *some* examples of the which packages support certain hardware:
 >
-> | Hardware        | Accelerators                      |
+> | Hardware        | Accelerator packages              |
 > | --------------- | --------------------------------- |
 > | Multi-core CPUs | OPT, USER-INTEL, USER-OMP, Kokkos |
 > | Intel Xeon Phi  | USER-INTEL, Kokkos                |
@@ -61,14 +62,30 @@ The **ONLY** accelerator package that supports all
 kinds of hardware is **Kokkos**. Kokkos is a templated C++ library developed in Sandia National
 Laboratory and this helps to create an abstraction that allows a *single implementation* of a
 software application on different kinds of hardware. This will be discussed in detail in the
-[next lesson]({{page.root}}/06-invoking-kokkos).
+[next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
 
 In the meantime, we'll touch a few key points about other accelerator packages to give you a feel
 about what these packages offer. To do this we will learn:
 * how to invoke an accelerator package in a LAMMPS run
-* gather data to compare the speedup with other LAMMPS runs.
+* how to gather data to compare the speedup with other LAMMPS runs.
 
 ## Accelerator package overview
+
+> ## Precision
+>
+> For many the accelerator packages you have the option to use `single`, `double` or
+> `mixed` *precision*. Precision means the amount of bytes that are used to store a
+> number on a computer: the more bytes you use, the more precise the representation of a
+> number you can have. `double` precision uses double the amount of bytes as `single`
+> precision. You should only use the precision that you need to, as higher precision
+> comes with costs (more bytes for numbers means more work for the CPU, more storage and
+> more bandwidth for communication).
+>
+> `mixed` precision is different in that it is implemented in an algorithm. It usually
+> means you use `single` precision when you can (to save CPU time and interconnect bandwidth)
+> and double (or higher) precision when you have to (because you need numbers to a certain
+> accuracy).
+{: .callout}
 
 ### **OPT** package
 
@@ -76,8 +93,8 @@ about what these packages offer. To do this we will learn:
   [here]({{page.root}}/reference/#package-OPT)).
 * Acceleration, in this case, is achieved by using a templated C++ library to reduce computational
   overheads due to `if` tests and other conditional code blocks.
-* This also provides better vectorization operations as compared to its regular CPU version.
-* This generally offers 5-20% savings on computational cost on most machines
+  * This also provides better vectorization operations as compared to its regular CPU version.
+  * This generally offers 5-20% savings on computational cost on most machines
 
 > ## Effect on the timing breakdown table
 >
@@ -104,7 +121,7 @@ Acceleration, in this case, is achieved in two different ways:
 
 There are, however, a number of conditions:
 
-* For using the offload feature, the Intel Xeon Phi coprocessors are required.
+* For using the offload feature, the (now outdated) Intel Xeon Phi coprocessors are required.
 * For using vectorization feature, Intel compiler with version 14.0.1.106 or versions 15.0.2.044
   and higher is required on both multi-core CPUs and Phi systems.
 
@@ -118,13 +135,8 @@ pair style (say, `reax`) for which this is not implemented, its obvious that you
 going to have a performance gain for the `Pair` part of the calculation. If the
 majority of the computation time is coming from the `Pair` part then you are in trouble.
 If you would like to know how much speedup you can expect to achieve using USER-INTEL, you can
-take a look in the corresponding
-[LAMMPS documentation](https://lammps.sandia.gov/doc/Speed_intel.html).
-
-> ## Single, double, mixed precision calculations
->
-> ***NEED TO EXPLAIN WHAT THIS MEANS IN CALLOUT*** Explain me!
-{: .callout}
+take a look in the [corresponding
+LAMMPS documentation](https://lammps.sandia.gov/doc/Speed_intel.html).
 
 ### **USER-OMP** package
 
@@ -137,9 +149,9 @@ A large sub-set of the LAMMPS routines can be used with this accelerator. A list
 functionalities enabled with this package can be found
 [here]({{page.root}}/reference/#package-USER-OMP).
 
-Generally, one can expect 5-20% performance boost when using this package either in serial.
+Generally, one can expect 5-20% performance boost when using this package even in serial!
 You should always test to figure out what the optimal number of OpenMP threads
-to use for a particular simulation is. Generally, the package gives better performance
+to use for a particular simulation is. Typically, the package gives better performance
 when used for lower numbers of threads, for example 2-4. It is important to remember
 that the MPI implementation in LAMMPS is so robust that you may almost always expect this
 to be more effective than using OpenMP on multi-core CPUs.
@@ -147,8 +159,8 @@ to be more effective than using OpenMP on multi-core CPUs.
 ### **GPU** package
 
 Using the **GPU** package in LAMMPS, one can achieve performance gain by coupling GPUs to
-one or many CPUs. Since supports both CUDA (which is vendor specific) and OpenCL (which
-is an open standard), it can be used on a variety of GPU hardware.
+one or many CPUs. The package supports both CUDA (which is vendor specific) and OpenCL (which
+is an open standard) so it can be used on a variety of GPU hardware.
 
 Calculations that require access to atomic data like coordinates, velocities, forces may suffer
 bottlenecks since at every step these data are communicated back and forth between the
@@ -175,7 +187,7 @@ discussed in more depth in the [next lesson]({{page.root}}{% link _episodes/06-i
 
 ## How to invoke a package in LAMMPS run?
 
-Let us now come back to the *Rhodopsin* example for which we did a thorough scaling
+Let us now come back to the *Rhodopsin* example for which we showed a thorough scaling
 study in the [previous episode]({{ page.root }}{% link _episodes/04-lammps-bottlenecks.md %}).
 We found that the `Kspace` and `Neigh` calculations
 suffer from poor scalability as you increase number of cores to do the calculations. In
@@ -184,23 +196,23 @@ and parallelizing over atoms (i.e. thread-based OpenMP) could be more beneficial
 improve scalability than a pure MPI-based approach. To test this, in the following
 exercise, we'll do a set of calculations to mix MPI and OpenMP using the **USER-OMP**
 package. Additionally, this exercise will also help us to learn the basic principles of
-invoking accelerator packages in a LAMMPS run. Before starting our runs, let us now
-discuss the syntax of the `package` command in LAMMPS, as outlined below.
+invoking accelerator packages in a LAMMPS run.
 
-To call an accelerator package (**USER-INTEL**, **USER-OMP**, **GPU**, **Kokkos**) in
+To call an
+accelerator package (**USER-INTEL**, **USER-OMP**, **GPU**, **Kokkos**) in
 your LAMMPS run, you need to know a LAMMPS command called `package`. This command
 invokes package-specific settings for an accelerator. You can learn about this command
 in detail from the
-[LAMMPS manual](https://lammps.sandia.gov/doc/package.html).
-
-The basic syntax for the additional options to the LAMMPS are:
+[LAMMPS manual](https://lammps.sandia.gov/doc/package.html). Before starting our runs, let
+us discuss the syntax of the `package` command in LAMMPS. The basic syntax for the
+additional options to the LAMMPS are:
 
 ```
 package <style> <arguments>
 ```
 {: .source}
 
-`style` allows you to choose the accelerator package for your run. There are four different
+`<style>` allows you to choose the accelerator package for your run. There are four different
 packages available currently (version `3Mar20`):
 
 * `intel`: This calls the **USER-INTEL** package
@@ -208,9 +220,11 @@ packages available currently (version `3Mar20`):
 * `gpu`: This calls the **GPU** package
 * `kokkos`: This calls the **Kokkos** package
 
-## How to invoke the **USER-OMP** package
+`<arguments>` are then the list of arguments you wish to provide to your `<style>` package.
 
-To call **USER-OMP** in a LAMMPS run, use `omp` as `style`. Next you need to choose
+### How to invoke the **USER-OMP** package
+
+To call **USER-OMP** in a LAMMPS run, use `omp` as `<style>`. Next you need to choose
 proper `<arguments>` for the `omp` style. `<arguments>` should be chosen as the number
 of OpenMP threads that you like to associate with each MPI process. This is an integer
 and should be chosen sensibly. If you have N number of physical cores available per node
@@ -260,7 +274,7 @@ There are two alternate ways to add these options to your simulation:
   input script:
 
   ```
-   mpirun -np 10 -ppn 10 lmp -in in.rhodo -sf omp -pk omp 4 neigh no
+  {% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %} -sf omp -pk omp 4 neigh no
   ```
   {: .bash}
 
@@ -322,7 +336,7 @@ i.e. through the command-line.
 > > ## Solution
 > >
 > > For a system with 40 cores per node, the following combinations are possible:
-> > 
+> >
 > > * 1 MPI task with 40 OpenMP threads
 > > * 2 MPI tasks with 20 OpenMP threads
 > > * 4 MPI tasks with 10 OpenMP threads
@@ -331,10 +345,10 @@ i.e. through the command-line.
 > > * 10 MPI tasks with 4 OpenMP threads
 > > * 20 MPI tasks with 2 OpenMP threads
 > > * 40 MPI tasks with 1 OpenMP threads (in this case, it is better not to use OMP at all)
-> > 
+> >
 > > For a perfectly scalable system, parallel efficiency should be equal to 100%, and
 > > as it approaches zero we say that the parallel performance is poor.
-> > 
+> >
 > > Upon completing the exercise, you should have produced a plot similar to this, from which we
 > > can take a few observations.
 > >
@@ -392,7 +406,7 @@ If the answer to these two questions is a *yes* then we you can proceed to the f
 ### Basic syntax: arguments and keywords
 
 As discussed above, you need to use the `package` command to invoke the **GPU** package.
-To use the **GPU** package for an accelerator you need to select `gpu` as *style*. Next
+To use the **GPU** package for an accelerator you need to select `gpu` as `<style>`. Next
 you need to choose proper `<arguments>` for the `gpu` style. The main argument for the
 `gpu` style is:
 * `ngpu`: This sets the number of GPUs per node. There must be at least as many MPI
@@ -437,7 +451,7 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > submit a LAMMPS job for the LJ system described by the following input file with the following
 > conditions. What command/package keywords should we run so that neighbour list building and force
 > computation are done entirely on the GPUs
-> 
+>
 > * Set `x = y = z = 60`, `t = 500`
 > * Use 2 GPUs and 24 MPI ranks
 > * Neighbour built on CPUs
@@ -467,7 +481,7 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > > * `newton off` - Currently, only an off value is allowed as all GPU package pair styles require
 > >                  this setting.
 > > * `split -1.0` - Dynamic load balancing option between CPUs and GPUs when value = `-1`
-> > 
+> >
 > > **NB:** It is important to fix the number of MPI ranks in your submission script, and request
 > > the number of GPUs you wish to utilise. This will change depending on your system.
 > >
@@ -545,7 +559,7 @@ out the best possible set of run-time parameters by following a thorough optimiz
 before starting the production runs. This might save your lot of resource and time!
 
 > ## Exercise: Offload entire neighbour build and force computation to GPUs
-> 
+>
 > 1. Using the input file from the previous exercise, modify it so that your system contains **ONE**
 >    of the following sizes, letting `t = 5000`;
 >
@@ -556,7 +570,7 @@ before starting the production runs. This might save your lot of resource and ti
 >    Make sure the system you pick is different to that of your neighbour(s).
 >
 > 2. Find the different GPU/MPI task combinations on your system. For example, on a 4 GPU node and
->    24 cores, there are 6 different combintaions, with a minimum of 4 MPI tasks being used. Submit jobs
+>    24 cores, there are 6 different combinations, with a minimum of 4 MPI tasks being used. Submit jobs
 >    for the **minimum** number of MPI tasks (`A GPUs/B MPI`) and for the maximum number of MPI tasks
 >    (`A GPUs/B MPI`), where `B` is the number of cores in the node you are using. Then submit a job
 >    for another GPU/MPI task combinations for your chosen system size. Choose package keywords such
@@ -645,7 +659,7 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 {: .challenge}
 
 > ## Speed-up (CPU versus GPU)
-> 
+>
 > By now we have idea about some of the 'preferred' tuning parameters for a LJ-sytem. For
 > the current exercise, let us take the system with ~11 million atoms, i.e.
 > `x = y = z = 140` and `t = 500` and for this size of atoms, we know from our previous example
