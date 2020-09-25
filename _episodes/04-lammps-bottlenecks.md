@@ -365,7 +365,7 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 > skin cutoff is 1.0 sigma, number of neighbors per atom is 440. NPT time integration
 > is performed for 20,000 timesteps.
 >
-> <p align="center"><img src="../fig/04/rhodo.png" width="50%"/></p>
+> <p align="center"><img src="../fig/04/rhodo.png" width="25%"/></p>
 >
 > Let's look at a scalability study of this system,
 >
