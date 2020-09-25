@@ -4,15 +4,15 @@ teaching: 40
 exercises: 45
 questions:
 - "How can I identify the main bottlenecks in LAMMPS?"
+- "How do I come up with a strategy for finding the best optimisation?"
 - "What is load balancing?"
-- "How do I come up with a strategy for the best optimisation?"
 objectives:
 - "Learn how to analyse timing data in LAMMPS and determine bottlenecks"
 keypoints:
 - "The best way to identify bottlenecks is to run different benchmarks on a smaller system and
   compare it to a representative system"
-- "Effective load balancing is being able to distribute an equal amount of work across processes
-  for inhomogeneous systems"
+- "Effective load balancing is being able to distribute an equal amount of work across
+  processes"
 usemathjax: true
 ---
 
@@ -40,8 +40,8 @@ Therefore, you need to ask yourself these questions:
 Identifying (and addressing) performance bottlenecks is important as this could save you
 a lot of
 computation time and resources. The best way to do this is to start with a reasonably
-representative system having a modest system size with run for a few hundred/thousand
-of timesteps.
+representative system having a modest system size and run for a few hundred/thousand
+timesteps.
 
 LAMMPS provides a timing breakdown table printed at the end of log file
 and also within the screen output file generated at the end of each LAMMPS run. The
@@ -64,10 +64,8 @@ Other   |            | 0.005199   |            |       |  0.29
 
 Note that `%total` of the timing is giving for a range of different parts of the
 calculation. In the following section, we will work on a few examples and try to
-understand how to identify bottlenecks from this output.
-
-The very first thing to do is run the simulation with just 1 MPI rank and no
-threads and find a way to minimise the walltime by adjusting the balance between
+understand how to identify bottlenecks from this output. Ultimately, we will try to find
+a way to minimise the walltime by adjusting the balance between
 `Pair`, `Neigh`, `Comm` and the other parts of the calculation.
 
 To get a feeling for this process, let us start with a Lennard-Jones (LJ) system. We'll study
@@ -86,97 +84,79 @@ The length of the run can be decided by the
 variable `t`. We'll choose two different system sizes here: the one given is tiny just
 having 4000 atoms (`x = y = z = 10`, `t = 1000`). If we take this input and modify it
 such that `x = y = z = 140` the other one would be huge
-containing about 10 million atoms. We have chosen this purposefully and let us do a
-*serial* run (i.e. on a single core), in our case this is with 1 MPI rank and without any
-OpenMP threads. Now let us have a look at an example of the timing breakdown table.
-
-> ## Example timing breakdown for 4000 atoms LJ-system
->
-> ```
-> MPI task timing breakdown:
-> Section |  min time  |  avg time  |  max time  |%varavg| %total
-> ---------------------------------------------------------------
-> Pair    | 12.224     | 12.224     | 12.224     |   0.0 | 84.23
-> Neigh   | 1.8541     | 1.8541     | 1.8541     |   0.0 | 12.78
-> Comm    | 0.18617    | 0.18617    | 0.18617    |   0.0 |  1.28
-> Output  | 7.4148e-05 | 7.4148e-05 | 7.4148e-05 |   0.0 |  0.00
-> Modify  | 0.20477    | 0.20477    | 0.20477    |   0.0 |  1.41
-> Other   |            | 0.04296    |            |       |  0.30
-> ```
-> {: .output}
->
-> This is for the small
-> system (having 4000 atoms). The last `%total` column in the table tells about the
-> percentage of the total loop time is spent in this category. Note that most of the CPU
-> time is spent on `Pair` part (~84%), about ~13% on the `Neigh` part and the rest of the
-> things have taken only 3% of the total simulation time. So, in order to get a
-> performance gain, the common choice would be to find a way to reduce the time taken
-> by the `Pair` part since improvements there will have the greatest impact on the overall
-> time. Often OpenMP or using a GPU can help us to achieve this, but not always! It very much
-> depends on the system that you are studying (the pair styles you use in your calculation
-> need to be supported).
-{: .callout}
-
-> ## Example timing breakdown for 10 million atoms LJ-system
->
-> The following table shows an example timing breakdown for a large, 10 million atom system.
-> Note that, though the absolute time to complete the simulation
-> has increased significantly (it now takes about 1.5 hours), the distribution of
-> `%total` remains the same.
->
-> ```
-> MPI task timing breakdown:
-> Section |  min time  |  avg time  |  max time  |%varavg| %total
-> ---------------------------------------------------------------
-> Pair    | 7070.1     | 7070.1     | 7070.1     |   0.0 | 85.68
-> Neigh   | 930.54     | 930.54     | 930.54     |   0.0 | 11.28
-> Comm    | 37.656     | 37.656     | 37.656     |   0.0 |  0.46
-> Output  | 0.1237     | 0.1237     | 0.1237     |   0.0 |  0.00
-> Modify  | 168.98     | 168.98     | 168.98     |   0.0 |  2.05
-> Other   |            | 43.95      |            |       |  0.53
-> ```
-> {: .output}
-{: .callout}
-
-> ## Executing on a node
->
-> Make a copy of the example input modified to run the large system (`x = y = z = 140`).
->
-> Now run the two systems using all the cores available in a single node and then run
-> with more nodes (2, 4) with full capacity and note how this timing breakdown varies rapidly.
-> While running with multiple cores, we're using only MPI only as parallelization method.
-> Below we have shown the table for the small system when run with 40 MPI ranks.
->
-> You can use the job scripts from
-> [the previous episode]({{ page.root }}{% link _episodes/03-benchmark-and-scaling.md %})
-> as a starting point.
->
-{: .challenge}
+containing about 10 million atoms.
 
 > ## Important!
->
-> For many of these exercises, the exact modifications you will need to implement are system
+> For many of these exercises, the exact modifications to job scripts that you will need
+> to implement are system
 > specific. Check with your instructor or your HPC institution's helpdesk for information specific
 > to your HPC system.
+>
+> Also remember that after each execution the `log.lammps` file in the current directory
+> may be overwritten but you will still have the information we require in the `mpi-out.XXXXX`
+> file corresponding to the executed job.
 {: .callout}
 
-> ## Example timing breakdown for 4000 atoms LJ-system with 40 MPI ranks
+> ## Example timing breakdown for 4000 atoms LJ-system
+> Using your previous job script for a a *serial* run (i.e. on a single core), replace
+> the input file with the one for the **small** system  (having 4000
+> atoms) and run it on the HPC system.
 >
-> ~~~
-> MPI task timing breakdown:
-> Section |  min time  |  avg time  |  max time  |%varavg| %total
-> ---------------------------------------------------------------
-> Pair    | 0.24445    | 0.25868    | 0.27154    |   1.2 | 52.44
-> Neigh   | 0.045376   | 0.046512   | 0.048671   |   0.3 |  9.43
-> Comm    | 0.16342    | 0.17854    | 0.19398    |   1.6 | 36.20
-> Output  | 0.0001415  | 0.00015538 | 0.00032134 |   0.0 |  0.03
-> Modify  | 0.0053594  | 0.0055818  | 0.0058588  |   0.1 |  1.13
-> Other   |            | 0.003803   |            |       |  0.77
-> ~~~
-> {: .output}
+> Take a look at the resulting timing breakdown table and discuss with your neighbour
+> what you think you should target to get a performance gain.
 >
-{: .callout}
+> > ## Solution
+> > Let us have a look at an example of the timing breakdown table.
+> > ```
+> > MPI task timing breakdown:
+> > Section |  min time  |  avg time  |  max time  |%varavg| %total
+> > ---------------------------------------------------------------
+> > Pair    | 12.224     | 12.224     | 12.224     |   0.0 | 84.23
+> > Neigh   | 1.8541     | 1.8541     | 1.8541     |   0.0 | 12.78
+> > Comm    | 0.18617    | 0.18617    | 0.18617    |   0.0 |  1.28
+> > Output  | 7.4148e-05 | 7.4148e-05 | 7.4148e-05 |   0.0 |  0.00
+> > Modify  | 0.20477    | 0.20477    | 0.20477    |   0.0 |  1.41
+> > Other   |            | 0.04296    |            |       |  0.30
+> > ```
+> > {: .output}
+> >
+> > The last `%total` column in the table tells about the
+> > percentage of the total loop time is spent in this category. Note that most of the CPU
+> > time is spent on `Pair` part (~84%), about ~13% on the `Neigh` part and the rest of the
+> > things have taken only 3% of the total simulation time. So, in order to get a
+> > performance gain, the common choice would be to find a way to reduce the time taken
+> > by the `Pair` part since improvements there will have the greatest impact on the overall
+> > time. Often OpenMP or using a GPU can help us to achieve this...but not always! It very much
+> > depends on the system that you are studying (the pair styles you use in your calculation
+> > need to be supported).
+> >
+> > ### Serial timing breakdown for 10 million atoms LJ-system
+> > The following table shows an example timing breakdown for a serial run of the large,
+> > 10 million atom system.
+> > Note that, though the absolute time to complete the simulation
+> > has increased significantly (it now takes about 1.5 hours), the distribution of
+> > `%total` remains roughly the same.
+> >
+> > ```
+> > MPI task timing breakdown:
+> > Section |  min time  |  avg time  |  max time  |%varavg| %total
+> > ---------------------------------------------------------------
+> > Pair    | 7070.1     | 7070.1     | 7070.1     |   0.0 | 85.68
+> > Neigh   | 930.54     | 930.54     | 930.54     |   0.0 | 11.28
+> > Comm    | 37.656     | 37.656     | 37.656     |   0.0 |  0.46
+> > Output  | 0.1237     | 0.1237     | 0.1237     |   0.0 |  0.00
+> > Modify  | 168.98     | 168.98     | 168.98     |   0.0 |  2.05
+> > Other   |            | 43.95      |            |       |  0.53
+> > ```
+> > {: .output}
+> {: .solution}
+{: .challenge}
 
+## Effects due to system size on resource used
+
+Different sized systems might behave differently
+as we increase our resource usage since they will have different distributions of work
+among our available resources.
 
 > ## Analysing the small system
 >
@@ -211,7 +191,8 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > > We have 4000 total atoms. When we run this with 1 core, this handles calculations
 > > (i.e. calculating pair terms, building neighbour list etc.) for all 4000 atoms. Now
 > > when you run this with 40 MPI processes, the particles will be distributed among
-> > these 40 cores "ideally" equally (if there is no *load imbalance* (see below)). These cores then do
+> > these 40 cores "ideally" equally (if there is no *load imbalance* (see below)). These
+> > cores then do
 > > the calculations in parallel, sharing information when necessary. This leads to the
 > > speedup. But this comes at a cost of communication between these MPI processes. So,
 > > communication becomes a bottleneck for such systems where you have a small number of
@@ -219,24 +200,6 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > > need to waste your resource for such a small system.
 > {: .solution}
 {: .discussion}
-
-> ## Load balancing
->
-> One important issue with MPI-based
-> parallelization is that it can under-perform for systems with inhomogeneous
-> distribution of particles, or systems having lots of empty space in them. It is pretty
-> common that the evolution of simulated systems evolve over time to reflect such a case.
-> This results in *load imbalance*. While some of the processors are assigned with
-> finite number of
-> particles to deal with for such systems, a few processors could have far less atoms (or
-> none) to do any calculation and this results in an overall loss in parallel efficiency.
-> This situation is more likely to expose itself as you scale up to a large
-> large number of processors.
->
-> You can deal with load imbalance up to a certain extent using `processors` and `balance`
-> commands in LAMMPS. Detailed usage is given in the
-> [LAMMPS manual](https://lammps.sandia.gov/doc/Manual.html).
-{: .callout}
 
 > ## Analysing the large system
 >
@@ -274,52 +237,46 @@ OpenMP threads. Now let us have a look at an example of the timing breakdown tab
 > {: .solution}
 {: .discussion}
 
-Let us now work on another example from the LAMMPS `bench` directory with the input file
-below. Let's run it using
-1 core (i.e., in *serial*) with `x = y = z = 1`, and `t = 10,000`.
-~~~
-{% include {{ site.snippets }}/ep04/in.chain %}
-~~~
-{: .source}
+## Scalability
 
-> ## Example timing breakdown for system with low average number of neighbours
+Since we have information about the timings for different components of the calculation,
+we can perform a scalability study for each of the components.
+
+> ## Investigating scalability on a number of nodes
 >
-> ~~~
-> Section |  min time  |  avg time  |  max time  |%varavg| %total
-> ---------------------------------------------------------------
-> Pair    | 20.665     | 20.665     | 20.665     |   0.0 | 18.24
-> Bond    | 6.9126     | 6.9126     | 6.9126     |   0.0 |  6.10
-> Neigh   | 57.247     | 57.247     | 57.247     |   0.0 | 50.54
-> Comm    | 4.3267     | 4.3267     | 4.3267     |   0.0 |  3.82
-> Output  | 0.000103   | 0.000103   | 0.000103   |   0.0 |  0.00
-> Modify  | 22.278     | 22.278     | 22.278     |   0.0 | 19.67
-> Other   |            | 1.838      |            |       |  1.62
-> ~~~
-> {: .output}
+> Make a copy of the example input modified to run the large system (`x = y = z = 140`).
 >
-> Note that, in this case,
-> the time spent in solving the `Pair` part is quite low as compared to the `Neigh`
-> part. What do you think may have caused such an outcome?
+> Now run the two systems using all the cores available in a single node and then run
+> with more nodes (2, 4) with full capacity and note how this timing breakdown varies rapidly.
+> While running with multiple cores, we're using only MPI only as parallelization method.
+>
+> You can use the job scripts from
+> [the previous episode]({{ page.root }}{% link _episodes/03-benchmark-and-scaling.md %})
+> as a starting point.
+>
+> 1. Using the `log.lammps` (or `mpi-out.XXXXX`) files, write down the
+>    speedup factor for the `Pair`, `Comm` and `walltime` fields in the timing breakdowns. Use
+>    the below formula to calculate speedup.
+>
+>    ```
+>    (Speedup factor) = 1.0 / ( (Time taken by n processors) / (Time taken by 1 processor) )
+>    ```
+>
+> 2. Using a simple pen and paper, make a plot of the speedup factor on the y-axis and number of
+>    processors on the x-axis for each of these fields.
+>
+> 3. What are your observations about this plot? Which fields show a good speedup factor?
+>    Discuss what could be a good approach in fixing this.
 >
 > > ## Solution
-> > This kind of timing breakdown generally indicates either there is something wrong
-> > with the input or a very, very unusual system geometry. If you investigate the
-> > screen or log file carefully, you would find that this is a system with a very
-> > short cutoff (1.12 sigma) resulting in on average less than 5 neighbors per atoms
-> > (`Ave neighs/atom = 4.85891`) and thus spending very little time on computing
-> > non-bonded forces.
+> > You should have noticed that `Pair` shows almost perfect linear scaling, whereas `Comm` shows
+> > poor scalability. and the total walltime also suffers from the poor scalability when running
+> > with more number of cores.
 > >
-> > Being a sparse system, the necessity of rebuilding its neighbour
-> > lists is more frequent and this explains why the time spent of the `Neigh` part is
-> > much more (about 50%) than the `Pair` part (~18%). On the contrary, the LJ-system
-> > is the extreme opposite. It is a relatively dense system having the average number
-> > of neighbours per atom nearly 37 (`Ave neighs/atom = 37.4618`). More computing
-> > operations are needed to decide the pair forces per atom (~84%), and less frequent
-> > would be the need to rebuild the neighbour list (~10%).  So, here your system
-> > geometry is the bottleneck that causes the neighbour list building to happen too
-> > frequently and taking a significant part of the entire simulation time.
+> > However, remember this is a pretty small sample size, to do a definitive study more nodes/cores
+> > would need to be utilised.
 > {: .solution}
-{: .discussion}
+{: .challenge}
 
 ## MPI vs OpenMP
 
@@ -336,16 +293,16 @@ MPI based parallelism using domain decomposition lies at the core of LAMMPS. Ato
 in each domain are associated to 1 MPI task. This domain decomposition approach comes
 with a cost however, keeping track and coordinating things among these domains requires
 communication overhead. It could lead to significant drop in performance if you have
-limited communication bandwidth, load imbalance in your simulation, or if you wish
+limited communication bandwidth, a slow network, or if you wish
 to scale to a very large number of cores.
 
 While MPI offers domain based parallelization, one can also use parallelization over
 particles. This can, for example, be done using OpenMP which is a different parallelization
-paradigm based on threading. This multi-threading is *conceptually* easy to implement.
+paradigm based on threading.
 Moreover, OpenMP parallelization is orthogonal to MPI parallelization which means you can
 use them together. OpenMP also comes with an overhead: starting and stopping OpenMP takes
-compute time; OpenMP also needs to be careful about how it handles memory (which can be
-expensive depending on the implementation), the particular use case impacts the
+compute time; OpenMP also needs to be careful about how it handles memory, the particular
+use case also impacts the
 efficiency. Remember that, in general, a threaded parallelization method in LAMMPS
 may not be as efficient as MPI unless you have situations where domain decomposition
 is no longer efficient (we will see below how to recognise such situations).
@@ -388,70 +345,104 @@ Let us discuss a few situations:
 
 Let us now build some hands-on experience to develop some feeling on how this works.
 
-### Situation practice: Rhodopsin system
+> ## Case study: Rhodopsin system
+>
+> The input file (given below) is prepared following the inputs provided in the *bench*
+> directory of the LAMMPS distribution (version `7Aug2019`):
+>
+> {% capture mycode %}{% include {{ site.snippets }}/ep04/in.rhodo %}{% endcapture %}
+> {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
+> ~~~{% for member in lines_of_code %}
+> {{ member }}{% endfor %}
+> ~~~
+> {: .source}
+>
+> Using this you can perform a simulation
+> of an all-atom rhodopsin protein in solvated lipid bilayer with CHARMM force field,
+> long-range Coulombics interaction via PPPM (particle-particle particle mesh) and
+> SHAKE constraints. The box contains counter-ions and a reduced amount of water to make
+> a 32000 atom system. The force cutoff for LJ force-field is 10.0 Angstroms, neighbor
+> skin cutoff is 1.0 sigma, number of neighbors per atom is 440. NPT time integration
+> is performed for 20,000 timesteps.
+>
+> <p align="center"><img src="../fig/04/rhodo.png" width="25%"/></p>
+>
+> Let's look at a scalability study of this system,
+>
+> <p align="center"><img src="../fig/04/rhodo_speedup_factor_scaling.png" width="50%"/></p>
+>
+> This was carried out on an Intel Skylake processor which has 2 sockets and 20 cores each,
+> meaning 40 physical cores per node. Here jobs were run with 1, 4, 8, 16, 32, 40 processors, and
+> then scaled up to 80, 120, 160, 200, 240, 280, 320, 360, 400 cores.
+>
+> As we can see, similar to your own study, `Pair` and `Bond` show almost perfect linear
+> scaling, whereas `Kspace` and `Comm` show poor scalability, and the total walltime also
+> suffers from the poor scalability when running with more number of cores. This resembles
+> situation 4 discussed above. A mix of MPI and OpenMP could be a sensible approach.
+>
+{: .callout}
 
-The input file (given below) is prepared following the inputs provided in the *bench*
-directory of the LAMMPS distribution (version `7Aug2019`):
+## Load balancing
+One important issue with MPI-based
+parallelization is that it can under-perform for systems with inhomogeneous
+distribution of particles, or systems having lots of empty space in them. It is pretty
+common that the evolution of simulated systems evolve over time to reflect such a case.
+This results in *load imbalance*. While some of the processors are assigned with
+finite number of
+particles to deal with for such systems, a few processors could have far less atoms (or
+none) to do any calculation and this results in an overall loss in parallel efficiency.
+This situation is more likely to expose itself as you scale up to a large
+large number of processors.
 
+Let us take a look at another example from the LAMMPS `bench` directory with the input file
+below which is run with
+1 core (i.e., in *serial*) with `x = y = z = 1`, and `t = 10,000`.
 ~~~
-{% include {{ site.snippets }}/ep04/in.rhodo %}
+{% include {{ site.snippets }}/ep04/in.chain %}
 ~~~
 {: .source}
 
-Using this you can perform a simulation
-of an all-atom rhodopsin protein in solvated lipid bilayer with CHARMM force field,
-long-range Coulombics interaction via PPPM (particle-particle particle mesh) and
-SHAKE constraints. The box contains counter-ions and a reduced amount of water to make
-a 32000 atom system. The force cutoff for LJ force-field is 10.0 Angstroms, neighbor
-skin cutoff is 1.0 sigma, number of neighbors per atom is 440. NPT time integration
-is performed for 20,000 timesteps.
-
-<p align="center"><img src="../fig/04/rhodo.png" width="50%"/></p>
-
-To submit this as a job using 4 processors, we can modify our previous job script:
-
-```
-{% include {{ site.snippets }}/ep03/4core_job_script %}
-```
-{: .bash}
-
-replacing the input file `in.lj` with the input file for the new system.
-
-> ## Investigating speedup
-> 
-> 1. Using the `log.lammps` files you have created in the previous exercises, write down the
->    speedup factor for the `Pair`, `Comm` and `walltime` fields in the timing breakdowns. Use
->    the below formula to calculate speedup.
-> 
->    ```
->    (Speedup factor) = 1.0 / ( (Time taken by n processors) / (Time taken by 1 processor) )
->    ```
+> ## Example timing breakdown for system with low average number of neighbours
 >
-> 2. Using a simple pen and paper, make a plot of speedup factor on the y-axis and number of
->    processors on the x-axis.
+> ~~~
+> Section |  min time  |  avg time  |  max time  |%varavg| %total
+> ---------------------------------------------------------------
+> Pair    | 20.665     | 20.665     | 20.665     |   0.0 | 18.24
+> Bond    | 6.9126     | 6.9126     | 6.9126     |   0.0 |  6.10
+> Neigh   | 57.247     | 57.247     | 57.247     |   0.0 | 50.54
+> Comm    | 4.3267     | 4.3267     | 4.3267     |   0.0 |  3.82
+> Output  | 0.000103   | 0.000103   | 0.000103   |   0.0 |  0.00
+> Modify  | 22.278     | 22.278     | 22.278     |   0.0 | 19.67
+> Other   |            | 1.838      |            |       |  1.62
+> ~~~
+> {: .output}
 >
-> 3. What are your observations about this plot? Which fields show a good speedup factor?
->    Discuss what could be a good approach in fixing this.
+> Note that, in this case,
+> the time spent in solving the `Pair` part is quite low as compared to the `Neigh`
+> part. What do you think may have caused such an outcome?
 >
 > > ## Solution
-> > You should have noticed that `Pair` shows almost perfect linear scaling, whereas `Comm` shows
-> > poor scalability. and the total walltime also suffers from the poor scalability when running
-> > with more number of cores.
-> > 
-> > However this is a very small sample size, as to get a better speedup, more nodes and cores need
-> > to be utilised. Take the example below of an effective scalability study.
-> > 
-> > This was carried out on an Intel Skylake processor which has 2 sockets and 20 cores each,
-> > meaning 40 physical cores per node. Here jobs were run with 1, 4, 8, 16, 32, 40 processors, and
-> > then scaled up to 80, 120, 160, 200, 240, 280, 320, 360, 400 cores. You can go further,
-> > depending on your system and availability.
-> > 
-> > <p align="center"><img src="../fig/04/rhodo_speedup_factor_scaling.png" width="50%"/></p>
+> > This kind of timing breakdown generally indicates either there is something wrong
+> > with the input or a very, very unusual system geometry. If you investigate the
+> > log file carefully, you would find that this is a system with a very
+> > short cutoff (1.12 sigma) resulting in on average less than 5 neighbors per atom
+> > (`Ave neighs/atom = 4.85891`) and thus spending very little time on computing
+> > non-bonded forces.
 > >
-> > 
-> > As we can see, similar to your own example, `Pair` and `Bond` show almost perfect linear
-> > scaling, whereas `Kspace` and `Comm` show poor scalability, and the total walltime also
-> > suffers from the poor scalability when running with more number of cores. This resembles
-> > situation 4 discussed above. A mix of MPI and OpenMP could be a sensible approach.
+> > Being a sparse system, the necessity of rebuilding its neighbour
+> > lists is more frequent and this explains why the time spent of the `Neigh` part is
+> > much more (about 50%) than the `Pair` part (~18%). On the contrary, the LJ-system
+> > is the extreme opposite. It is a relatively dense system having the average number
+> > of neighbours per atom nearly 37 (`Ave neighs/atom = 37.4618`). More computing
+> > operations are needed to decide the pair forces per atom (~84%), and less frequent
+> > would be the need to rebuild the neighbour list (~10%).  So, here your system
+> > geometry is the bottleneck that causes the neighbour list building to happen too
+> > frequently and taking a significant part of the entire simulation time.
 > {: .solution}
-{: .challenge}
+{: .discussion}
+
+
+You can deal with load imbalance up to a certain extent using `processors` and `balance`
+commands in LAMMPS. Detailed usage is given in the
+[LAMMPS manual](https://lammps.sandia.gov/doc/Manual.html). Unfortunately load balancing
+is out of scope for this lesson since it is a somewhat complicated topic.
