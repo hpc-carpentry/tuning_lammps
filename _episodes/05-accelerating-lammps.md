@@ -225,7 +225,7 @@ packages available currently (version `3Mar20`):
 ### How to invoke the **USER-OMP** package
 
 To call **USER-OMP** in a LAMMPS run, use `omp` as `<style>`. Next you need to choose
-proper `<arguments>` for the `omp` style. `<arguments>` should be chosen as the number
+proper `<arguments>` for the `omp` style. The minimum content of `<arguments>` is the number
 of OpenMP threads that you like to associate with each MPI process. This is an integer
 and should be chosen sensibly. If you have N number of physical cores available per node
 then;
@@ -233,7 +233,8 @@ then;
 (Number of MPI processes) x (Number of OpenMP threads) = (Number of cores per node)
 ```
 
-`<arguments>` can potentially include a number of *keywords* and their corresponding *values*.
+`<arguments>` can potentially include an additional number of *keywords* and their
+corresponding *values*.
 These *keyword/values* provides with you enhanced flexibility to distribute your job among
 the MPI ranks and threads. For a quick reference, the following table could be useful:
 
@@ -254,6 +255,7 @@ There are two alternate ways to add these options to your simulation:
   package omp 4 neigh no
   ```
   {: .source}
+  (here 4 is the number of OpenMP threads per MPI task)
 
   To distinguish the various styles of these accelerator packages from
   its 'regular' non-accelerated variants, LAMMPS has introduced *suffixes* for styles
@@ -263,7 +265,6 @@ There are two alternate ways to add these options to your simulation:
   example, if we take a pair potential that would normally be set with
   `lj/charmm/coul/long`, when using **USER-OMP** optimization it would be set in the input
   file as:
-
   ```
   pair_style      lj/charmm/coul/long/omp 8.0 10.0
   ```
@@ -272,14 +273,13 @@ There are two alternate ways to add these options to your simulation:
 * A simpler way to do this is through the command-line when launching LAMMPS using the
   `-pk` command-line switch. The syntax would be essentially the same as when used in an
   input script:
-
-  ```
-  {% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %} -sf omp -pk omp 4 neigh no
+  ```{% capture mycode %}{% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %}{% endcapture %}
+  {{ mycode | strip }} -sf omp -pk omp $OMP_NUM_THREADS neigh no
   ```
   {: .bash}
-
-  The second method appears to be convenient since you don't need to take the hassle to
-  edit the input file (and possibly in many places)!
+  where `OMP_NUM_THREADS` is now an *environment variable* that we can use to control the
+  number of OpenMP threads. This second method appears to be convenient since you don't
+  need to edit the input file (and possibly in many places)!
 
   Note that there is an extra command-line switch in the above command-line. Can you
   imagine this is for? The `-sf`
@@ -295,42 +295,42 @@ i.e. through the command-line.
 
 > ## Case study: Rhodopsin (with **USER-OMP** package)
 >
-> We shall use the same input file for the rhodopsin system with lipid bilayer (**FIXME LINK**). The
-> settings for this run are described in a
-> [previous episode]({{page.root}}/04-lammps-bottlenecks/#situation-practice-rhodopsin-system).
+> We shall use the same input file for the rhodopsin system with lipid bilayer that was
+> described in the [case study of our previous
+> episode]({{page.root}}/04-lammps-bottlenecks/#case-study-rhodopsin-system).
 > In this episode, we'll run this using the **USER-OMP** package to mix MPI and OpenMP. For
-> all the runs we will use the default value for the *neigh* keyword.
+> all the runs we will use the default value for the `neigh` keyword (which means we can
+> exclude it from the command line).
 >
 > 1. First, find out the number of cpu cores available per node in the HPC system that
 >    you are using and then figure out all the possible MPI/OpenMP combinations that you
->    can have per node. For example on a node with 40 physical cores, there are 8 combinations per
->    node. Write down the different combinations for your machine, then choose one to run. Then run
->    the code again with pure MPI settings, without **any** OpenMP threading, to avoid any overhead.
->    Do you notice a difference in speedup?
+>    can have per node. For example on a node with 40 physical cores, there are 8
+>    combinations per node. Write down the different combinations for your machine.
 >
->    ```
->    (Number of MPI processes) x (Number of OpenMP threads) = (Number of cores per node)
->    ```
+>    Here we have a job script to run the rhodopsin case with 2 OpenMP threads per MPI
+>    task, choose another MPI/OpenMP combination and adapt (and run) the job script:
 >
-> 2. On a system of a node with 40 cores, if we want to see scaling, say up to 10 nodes, this means
->    that a total of 80 calculations would need to be run since we have 8 MPI/OpenMP combinations
->    for each node. Thankfully, you don’t need to do the 80 calculations. A good metric to
->    measure strong scalability is to compute the parallel efficiency for each of these runs, where;
+>    {% capture mycode %}{% include {{ site.snippets }}/ep05/2omp_job_script %}{% endcapture %}
+>    {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
+>    ~~~{% for member in lines_of_code %}
+>    {{ member }}{% endfor %}
+>    ~~~
+>    {: .language-bash}
 >
->    ```
->    Parallel efficiency = (Time taken by a serial run / (Np * (Time taken by Np cores))
->    ```
+> 2. Run the same command with pure MPI settings, i.e., without **any** OpenMP threading,
+>    to avoid any overhead. Do you notice a difference in performance?
 >
->    Using the `log.lammps` files here (**FIXME WITH LINK**), calculate the parallel efficiencies
->    to complete the csv (**FIXME WITH LINK**) file.  To get the total time taken by each job,
->    search for `wall time` in the log/screen output files. The value for the serial run can be taken
->    as `7019`. **NOTE: This will differ between systems. If time permits, find out the time taken**
->    **for a serial run on your system.**
 >
-> 3. Now that you have completed the csv, make a plot of parallel efficiency versus number of nodes
->    from the various combinations by running the python script (**FIXME WITH LINK**).
+> 3. On a system of a node with 40 cores, if we want to see scaling, say up to 10 nodes,
+>    this means that a total of 80 calculations would need to be run since we have
+>    8 MPI/OpenMP combinations
+>    for each node.
 >
-> 4. Write down your observations based on this plot and make comments on any performance
+>    Thankfully, you don’t need to do the 80 calculations right now! Here's an example
+>    plot for what that picture might look like:
+>    <p align="center"><img src="../fig/05/scaling_rhodo_user_omp.png" width="60%"/></p>
+>
+>    Write down your observations based on this plot and make comments on any performance
 >    enhancement when you compare these results with the pure MPI runs.
 >
 > > ## Solution
@@ -344,35 +344,32 @@ i.e. through the command-line.
 > > * 8 MPI tasks with 5 OpenMP threads
 > > * 10 MPI tasks with 4 OpenMP threads
 > > * 20 MPI tasks with 2 OpenMP threads
-> > * 40 MPI tasks with 1 OpenMP threads (in this case, it is better not to use OMP at all)
+> > * 40 MPI tasks with 1 OpenMP threads
 > >
 > > For a perfectly scalable system, parallel efficiency should be equal to 100%, and
 > > as it approaches zero we say that the parallel performance is poor.
 > >
-> > Upon completing the exercise, you should have produced a plot similar to this, from which we
-> > can take a few observations.
+> > From the plot, we can make a few observations.
 > >
-> > <p align="center"><img src="../fig/05/scaling_rhodo_user_omp.png" width="75%"/></p>
 > >
 > > 1. As we increase number of nodes, the parallel efficiency decreases considerably
 > >    for all the runs. This decrease in performance could be associated to the poor
-> >    scalability of the `Kspace` and `Neigh` computations. We have discussed about
-> >    this in episode 2.
+> >    scalability of the `Kspace` and `Neigh` computations.
 > > 2. Parallel efficiency is increased by about 10-15% when we use mixed MPI+OpenMP
-> >    approach.
+> >    approach **even when we use only 1 OpenMP thread**.
 > > 3. The performance of hybrid runs are better than or comparable to pure MPI runs
 > >    only when the number of OpenMP threads are less than or equals to five. This
-> >    implies that USER-OMP package shows scalability only when number of threads are
-> >    less in number.
+> >    implies that USER-OMP package shows scalability only with lower numbers of threads.
 > > 4. Though we are seeing about 10-15% increase in parallel efficiency of hybrid
 > >    MPI+OpenMP runs (using 2 threads) over pure MPI runs, still it is important to
 > >    note that trends in loss of performance with increasing core number is similar
 > >    in both of these types of runs thus indicating that this increase in performance
-> >    might not be due to threading but rather due to better SIMD vectorization.
-> >    Specially, for Skylake processor the vectorization capability is great. In fact,
-> >    in LAMMPS, MPI-based parallelization almost always win over OpenMP until
-> >    thousands of MPI ranks are being used where communication overheads very much
-> >    significant. There are overheads to making the kernels thread-safe.
+> >    might not be due to threading but rather due to other effects (like *vectorisation*).
+> >
+> >    In fact, there are overheads to making the kernels thread-safe.
+> >    In LAMMPS, MPI-based parallelization almost always win over OpenMP until
+> >    thousands of MPI ranks are being used where communication overheads become very
+> >    significant.
 > {: .solution}
 {: .challenge}
 
