@@ -350,8 +350,10 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 > The input file (given below) is prepared following the inputs provided in the *bench*
 > directory of the LAMMPS distribution (version `7Aug2019`):
 >
-> ~~~
-> {% include {{ site.snippets }}/ep04/in.rhodo %}
+> {% capture mycode %}{% include {{ site.snippets }}/ep04/in.rhodo %}{% endcapture %}
+> {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
+> ~~~{% for member in lines_of_code %}
+> {{ member }}{% endfor %}
 > ~~~
 > {: .source}
 >
@@ -377,6 +379,7 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 > scaling, whereas `Kspace` and `Comm` show poor scalability, and the total walltime also
 > suffers from the poor scalability when running with more number of cores. This resembles
 > situation 4 discussed above. A mix of MPI and OpenMP could be a sensible approach.
+>
 {: .callout}
 
 ## Load balancing
