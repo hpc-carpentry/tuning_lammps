@@ -1,8 +1,8 @@
-processors      * * * grid numa
-
-variable        x index 1
-variable        y index 1
-variable        z index 1
+# 3d Lennard-Jones melt
+variable        x index 60
+variable        y index 60
+variable        z index 60
+variable        t index 500
 
 variable        xx equal 1*$x
 variable        yy equal 1*$y
