@@ -223,11 +223,11 @@ code is the primary objective of KOKKOS.
 > > graphics cards,...) going forward.
 > >
 > > A caveat on these results however, at the time of their generation mixed precision
-> > support in the LAMMPS KOKKOS package was still under development. When running large
-> > number of atoms per GPU, KOKKOS is likely faster than the **GPU** package when compiled
+> > support in the LAMMPS **KOKKOS** package was still under development. When running large
+> > number of atoms per GPU, **KOKKOS** is likely faster than the **GPU** package when compiled
 > > for double precision. It is likely that there is additional benefit of using single
 > > or mixed precision with the **GPU** package (depending significantly on the hardware
-> > in use and the simulated system and pair style.
+> > in use and the simulated system and pair style).
 > >
 > {: .solution}
 {: .challenge}
