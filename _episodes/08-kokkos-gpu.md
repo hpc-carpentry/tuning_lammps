@@ -3,41 +3,35 @@ title: "Kokkos with GPUs"
 teaching: 15
 exercises: 15
 questions:
-- "How do I use Kokkos on a GPU?"
+- "How do I use Kokkos together with a GPU?"
 objectives:
 - "Utilise Kokkos on a specific GPU"
 keypoints:
-- "Knowing the capabilities of your host, device and if you can use a CUDA-aware MPI runtime is 
-  required before starting a GPU run"
-- 
+- "Knowing the capabilities of your host, device and if you can use a CUDA-aware MPI
+  runtime is required before starting a GPU run"
+-
 ---
 
 ## Using GPU acceleration through the **Kokkos** package
 
 In this episode, we shall learn to how to use GPU acceleration using the **Kokkos**
-package in LAMMPS. In [a previous episode]({{page.root}}/06-invoking-kokkos), we
+package in LAMMPS. In a
+[previous episode]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}), we
 have learnt the basic syntax of the `package` command that
 is used to invoke the **Kokkos** package in a LAMMPS run. The main arguments and the
 corresponding keywords were discussed briefly in that chapter. In this episode, we shall
-do practical exercises to get more hands-on experiences on using those commands.
+do practical exercises to get further hands-on experiences on using those commands.
 
 ## Command-line options to submit a Kokkos GPU job in LAMMPS
 
-Before proceeding further, let's breakdown the key syntax for calling the GPU acceleration
-through the **Kokkos** package is given below.
-
-```
-srun lmp -in in.lj -k on g Ngpu -sf kk -pk kokkos <arguments>
-```
-{: .bash}
-
-To run the **Kokkos** package, the following three command-line switches are very important:
+In this episode, we'll learn to use **Kokkos** package with GPUs. As we have seen,
+to run the **Kokkos** package the following three command-line switches are very important:
   1. ```-k on``` : This enables Kokkos at runtime
   2. ```-sf kk``` : This appends the "/kk" suffix to Kokkos-supported LAMMPS styles
-  3. ```-pk kokkos``` : This is used to modify the default **Kokkos** package options
+  3. ```-pk kokkos``` : This is used to modify the default package **Kokkos** options
 
-To invoke the GPU(s) with **Kokkos**, we need an additional command-line switch just following
-the ```-k on``` switch as shown below:
+To invoke the GPU execution mode with Kokkos, the ```-k on``` switch takes additional
+arguments for hardware settings as shown below:
   4. ```-k on g Ngpu```: Using this switch you can specify the number of GPU devices, `Ngpu`,
      that you want to use per node.
 
@@ -48,23 +42,30 @@ the ```-k on``` switch as shown below:
 > 2. **Know your device:** know how many GPUs are available on your system and know how
 >    to ask for them from your *resource manager* (SLURM, etc.)
 > 4. **CUDA-aware MPI**: Check if you can use a CUDA-aware MPI runtime with your LAMMPS
->    executable. If not then you need to add `cuda/aware no` to your `<arguments>`.
+>    executable. If not then you will need to add `cuda/aware no` to your `<arguments>`.
 {: .callout}
 
-> ## Get the full command-line
+> ## Creating a Kokkos GPU job script
 >
-> Derive a command-line to submit a LAMMPS job for the LJ system that you studied for
-> the [GPU package]({{page.root}}/05-accelerating-lammps/#learn-to-call-the-gpu-package-from-the-command-line)
+> Create a job script to submit a LAMMPS job for the [LJ system that you studied for the
+> **GPU**
+> package]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}#learn-to-call-the-gpu-package-from-the-command-line)
 > such that it invokes the Kokkos GPU to
-> accelerate the job using 2 nodes having 24 cores each, 4 devices per node. Assign all
-> the MPI ranks available on a node to all the devices. Use  *default* package options.
-> 
+> * accelerate the job using 2 nodes,
+> * uses all available GPU devices on the node,
+> * use the same amount of MPI ranks per node as there are GPUs, and
+> * uses the *default* package options.
+>
 > > ## Solution
 > >
-> > ```
-> > lmp -k on g 4 -sf kk -pk kokkos -in in.lj
-> > ```
-> > {: .bash}
+> > {% capture mycode %}{% include {{ site.snippets }}/ep08/gpu_kokkos_job_script %}{% endcapture %}
+> > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
+> > ~~~{% for member in lines_of_code %}
+> > {{ member }}{% endfor %}
+> > ~~~
+> > {: .language-bash}
+> > If you run it how does the execution time compare to the times you have seen for the
+> > **GPU** package?
 > {: .solution}
 {: .challenge}
 
@@ -91,69 +92,65 @@ the ```-k on``` switch as shown below:
 > 6. **Avoid mixing Kokkos and non-Kokkos styles**: In the LAMMPS input file, if you use
 >    styles that are not ported to use Kokkos, you may experience a significant loss in
 >    performance. This performance penalty occurs because it causes the data to be
->    copied back to the CPU repeatedly.
+>    copied back and forth from the CPU repeatedly.
 {: .callout}
 
 In the following discussion, we'll work on a few exercises to get familiarized on some of
-these aspects to some extent.
+these aspects (to some extent).
 
 > ## Exercise: Performance penalty due to use of mixed styles
 >
-> 1. First, let us take the input for the LJ-system from
->    [episode 5]({{page.root}}/05-accelerating-lammps/#learn-to-call-the-gpu-package-from-the-command-line).
->    Run this input using all the visible devices in a node available to you and use **Kokkos**/GPU
->    as the accelerator package using the following settings;
->    **CHECK ME!**
->    * 4 GPUs
->    * Kokkos on
+> 1. First, let us take the input and job script for the LJ-system in the last exercise.
+>    Make a copy of this script that uses the following additional settings:
 >    * `newton off`
 >    * `neigh full`
 >    * `comm device`
->    * `cude/aware off`
 >
 >    Use the number of MPI tasks that equals to the number of devices. Measure the performance of
 >    of this run in `timesteps/s`.
->      
-> 2. Modify the LJ-input file and append the following lines to the end of the file.
 >
->      ```
->      ... ... ...
->      ... ... ...
->      neighbor	0.3 bin
->      neigh_modify	delay 0 every 20 check no
+> 2. Make a copy of the LJ-input file called `in.mod.lj` and append the following lines to
+>    the end of the file:
 >
->      compute 1 all coord/atom cutoff 2.5
->      compute 2 all reduce sum c_1
->      variable acn equal c_2/atoms
+>    ~~~
+>    ... ... ...
+>    ... ... ...
+>    neighbor	0.3 bin
+>    neigh_modify	delay 0 every 20 check no
 >
->      fix		1 all nve
+>    compute 1 all coord/atom cutoff 2.5
+>    compute 2 all reduce sum c_1
+>    variable acn equal c_2/atoms
 >
->      thermo 50
->      thermo_style custom step time  temp press pe ke etotal density v_acn
->      run		500
->      ```
->      {: .source}
+>    fix		1 all nve
 >
-> 3. Rename the input file and run it using the same Kokkos setting as before, and the identical
->    number of GPU and MPI tasks as previously. Measure the performance of this run in `timesteps/s`
->    and compare the performance of these two runs and comment on your observations.
+>    thermo 50
+>    thermo_style custom step time  temp press pe ke etotal density v_acn
+>    run		500
+>    ~~~
+>    {: .source}
+>
+> 3. Using the same Kokkos setting as before, and the identical
+>    number of GPU and MPI tasks as previously, run the job script using the new input file.
+>    Measure the performance of this run in `timesteps/s`
+>    and compare the performance of these two runs. Comment on your observations.
 >
 > > ## Solution
 > >
 > > Taking an example from a HPC system with 2x12 cores per node and 2 GPUs (4 visible devices per
 > > node), using 1 MPI task per GPU, the following was observed.
 > >
-> > First, we ran with *Input1*. Second, we modified this input as mentioned above (to
-> > become *Input2*) and performance for both of these runs are measured in units of
+> > First, we ran with `in.lj`. Second, we modified this input as mentioned above (to
+> > become `in.mod.lj`) and performance for both of these runs are measured in units of
 > > `timesteps/s`. We can get this information from the log/screen output files. The
 > > comparison of performance is given in this table:
 > >
-> > |Input | Performance (timesteps/sec) |  Performance loss by a factor of |
+> > |Input | Performance (timesteps/sec) |  Performance loss |
 > > |------|-----------------------------|----------------------------------|
-> > |Input 1 (all Kokkos enabled styles used)| 8.097                   |                                 |
-> > |Input 2 (non-Kokkos style used: `compute coord/atom`) | 3.022        |  2.68                           |
+> > |`in.lj` (all Kokkos enabled styles used)| 8.097                   |                                 |
+> > |`in.mod.lj` (non-Kokkos style used: `compute coord/atom`) | 3.022        |  2.68                           |
 > >
-> > In *Input2* we have used styles that is not yet ported to Kokkos. We can check this
+> > In `in.mod.lj` we have used styles that are not yet ported to Kokkos. We can check this
 > > from the log/screen output files:
 > > ~~~
 > > (1) pair lj/cut/kk, perpetual
@@ -172,7 +169,7 @@ these aspects to some extent.
 > > In this case, the pair style is Kokkos-enabled (`pair lj/cut/kk`) while the compute
 > > style `compute coord/atom` is not. Whenever you make such a mix of Kokkos and
 > > non-Kokkos styles in the input of a Kokkos run, it costs you dearly since this
-> > requires the data to be copied back to the host incurring performance penalty.
+> > requires the data to be copied back to the host incurring a performance penalty.
 > {: .solution}
 {: .challenge}
 
@@ -186,8 +183,8 @@ code is the primary objective of Kokkos.
 >
 > Let us see now see how the current Kokkos/GPU implementation within LAMMPS (version
 > `3Mar20`) achieves this goal by comparing its performance with the CPU and GPU package.
-> 
-> For this, we shall repeat the same set of tasks as described in 
+>
+> For this, we shall repeat the same set of tasks as described in
 > [episode 5]({{page.root}}/05-accelerating-lammps). Take a
 > LJ-system with ~11 million atons by choosing `x = y = z = 140` and `t = 500`. We'll
 > Use the optimum number of GPU devices and MPI tasks to run the jobs with **Kokkos**/GPU
