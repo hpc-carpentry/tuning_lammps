@@ -21,4 +21,5 @@ module load Stages/Devel-2019a
 module load intel-para/2019a
 module load LAMMPS/9Jan2020-cuda
 
+# srun handles the MPI placement based on the choices in the job script file
 srun lmp -in in.rhodo -sf omp -pk omp $OMP_NUM_THREADS

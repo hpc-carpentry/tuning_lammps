@@ -6,7 +6,7 @@ questions:
 - "How do I utilise Kokkos with OpenMP"
 objectives:
 - "Utilise OpenMP and Kokkos on specific hardware"
-- "Do a scalability study on optimum command line settings"
+- "Be able to perform a scalability study on optimum command line settings"
 keypoints:
 - "The three command line switches, `-k on`, `-sf kk` and `-pk kokkos` are needed to run the Kokkos
   package"
@@ -20,11 +20,13 @@ In this episode, we'll be learning to use **Kokkos** package with OpenMP executi
 multi-core CPUs. First we'll get familiarized with the command-line options to run a
 **Kokkos** OpenMP job in LAMMPS. This will be followed by a case study to gain some
 hands-on experience to use this package. For the hands-on part, we'll take the same
-rhodopsin system which we studied in previous episodes. We shall use the same input
-file ***ADD LINK to in.rhodo*** and repeat similar scalability studies for the mixed MPI/OpenMP
+rhodopsin system which we have [used previously as a case study](
+{{page.root}}{% link _episodes/04-lammps-bottlenecks.md %}#case-study-rhodopsin-system).
+We shall use the same input
+file and repeat similar scalability studies for the mixed MPI/OpenMP
 settings as we did it for the **USER-OMP** package.
 
-> ## Factors that will impact performance
+> ## Factors that can impact performance
 >
 > 1. **Know your hardware:** get the number of physical cores per node available to you.
 >    Take care such that
@@ -47,8 +49,12 @@ settings as we did it for the **USER-OMP** package.
 >    can migrate to, for example you usually do not want your thread to migrate to another
 >    socket since that could mean that it is far away from the data it needs to process
 >    and could introduce a lot of delay in fetching and writing data.
-> 4. **Set OpenMP Environment variables:** `OMP_NUM_THREADS`, `OMP_PROC_BIND`,
->    `OMP_PLACES` are the ones we will touch here.
+> 4. **Setting OpenMP Environment variables:** `OMP_NUM_THREADS`, `OMP_PROC_BIND`,
+>    `OMP_PLACES` are the ones we will touch here:
+>      * `OMP_NUM_THREADS`: sets the number of threads to use for parallel regions
+>      * `OMP_PROC_BIND`: set the thread affinity policy to be used for parallel regions
+>      * `OMP_PLACES`: specifies on which CPUs (or subset of cores of a CPU) the threads
+>        should be placed
 {: .callout}
 
 
@@ -60,46 +66,51 @@ To run the **Kokkos** package, the following three command-line switches are ver
   2. ```-sf kk``` : This appends the "/kk" suffix to Kokkos-supported LAMMPS styles
   3. ```-pk kokkos``` : This is used to modify the default package **Kokkos** options
 
-To invoke the OpenMP execution mode with Kokkos, we need an additional command-line
-switch just following the ```-k on``` switch as shown below:
+To invoke the OpenMP execution mode with Kokkos, the ```-k on``` switch takes additional
+arguments for hardware settings as shown below:
   4. ```-k on t Nt```: Using this switch you can specify the number of OpenMP threads, `Nt`,
      that you want to use per node. You should also set a proper value for your OpenMP
      environment variables. You can do this with
      ```
      export OMP_NUM_THREADS=4
      ```
-     {: .bash}
+     {: .language-bash}
 
-     if you like to use 4 threads per node (`Nt` is 4). You should also set some other
-     environment variables to help with thread placement. For best performance with
-     OpenMP 4.0 or later set;
+     if you like to use 4 threads per node (`Nt` is 4). Using this environment variable
+     allows you to use ```-k on t $OMP_NUM_THREADS``` on the command line or in your
+     job scripts.
+
+     You should also set some other
+     environment variables to help with thread placement. Good default options with
+     OpenMP 4.0 or later are;
 
      ```
      export OMP_PROC_BIND=spread
      export OMP_PLACES=threads
      ```
-     {: .bash}
+     {: .language-bash}
 
 > ## Get the full command-line
 >
-> Derive a command-line to submit a LAMMPS job for the rhodopsin system such that it
-> invokes the Kokkos OpenMP threading to accelerate the job using 2 nodes having 40 cores
-> each, 4 MPI ranks per nodes, 10 OpenMP threads per rank with *default* package options.
-> 
+> Try to create a job script to submit a LAMMPS job for the rhodopsin system such that it
+> invokes Kokkos with OpenMP threading to accelerate the job using 2 nodes, 2 MPI ranks
+> per node with half the available cores on a node used as OpenMP threads per rank, and the
+> *default* package options.
+>
 > > ## Solution
-> > 
-> > ```
-> > export OMP_NUM_THREADS=10
-> > export OMP_PROC_BIND=spread
-> > export OMP_PLACES=threads
-> > mpirun -np 8 -ppn 4 --bind-to socket --map-by socket lmp -k on t $OMP_NUM_THREADS -sf kk -i in.rhodo
-> > ```
-> > {: .bash}
 > >
-> > This solution includes affinity using OpenMPI MPI runtime binding mechanisms
-> > `--bind-to socket --map-by socket` which ensures that OpenMP threads cannot move
-> > between sockets (but how to set this is
-> > ***dependent on the MPI runtime used***). `OMP_PROC_BIND` and `OMP_PLACES` influence
+> > {% capture mycode %}{% include {{ site.snippets }}/ep07/2omp_kokkos_job_script %}{% endcapture %}
+> > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
+> > ~~~{% for member in lines_of_code %}
+> > {{ member }}{% endfor %}
+> > ~~~
+> > {: .language-bash}
+> >
+> > A solution including affinity using the OpenMPI MPI would include runtime binding mechanisms
+> > like `--bind-to socket` and `--map-by socket` which ensures that OpenMP threads cannot move
+> > between sockets (but how something like this is done is
+> > ***dependent on the MPI runtime used***). `OMP_PROC_BIND` and `OMP_PLACES`
+> > would then influence
 > > what happens to the OpenMP threads on each socket.
 > {: .solution}
 {: .challenge}
@@ -109,38 +120,30 @@ switch just following the ```-k on``` switch as shown below:
 
 There is some more work to do before we can jump into a thorough scalability study when
 we use OpenMP in **Kokkos** which comes with a few extra `package` arguments and
-corresponding keywords (see the [previous episode]({{page.root}}/06-invoking-kokkos) for
+corresponding keywords (see the
+[previous episode]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}) for
 a list of all options) as compared to that offered by the **USER-OMP** package. These
 are `neigh`, `newton`, `comm` and `binsize`.  The first thing that we need to do here is to
 find what values of these keywords offer the fastest runs. Once we know the optimum
 settings, we can use them for all the runs needed to perform the scalability studies.
 
-> ## Command-lines to submit a **Kokkos** OpenMP job
->
-> In the above, we showed a command-line example to submit a LAMMPS job with default
-> package setting for the Kokkos OpenMP run. But, often the default `package` setting
-> may not provide the fastest runs. Before jumping to production runs, we need to check
-> for optimum settings for these values to avoid wastage of our time and valuable
-> computing resources. In the very next section, we'll be showing how to do this with
-> rhodopsin example. Before that, here is an example of command-line which shows
-> how these `package` related keywords can be invoked in your LAMMPS runs using the
-> command-line switches. Default `package` settings are overwritten here using
-> ```-pk kokkos neigh half newton on comm no```.
->
-> ~~~
-> export OMP_NUM_THREADS=10
-> export OMP_PROC_BIND=spread
-> export OMP_PLACES=threads
-> mpirun -np 8 -ppn 4 --bind-to socket --map-by socket lmp -k on t $OMP_NUM_THREADS -sf kk -pk kokkos neigh half newton on comm no -i in.rhodo
-> ~~~
-> {: .bash}
-{: .callout}
+In the last exercise, we constructed a command-line example to submit a LAMMPS job with
+the default
+package setting for the Kokkos OpenMP run. But, often the default `package` setting
+may not provide the fastest runs. Before jumping to production runs, we should investigate
+other settings for these values to avoid wastage of our time and valuable
+computing resources. In the next section, we'll be showing how to do this with
+rhodopsin example. An example of a set of command line arguments which shows
+how these `package` related keywords can be invoked in your LAMMPS run would be
+```-pk kokkos neigh half newton on comm no```.
 
 > ## The optimum values of the keywords
 >
-> Take the rhodopsin input files (`in.rhodo` and `data.rhodo` ***SHOULD BE LINKED*** ),
-> and run LAMMPS jobs for `40 MPI/1 OpenMP` thread on 1 node using the `package` command for the
-> following two set of parameters.
+> Take the rhodopsin input files (`in.rhodo` and `data.rhodo` as provided in the
+> [rhodopsin case study]({{page.root}}
+> {% link _episodes/04-lammps-bottlenecks.md %}#case-study-rhodopsin-system)),
+> and run LAMMPS jobs for 1 OpenMP thread on 1 node using the
+> following two set of parameters for the `package` command:
 >
 > * `neigh full newton off comm no`
 > * `neigh half newton on comm host`
