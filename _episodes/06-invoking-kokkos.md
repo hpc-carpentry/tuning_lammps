@@ -1,18 +1,18 @@
 ---
-title: "Invoking Kokkos"
+title: "Invoking KOKKOS"
 teaching: 25
 exercises: 5
 questions:
-- "Why should I use Kokkos?"
-- "How do I invoke Kokkos within LAMMPS?"
+- "Why should I use KOKKOS?"
+- "How do I invoke KOKKOS within LAMMPS?"
 objectives:
-- "Learn how to invoke Kokkos in a LAMMPS run"
+- "Learn how to invoke KOKKOS in a LAMMPS run"
 - "Learn how to transition from a normal LAMMPS call to an accelerated call"
 keypoints:
-- "Kokkos is a templated C++ library which allows a *single implementation* of a software application
+- "KOKKOS is a templated C++ library which allows a *single implementation* of a software application
   on different kinds of hardware"
 ---
-## Kokkos
+## KOKKOS
 
 In recent times, the HPC industry has witnessed dramatic architectural revolution. Modern
 HPC architecture
@@ -37,12 +37,12 @@ portability which arises due to differences in hardware, and software implementa
 for hardware (writing CUDA code for NVIDIA GPUs won't help you with Intel Xeon Phi). So,
 the question arises: Is there any way to ease this difficulty?
 
-[Kokkos](https://github.com/kokkos) is one of the programming models that strives to be
+[KOKKOS](https://github.com/kokkos) is one of the programming models that strives to be
 an answer to this portability issue. The
-primary objective of Kokkos is to maximize the
+primary objective of KOKKOS is to maximize the
 amount of user code that can be compiled for various devices but obtaining comparable
 performance as compared to if the code
-was written in a  native language specific to that particular device. How does Kokkos
+was written in a  native language specific to that particular device. How does KOKKOS
 achieve this goal?
 
 1. It maps a C++ *kernel* to different backend languages (like CUDA and OpenMP for example).
@@ -51,11 +51,11 @@ achieve this goal?
    and 3D arrays to optimize performance on different hardware (e.g., GPUs prefer an opposite
    data layout to CPUs).
 
-> ## Kokkos: A developing library
+> ## KOKKOS: A developing library
 >
-> Why should we bother to learn about using Kokkos?
+> Why should we bother to learn about using KOKKOS?
 >
-> The primary reason for Kokkos being used by LAMMPS is that it allows you to write a
+> The primary reason for KOKKOS being used by LAMMPS is that it allows you to write a
 > *single* pair style in C++ without (much) understanding of GPU programming, that
 > will then work on both GPUs (or Xeon Phi or another supported hardware) and CPUs
 > with or without multi-threading.
@@ -63,20 +63,20 @@ achieve this goal?
 > It cannot (currently) fully reach the performance of the **USER-INTEL** or the **GPU**
 > packages
 > on *particular* CPUs and GPUs, but adding new code for a pair style, for
-> which something similar already exists, is *significantly* less effort with Kokkos
+> which something similar already exists, is *significantly* less effort with KOKKOS
 > and requires significantly less programming expertise in vectorization and directive
 > based SIMD programming or CPU computing. Also support for a new kind of computing
-> hardware will primarily need additional code in the Kokkos library and just a
+> hardware will primarily need additional code in the KOKKOS library and just a
 > small amount of programming setup/management in LAMMPS.
 >
 {: .discussion}
 
-## What is the **Kokkos** package in LAMMPS?
+## What is the **KOKKOS** package in LAMMPS?
 
-The **Kokkos** package in LAMMPS is implemented to gain performance without losing
+The **KOKKOS** package in LAMMPS is implemented to gain performance without losing
 portability. Various pair styles, fixes and atom
 styles have been updated in LAMMPS to use the data structures and macros as provided by the
-Kokkos C++ library so that when LAMMPS is built with Kokkos features enabled targeting
+KOKKOS C++ library so that when LAMMPS is built with KOKKOS features enabled targeting
 the hardware available on the HPC resource, it can provide
 good performance for that hardware when all the runtime parameters are chosen sensibly. What
 are the things that it currently supports?
@@ -96,7 +96,7 @@ are the things that it currently supports?
 * It is under heavy development and adoption by LAMMPS, so more features and flexibilities
   are expected in future versions of LAMMPS.
 
-The list of LAMMPS features that is supported by Kokkos (as of July 2020) is given below:
+The list of LAMMPS features that is supported by KOKKOS (as of July 2020) is given below:
 
 | Atom Styles | Pair Styles  | Fix Styles  | Compute Style | Bond Styles | Angle Styles | Dihedral Styles | Improper Styles | K-space Styles |
 |:----------- |:------------ |:----------- |:------------- |:----------- |:------------ |:--------------- |:--------------- |:-------------- |
@@ -113,9 +113,9 @@ The list of LAMMPS features that is supported by Kokkos (as of July 2020) is giv
 |             |              | Setforce    |               |             |              |                 |                 |                |
 |             |              | Wall/reflect|               |             |              |                 |                 |                |
 
-This list is likely to be subject to significant changes over time as newer versions of Kokkos are released.
+This list is likely to be subject to significant changes over time as newer versions of KOKKOS are released.
 
-## How to invoke **Kokkos** package in a LAMMPS run?
+## How to invoke **KOKKOS** package in a LAMMPS run?
 
 In the [previous episode]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}) you learned how to call
 an accelerator package in LAMMPS.
@@ -130,11 +130,11 @@ where `<arguments>` can potentially include a number of *keywords* and their cor
 *values*.
 In this case, you will need to use `kokkos` as `<style>` with suitable arguments/keywords.
 
-For **Kokkos** these *keyword/values* provides you enhanced flexibility to distribute your
+For **KOKKOS** these *keyword/values* provides you enhanced flexibility to distribute your
 job among CPUs and GPUs in an optimum way. As a quick reference, the following table could
 be useful:
 
-> ## Guide to Kokkos *keywords*/*values*
+> ## Guide to KOKKOS *keywords*/*values*
 >
 > | Keywords |what it does? |Default value |
 > |----------|--------------|--------------|
@@ -143,7 +143,7 @@ be useful:
 > |`neigh/thread`|  |  |
 > |`newton`|sets the Newton flags for pairwise and bonded interactions to off or on |`off` for GPU and `on` for CPU |
 > |`binsize`|sets the size of bins used to bin atoms in neighbor list builds|`0.0` for CPU. On GPUs, the default is twice the CPU value|
-> |`comm`|It determines whether the CPU or GPU performs the packing and unpacking of data when communicating per-atom data between processors. Values could be `no`, `host` or `device`. `no` means pack/unpack will be done in non-Kokkos mode| |
+> |`comm`|It determines whether the CPU or GPU performs the packing and unpacking of data when communicating per-atom data between processors. Values could be `no`, `host` or `device`. `no` means pack/unpack will be done in non-KOKKOS mode| |
 > |`comm/exchange`|This defines 'exchange' communication which happens only when neighbour lists are rebuilt. Values could be `no`, `host` or `device` | |
 > |`comm/forward`|This defines forward communication and it occurs at every timestep. Values could be `no`, `host` or `device` | |
 > |`comm/reverse`| If the `newton` option is set to `on`, this occurs at every timestep. Values could be `no`, `host` or `device`| |
@@ -168,7 +168,7 @@ be useful:
 >    you need to override the default value of `binsize` with a smaller value.
 > 4. `comm`, `comm/exchange`, `comm/forward`, `comm/reverse`: From the table you can already
 >    tell what it does. Three possible values are `no`, `host` and `device`. For GPUs,
->    `device` is faster if all the styles used in your calculation are Kokkos-enabled. But,
+>    `device` is faster if all the styles used in your calculation are KOKKOS-enabled. But,
 >    if not, it may results in communication overhead due to CPU-GPU communication.
 >    For CPU-only systems, `host` is the fastest. For Xeon Phi and CPU-only systems,
 >    `host` and `device` work identically.
@@ -186,15 +186,15 @@ be useful:
 >
 {: .callout}
 
-## Invoking Kokkos through input file or through command-line?
+## Invoking KOKKOS through input file or through command-line?
 
 Unlike the *USER-OMP* or the *GPU* package in the
 [previous episode]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}) which
 supports *either* OpenMP
-*or* GPU, the **Kokkos** package supports both OpenMP and GPUs. This adds additional
+*or* GPU, the **KOKKOS** package supports both OpenMP and GPUs. This adds additional
 complexity to the command-line to invoke appropriate execution mode (OpenMP or GPU) when
-you decide to use **Kokkos** for your LAMMPS runs. In the following section, we'll touch
-on a few general command-line features which are needed to call **Kokkos**. More detailed
+you decide to use **KOKKOS** for your LAMMPS runs. In the following section, we'll touch
+on a few general command-line features which are needed to call **KOKKOS**. More detailed
 OpenMP or GPU specific command-line switches will be discussed in later episodes.
 
 Let us recall the command-line to submit a LAMMPS job that uses USER-OMP as an
@@ -208,16 +208,16 @@ to refresh your memory).
 {: .language-bash}
 
 We can perform a straight-forward to edit the above command-line to try to make it
-appropriate for a **Kokkos** run. A few points to keep in mind:
+appropriate for a **KOKKOS** run. A few points to keep in mind:
 
-  1. To enable **Kokkos** package you need to use a switch `-k on`.
-  2. To use **Kokkos** enabled styles (pair styles/fixes etc.), you need one additional
+  1. To enable **KOKKOS** package you need to use a switch `-k on`.
+  2. To use **KOKKOS** enabled styles (pair styles/fixes etc.), you need one additional
      switch `-sf kk`. This will append the `/kk` suffix to all the styles that
-     **Kokkos** supports in LAMMPS. For example, when you use this, the
+     **KOKKOS** supports in LAMMPS. For example, when you use this, the
      `lj/charmm/coul/long` pair style would be read as `lj/charmm/coul/long/kk` at runtime.
 
 With these points in mind, the above command-line could be modified
-to start making it ready for Kokkos:
+to start making it ready for KOKKOS:
 
 ```{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
 {{ mycode | strip }} -k on -sf kk

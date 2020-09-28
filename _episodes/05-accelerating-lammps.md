@@ -11,8 +11,8 @@ objectives:
 - "Learn how to invoke the different accelerator packages across different hardwares"
 keypoints:
 - "The five accelerator packages currently offered by LAMMPS are i) OPT, ii) USER-INTEL,
-  iii) USER-OMP, iv) GPU, v) Kokkos"
-- "Kokkos is available for use on all types of hardware. Other accelerator packages are hardware
+  iii) USER-OMP, iv) GPU, v) KOKKOS"
+- "KOKKOS is available for use on all types of hardware. Other accelerator packages are hardware
   specific"
 - "To invoke a package in LAMMPS, the notation is `package <style> <arguments>`, where `style` is
   the package you want to invoke"
@@ -36,7 +36,7 @@ There are five accelerator packages currently offered by LAMMPS. These are;
 2. **USER-INTEL**
 3. **USER-OMP**
 4. **GPU**
-5. **Kokkos**
+5. **KOKKOS**
 
 Specialized codes contained in these packages help LAMMPS to perform well on the
 spectrum of architectures found in modern HPC platforms. Therefore, the next
@@ -47,9 +47,9 @@ question that arises is: *What hardware is supported by these packages?*
 >
 > | Hardware        | Accelerator packages              |
 > | --------------- | --------------------------------- |
-> | Multi-core CPUs | OPT, USER-INTEL, USER-OMP, Kokkos |
-> | Intel Xeon Phi  | USER-INTEL, Kokkos                |
-> | NVIDIA GPU      | GPU, Kokkos                       |
+> | Multi-core CPUs | OPT, USER-INTEL, USER-OMP, KOKKOS |
+> | Intel Xeon Phi  | USER-INTEL, KOKKOS                |
+> | NVIDIA GPU      | GPU, KOKKOS                       |
 >
 {: .callout}
 
@@ -59,7 +59,7 @@ acceleration packages use multi-threading for parallelization, but how they do i
 what architecture they can address differ.
 
 The **ONLY** accelerator package that supports all
-kinds of hardware is **Kokkos**. Kokkos is a templated C++ library developed in Sandia National
+kinds of hardware is **KOKKOS**. KOKKOS is a templated C++ library developed in Sandia National
 Laboratory and this helps to create an abstraction that allows a *single implementation* of a
 software application on different kinds of hardware. This will be discussed in detail in the
 [next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
@@ -167,7 +167,7 @@ bottlenecks since at every step these data are communicated back and forth betwe
 CPUs and GPUs. Calculations can be done in single, double or mixed precisions.
 
 In case of the **GPU** package, computations are shared between CPUs and GPUs
-(unlike the Kokkos package GPU implementation where the primary aim is to offload all of
+(unlike the KOKKOS package GPU implementation where the primary aim is to offload all of
 the calculations to the GPUs only). For example,
 asynchronous force calculations like **pair** vs **bond/angle/dihedral/improper** can be done
 simultaneously on GPUs and CPUs respectively. Similarly, for PPPM calculations the charge
@@ -180,9 +180,9 @@ particular simulation to achieve a performance gain.
 A list of functionalities enabled with this package can be found
 [here]({{page.root}}/reference/#package-GPU).
 
-### **Kokkos** package
+### **KOKKOS** package
 
-The Kokkos package in LAMMPS is implemented to gain performance with portability. This will be
+The KOKKOS package in LAMMPS is implemented to gain performance with portability. This will be
 discussed in more depth in the [next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
 
 ## How to invoke a package in LAMMPS run?
@@ -199,7 +199,7 @@ package. Additionally, this exercise will also help us to learn the basic princi
 invoking accelerator packages in a LAMMPS run.
 
 To call an
-accelerator package (**USER-INTEL**, **USER-OMP**, **GPU**, **Kokkos**) in
+accelerator package (**USER-INTEL**, **USER-OMP**, **GPU**, **KOKKOS**) in
 your LAMMPS run, you need to know a LAMMPS command called `package`. This command
 invokes package-specific settings for an accelerator. You can learn about this command
 in detail from the
@@ -218,7 +218,7 @@ packages available currently (version `3Mar20`):
 * `intel`: This calls the **USER-INTEL** package
 * `omp` : This calls the **USER-OMP** package
 * `gpu`: This calls the **GPU** package
-* `kokkos`: This calls the **Kokkos** package
+* `kokkos`: This calls the **KOKKOS** package
 
 `<arguments>` are then the list of arguments you wish to provide to your `<style>` package.
 
@@ -389,7 +389,7 @@ The primary aim for this following exercise is:
 * To get an initial idea on how to play with different run-time parameters to get an optimum
   performance.
 * Finally, one can also make a fair comparison of performance between a *regular* LAMMPS run, the
-  GPU package and a Kokkos implementation of GPU functionality.
+  GPU package and a KOKKOS implementation of GPU functionality.
 * Moreover, this exercise will also help the users to extend the knowledge of using the *package*
   command so that they can figure out by themselves how to use other accelerator packages in LAMMPS.
 
