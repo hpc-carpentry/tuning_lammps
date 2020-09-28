@@ -276,7 +276,7 @@ There are two alternate ways to add these options to your simulation:
   ```{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
   {{ mycode | strip }} -sf omp -pk omp $OMP_NUM_THREADS neigh no
   ```
-  {: .bash}
+  {: .language-bash}
   where `OMP_NUM_THREADS` is now an *environment variable* that we can use to control the
   number of OpenMP threads. This second method appears to be convenient since you don't
   need to edit the input file (and possibly in many places)!
