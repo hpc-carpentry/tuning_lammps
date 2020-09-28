@@ -6,6 +6,7 @@ root: ..
 
 ## Glossary
 
+~~~
 {:auto_ids}
 package-OPT
 :   As of *3Mar20* version of LAMMPS, the following list of functionalities are available with the OPT package
@@ -107,5 +108,7 @@ package-GPU
     | soft               | sw                  |table             | tersoff             |tersoff_mod         |               |
     | tersoff_zbl        | ufm                 |vashishta         | yukawa_colloid      |yukawa              |               |
     | zbl                |                     |                  |                     |                    |               |
+~~~
+{: .source}
 
 {% include links.md %}

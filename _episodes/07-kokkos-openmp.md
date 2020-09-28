@@ -62,32 +62,31 @@ settings as we did it for the **USER-OMP** package.
 
 In this episode, we'll learn to use **KOKKOS** package with OpenMP for multi-core CPUs.
 To run the **KOKKOS** package, the following three command-line switches are very important:
-  1. ```-k on``` : This enables KOKKOS at runtime
-  2. ```-sf kk``` : This appends the "/kk" suffix to KOKKOS-supported LAMMPS styles
-  3. ```-pk kokkos``` : This is used to modify the default package **KOKKOS** options
+  1. `-k on` : This enables KOKKOS at runtime
+  2. `-sf kk` : This appends the "/kk" suffix to KOKKOS-supported LAMMPS styles
+  3. `-pk kokkos` : This is used to modify the default package **KOKKOS** options
 
 To invoke the OpenMP execution mode with KOKKOS, the ```-k on``` switch takes additional
 arguments for hardware settings as shown below:
-  4. ```-k on t Nt```: Using this switch you can specify the number of OpenMP threads, `Nt`,
+  4. `-k on t Nt`: Using this switch you can specify the number of OpenMP threads, `Nt`,
      that you want to use per node. You should also set a proper value for your OpenMP
      environment variables. You can do this with
-     ```
+     ~~~
      export OMP_NUM_THREADS=4
-     ```
+     ~~~
      {: .language-bash}
-
      if you like to use 4 threads per node (`Nt` is 4). Using this environment variable
-     allows you to use ```-k on t $OMP_NUM_THREADS``` on the command line or in your
+     allows you to use `-k on t $OMP_NUM_THREADS` on the command line or in your
      job scripts.
 
      You should also set some other
      environment variables to help with thread placement. Good default options with
-     OpenMP 4.0 or later are;
+     OpenMP 4.0 or later are:
 
-     ```
+     ~~~
      export OMP_PROC_BIND=spread
      export OMP_PLACES=threads
-     ```
+     ~~~
      {: .language-bash}
 
 > ## Get the full command-line
