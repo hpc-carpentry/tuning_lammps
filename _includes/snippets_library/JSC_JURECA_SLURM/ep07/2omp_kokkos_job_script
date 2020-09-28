@@ -13,6 +13,7 @@ module purge
 module use /usr/local/software/jureca/OtherStages
 module load Stages/Devel-2019a
 module load intel-para/2019a
+# Note how we have to load a different module for LAMMPS
 module load LAMMPS/2Jun2020-Python-3.6.8-kokkos
 
 # srun handles the MPI task placement and affinities based on the choices in the job script file

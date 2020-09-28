@@ -347,7 +347,7 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 
 > ## Case study: Rhodopsin system
 >
-> The input file `in.rhodo` is prepared following the inputs provided in the *bench*
+> The following input file, `in.rhodo`, is one of the inputs provided in the *bench*
 > directory of the LAMMPS distribution (version `7Aug2019`):
 >
 > {% capture mycode %}{% include {{ site.snippets }}/ep04/in.rhodo %}{% endcapture %}

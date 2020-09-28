@@ -92,7 +92,9 @@ arguments for hardware settings as shown below:
 
 > ## Get the full command-line
 >
-> Try to create a job script to submit a LAMMPS job for the rhodopsin system such that it
+> Try to create a job script to submit a LAMMPS job for the
+> [rhodopsin case study]({{page.root}}
+> {% link _episodes/04-lammps-bottlenecks.md %}#case-study-rhodopsin-system)) such that it
 > invokes Kokkos with OpenMP threading to accelerate the job using 2 nodes, 2 MPI ranks
 > per node with half the available cores on a node used as OpenMP threads per rank, and the
 > *default* package options.
@@ -139,18 +141,18 @@ how these `package` related keywords can be invoked in your LAMMPS run would be
 
 > ## The optimum values of the keywords
 >
-> Take the rhodopsin input files (`in.rhodo` and `data.rhodo` as provided in the
+> Using the rhodopsin input files (`in.rhodo` and `data.rhodo` as provided in the
 > [rhodopsin case study]({{page.root}}
 > {% link _episodes/04-lammps-bottlenecks.md %}#case-study-rhodopsin-system)),
-> and run LAMMPS jobs for 1 OpenMP thread on 1 node using the
+> run LAMMPS jobs for 1 OpenMP thread on 1 node using the
 > following two set of parameters for the `package` command:
 >
 > * `neigh full newton off comm no`
-> * `neigh half newton on comm host`
+> * `neigh half newton on neigh half comm host`
 >
-> 1. What is the influence on `comm`? What is implied in the output file?
+> 1. What is the influence of `comm`? What is implied in the output file?
 >
-> 2. What difference does switching the values of `neigh` and `newton` have? Why?
+> 2. What difference does switching the values of `newton`/`neigh` have? Why?
 >
 > > ## Results obtained from a 40 core system
 > > For a HPC setup which has 40 cores per node, the runtimes for all the MPI/OpenMP combinations
@@ -187,37 +189,25 @@ how these `package` related keywords can be invoked in your LAMMPS run would be
 > >    other hand, when you use only 1 OpenMP thread per MPI rank, it requires no data
 > >    duplication or atomic operations, hence it produces the fastest run.
 > >
-> > So, we'll be using `neigh half newton on comm host`) for all the runs in the scalability
-> > studies below.
+> > So, we'll be using `neigh half newton on comm host` for all the runs in the scalability
+> > study below.
 > {: .solution}
 {: .challenge}
 
-> ## Do the scalability study
+> ## Rhodopsin scalability study with Kokkos
 >
-> As before, doing a scalability study would be a time consuming undertaking, so lets take an
-> example on nodes with 2x20 cores, as we did in an exercise a
-> [few episodes ago]({{page.root}}/05-accelerating-lammps/#case-study-rhodopsin-with-user-omp-package),
-> where a total of 80 calculations would be needed for the 10 nodes.
+> Doing a scalability study would be a time consuming undertaking, a full
+> study would again require a total of 80 calculations for 10 nodes. Below is the result
+> of such a study on an available system (**FIX SCALES**)
 >
-> 1. The results from this study can be found in the csv file (**INCLUDE LINK**). Using the
->    parallel_eff.py (**INCLUDE LINK**), make a plot of parallel efficiency vs number of nodes.
->    The code will calculate parallel efficiency for you.
+> <p align="center"><img src="../fig/07/scaling_rhodo_kokkos_omp.png" width="75%"/></p>
 >
-> 2. Compare this plot with the plot you generated in a
->    [previous exercise]({{page.root}}/05-accelerating-lammps/#case-study-rhodopsin-with-user-omp-package).
->    Write down your observations and make comments on any performance enhancement when you compare
->    these results with the pure MPI runs.
->
-> 3. Consider your own HPC system. How would a similar study look on your own system?
+> Compare this plot with the plot given in a
+> [previous exercise]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}#case-study-rhodopsin-with-user-omp-package).
+> Write down your observations and make comments on any performance "enhancement" when you
+> compare these results with the pure MPI runs.
 >
 > > ## Solution
-> >
-> > **FIX SCALES**
-> > <p align="center"><img src="../fig/07/scaling_rhodo_kokkos_omp.png" width="75%"/></p>
-> >
-> > Consider this plot of a full scalability study, comparing it with that seen in a
-> > [previous exercise]({{page.root}}/05-accelerating-lammps/#case-study-rhodopsin-with-user-omp-package),
-> > from which you can take the following observations.
 > >
 > > * Data for the pure MPI-based run is plotted with the thick blue line. Strikingly, none of the
 > >   Kokkos based MPI/OpenMP mixed runs show comparable parallel performance with the pure
