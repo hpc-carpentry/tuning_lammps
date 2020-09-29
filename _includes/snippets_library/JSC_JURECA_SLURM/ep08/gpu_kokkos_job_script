@@ -1,0 +1,22 @@
+#!/bin/bash -x
+#SBATCH --nodes=1
+#SBATCH --output=mpi-out.%j
+#SBATCH --error=mpi-err.%j
+#SBATCH --time=00:05:00
+
+# Configure the GPU usage
+#SBATCH --partition=gpus
+#SBATCH --gres=gpu:4
+
+# Use this many MPI tasks per node (maximum 24)
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-node=6
+
+module purge
+module use /usr/local/software/jureca/OtherStages
+module load Stages/Devel-2019a
+module load intel-para/2019a
+# Note how we have to load a different module for LAMMPS
+module load LAMMPS/2Jun2020-Python-3.6.8-kokkos
+
+srun lmp -in in.lj -k on g 4 -sf kk -pk kokkos cuda/aware no
