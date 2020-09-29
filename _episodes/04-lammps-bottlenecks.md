@@ -347,7 +347,7 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 
 > ## Case study: Rhodopsin system
 >
-> The input file (given below) is prepared following the inputs provided in the *bench*
+> The following input file, `in.rhodo`, is one of the inputs provided in the *bench*
 > directory of the LAMMPS distribution (version `7Aug2019`):
 >
 > {% capture mycode %}{% include {{ site.snippets }}/ep04/in.rhodo %}{% endcapture %}
@@ -356,6 +356,8 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 > {{ member }}{% endfor %}
 > ~~~
 > {: .source}
+> Note that this input file requires an additional data file
+>[`data.rhodo`]({{ site.url }}/assets/data.rhodo).
 >
 > Using this you can perform a simulation
 > of an all-atom rhodopsin protein in solvated lipid bilayer with CHARMM force field,

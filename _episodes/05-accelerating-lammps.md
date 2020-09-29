@@ -297,7 +297,7 @@ i.e. through the command-line.
 >
 > We shall use the same input file for the rhodopsin system with lipid bilayer that was
 > described in the [case study of our previous
-> episode]({{page.root}}/04-lammps-bottlenecks/#case-study-rhodopsin-system).
+> episode]({{page.root}}{% link _episodes/04-lammps-bottlenecks.md %}#case-study-rhodopsin-system).
 > In this episode, we'll run this using the **USER-OMP** package to mix MPI and OpenMP. For
 > all the runs we will use the default value for the `neigh` keyword (which means we can
 > exclude it from the command line).

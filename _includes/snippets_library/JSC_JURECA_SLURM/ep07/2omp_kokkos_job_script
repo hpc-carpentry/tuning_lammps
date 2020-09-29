@@ -1,0 +1,20 @@
+#!/bin/bash -x
+#SBATCH --nodes=2
+#SBATCH --output=mpi-out.%j
+#SBATCH --error=mpi-err.%j
+#SBATCH --time=00:05:00
+#SBATCH --partition=batch
+
+# Make sure that the multiplying the following 2 gives ncpus per node (24)
+#SBATCH --ntasks-per-node=12
+#SBATCH --cpus-per-task=2
+
+module purge
+module use /usr/local/software/jureca/OtherStages
+module load Stages/Devel-2019a
+module load intel-para/2019a
+# Note how we have to load a different module for LAMMPS
+module load LAMMPS/2Jun2020-Python-3.6.8-kokkos
+
+# srun handles the MPI task placement and affinities based on the choices in the job script file
+srun lmp -in in.rhodo -k on t $OMP_NUM_THREADS -sf kk
