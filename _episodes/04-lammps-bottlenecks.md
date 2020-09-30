@@ -259,8 +259,10 @@ we can perform a scalability study for each of the components.
 >    the below formula to calculate speedup.
 >
 >    ```
->    (Speedup factor) = 1.0 / ( (Time taken by n processors) / (Time taken by 1 processor) )
+>    (Speedup factor) = 1.0 / ( (Time taken by N nodes) / (Time taken by 1 node) )
 >    ```
+>    Note here how we have uses a node for our baseline unit of measurement (rather than
+>    a single processor) since running the serial case would take too long.
 >
 > 2. Using a simple pen and paper, make a plot of the speedup factor on the y-axis and number of
 >    processors on the x-axis for each of these fields.

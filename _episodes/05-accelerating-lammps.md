@@ -317,11 +317,7 @@ i.e. through the command-line.
 >    ~~~
 >    {: .language-bash}
 >
-> 2. Run the same command with pure MPI settings, i.e., without **any** OpenMP threading,
->    to avoid any overhead. Do you notice a difference in performance?
->
->
-> 3. On a system of a node with 40 cores, if we want to see scaling, say up to 10 nodes,
+> 2. On a system of a node with 40 cores, if we want to see scaling, say up to 10 nodes,
 >    this means that a total of 80 calculations would need to be run since we have
 >    8 MPI/OpenMP combinations
 >    for each node.
@@ -581,7 +577,7 @@ before starting the production runs. This might save you a lot of resources and 
 > {: .source}
 > where 4 GPUs are being used.
 >
-> On a system with 2x12 cores per node and two GPUs (4 visible devices per node in this case),
+> On a system with 2x12 cores per node and four GPUs,
 > the different combinations are;
 >
 > * 4 GPUs/4 MPI tasks

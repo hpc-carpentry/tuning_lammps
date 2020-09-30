@@ -55,7 +55,7 @@ sched:
     default: "batch"
 
 lammps:
-  version: "9Jan2020"
+  version: "3Mar2020"
   exec: "lmp"
   kokkos:
     env:
