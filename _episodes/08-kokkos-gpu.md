@@ -43,7 +43,7 @@ arguments for hardware settings as shown below:
 > 2. **Know your device:** know how many GPUs are available on your system and know how
 >    to ask for them from your *resource manager* (SLURM, etc.)
 > 4. **CUDA-aware MPI**: Check if you can use a CUDA-aware MPI runtime with your LAMMPS
->    executable. If not then you will need to add `cuda/aware no` to your `<arguments>`.
+>    executable. If not then you will need to add `cuda/aware off` to your `<arguments>`.
 {: .callout}
 
 > ## Creating a KOKKOS GPU job script
@@ -52,7 +52,7 @@ arguments for hardware settings as shown below:
 > **GPU**
 > package]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}#learn-to-call-the-gpu-package-from-the-command-line)
 > such that it invokes the KOKKOS GPU to
-> * accelerate the job using 2 nodes,
+> * accelerate the job using 1 node,
 > * uses all available GPU devices on the node,
 > * use the same amount of MPI ranks per node as there are GPUs, and
 > * uses the *default* package options.
@@ -82,7 +82,7 @@ arguments for hardware settings as shown below:
 >    may get better performance by assigning multiple MPI tasks per GPU if some styles
 >    used in the input script have not yet been KOKKOS-enabled.
 > 3. **CUDA-aware MPI library**: Using this can provide significant performance gain.
->    If this is not available, set it `off` using the `-pk kokkos cuda/aware no` switch.
+>    If this is not available, set it `off` using the `-pk kokkos cuda/aware off` switch.
 > 4. **`neigh` and `newton`**: For KOKKOS/GPU, the default is `neigh = full` and
 >    `newton = off`. For *Maxwell* and *Kepler* generations of GPUs, the *default*
 >    settings are typically the best. For *Pascal* generations, setting `neigh = half`
@@ -102,7 +102,7 @@ these aspects (to some extent).
 > ## Exercise: Performance penalty due to use of mixed styles
 >
 > 1. First, let us take the input and job script for the LJ-system in the last exercise.
->    Make a copy of this script that uses the following additional settings:
+>    Make a copy of the job script that uses the following additional settings for KOKKOS:
 >    * `newton off`
 >    * `neigh full`
 >    * `comm device`
@@ -110,24 +110,19 @@ these aspects (to some extent).
 >    Use the number of MPI tasks that equals to the number of devices. Measure the performance of
 >    of this run in `timesteps/s`.
 >
-> 2. Make a copy of the LJ-input file called `in.mod.lj` and append the following lines to
+> 2. Make a copy of the LJ-input file called `in.mod.lj` and replace the line near
 >    the end of the file:
->
 >    ~~~
->    ... ... ...
->    ... ... ...
->    neighbor	0.3 bin
->    neigh_modify	delay 0 every 20 check no
->
+>    thermo_style custom step time  temp press pe ke etotal density
+>    ~~~
+>    {: .source}
+>    with
+>    ~~~
 >    compute 1 all coord/atom cutoff 2.5
 >    compute 2 all reduce sum c_1
 >    variable acn equal c_2/atoms
 >
->    fix		1 all nve
->
->    thermo 50
 >    thermo_style custom step time  temp press pe ke etotal density v_acn
->    run		500
 >    ~~~
 >    {: .source}
 >
@@ -138,8 +133,8 @@ these aspects (to some extent).
 >
 > > ## Solution
 > >
-> > Taking an example from a HPC system with 2x12 cores per node and 2 GPUs (4 visible devices per
-> > node), using 1 MPI task per GPU, the following was observed.
+> > Taking an example from a HPC system with 2x12 cores per node and 4 GPUs, using 1 MPI
+> > task per GPU, the following was observed.
 > >
 > > First, we ran with `in.lj`. Second, we modified this input as mentioned above (to
 > > become `in.mod.lj`) and performance for both of these runs are measured in units of
