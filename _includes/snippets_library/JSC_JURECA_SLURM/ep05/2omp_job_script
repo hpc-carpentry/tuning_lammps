@@ -8,7 +8,7 @@
 #SBATCH --error=mpi-err.%j
 #SBATCH --time=00:10:00
 
-# Let's use the devel partition for faster queueing time since we a tiny job.
+# Let's use the devel partition for faster queueing time since we have a tiny job.
 # (For a more substantial job we should use --partition=batch)
 
 #SBATCH --partition=devel
