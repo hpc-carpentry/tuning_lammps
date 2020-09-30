@@ -22,4 +22,4 @@ module load intel-para/2019a
 # Note we are loading a different LAMMPS package
 module load LAMMPS/9Jan2020-cuda
 
-srun lmp -in in.lj -sf gpu -pk gpu 2 neigh no newton off split -1.0
+srun lmp -in in.lj -sf gpu -pk gpu 4 neigh no newton off split -1.0

@@ -359,7 +359,7 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 > ~~~
 > {: .source}
 > Note that this input file requires an additional data file
->[`data.rhodo`]({{ site.url }}/assets/data.rhodo).
+>[`data.rhodo`](https://github.com/lammps/lammps/raw/master/bench/data.rhodo).
 >
 > Using this you can perform a simulation
 > of an all-atom rhodopsin protein in solvated lipid bilayer with CHARMM force field,

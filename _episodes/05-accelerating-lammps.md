@@ -444,7 +444,7 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > Use command/package keywords from the table should to set the following
 > conditions:
 >
-> * Use 2 GPUs and a full node of MPI ranks
+> * Use 4 GPUs and a full node of MPI ranks
 > * Neighbour lists built on CPUs
 > * Dynamic load balancing between CPUs and GPUs
 >
@@ -465,7 +465,7 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > >
 > > The breakdown of the command is as follows;
 > >
-> > * `-pk gpu 2` - Setting **GPU** package and number of GPUs (2)
+> > * `-pk gpu 4` - Setting **GPU** package and number of GPUs (2)
 > > * `-sf gpu` - **GPU** package related fix/pair styles
 > > * `neigh no` - A `no` value of `neigh` keyword indicates neighbour list built in the CPUs
 > > * `newton off` - Currently, only an off value is allowed as all GPU package pair styles require
