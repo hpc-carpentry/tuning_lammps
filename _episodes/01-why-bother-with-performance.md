@@ -85,9 +85,9 @@ and **CPU hours**.
 
 > ## Walltime
 >
-> Walltime is simply the length of time, usually measured in seconds, that a program
+> Walltime is the length of time, usually measured in seconds, that a program
 > takes to run (i.e., to execute its assigned tasks). It is not directly related to the
-> resources used, it's simply the time it takes according to an independent clock on the
+> resources used, it's the time it takes according to an independent clock on the
 > wall.
 >
 {: .callout}
