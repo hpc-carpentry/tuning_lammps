@@ -383,6 +383,10 @@ class CheckBase:
                                                   (not l.startswith('!')) and
                                                   (not re.search(code, l)) and
                                                   (not re.search(link, l)) and
+                                                  # Check we are not referencing an episode title
+                                                  (l.find('_episodes/') == -1) and
+                                                  # Check we are not doing a complex link
+                                                  (l.find('page.root') == -1) and
                                                   # Check we are not in a complex capture block
                                                   (l.find('endcapture') == -1) and
                                                   # Check we are not in a table (assumed with |)

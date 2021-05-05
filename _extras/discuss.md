@@ -17,8 +17,7 @@ title: Discussion
 >#SBATCH --time=00:15:00
 >#SBATCH --partition=devel
 >```
->
->{: .bash}
+>{: .language-bash}
 {: .challenge}
 
 Submit your job using the following; 
@@ -26,11 +25,6 @@ Submit your job using the following;
 ```
 [{{ site.host_prompt }} {{ site.sched_submit }} ]
 ```
-
-Submit the job using the following;
-
->
->
->
+{: .language-bash}
 
 {% include links.md %}

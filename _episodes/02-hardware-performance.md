@@ -7,9 +7,9 @@ questions:
 - "What is the difference between OpenMP and MPI?"
 - "How can I use GPUs and/or multiple nodes?"
 objectives:
-- "First learning objective. (FIXME)"
+- "Differentiate between OpenMP and MPI"
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "OpenMP works on a single node, MPI can work on multiple nodes"
 usemathjax: true
 ---
 

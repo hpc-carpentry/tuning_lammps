@@ -122,9 +122,9 @@ In the [previous episode]({{page.root}}{% link _episodes/05-accelerating-lammps.
 learned how to call an accelerator package in LAMMPS.
 The basic syntax of this command is;
 
-```
+~~~
 package <style> <arguments>
-```
+~~~
 {: .source}
 
 where `<arguments>` can potentially include a number of *keywords* and their corresponding
@@ -203,9 +203,10 @@ accelerator package (see
 [here]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}#how-to-invoke-the-user-omp-package)
 to refresh your memory).
 
-```{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
+{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
+~~~
 {{ mycode | strip }} -sf omp -pk omp $OMP_NUM_THREADS neigh no
-```
+~~~
 {: .language-bash}
 
 We can perform a straight-forward to edit the above command-line to try to make it
@@ -220,9 +221,9 @@ appropriate for a **KOKKOS** run. A few points to keep in mind:
 With these points in mind, the above command-line could be modified
 to start making it ready for KOKKOS:
 
-```{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
+~~~{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
 {{ mycode | strip }} -k on -sf kk
-```
+~~~
 {: .language-bash}
 
 But, unfortunately, this above command-line is still *incomplete*. We have not yet passed any

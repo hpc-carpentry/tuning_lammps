@@ -160,16 +160,16 @@ Now let's put all that together to make our job script:
 > > Our single core version is
 > > {% capture mycode %}{% include {{ site.snippets }}/ep03/1core_job_script %}{% endcapture %}
 > > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
-> > ```{% for member in lines_of_code %}
+> > ~~~{% for member in lines_of_code %}
 > > {{ member }}{% endfor %}
-> > ```
+> > ~~~
 > > {: .language-bash}
 > > and our 4 core version is
 > > {% capture mycode %}{% include {{ site.snippets }}/ep03/4core_job_script %}{% endcapture %}
 > > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
-> > ```{% for member in lines_of_code %}
+> > ~~~{% for member in lines_of_code %}
 > > {{ member }}{% endfor %}
-> > ```
+> > ~~~
 > > {: .language-bash}
 > {: .solution}
 {: .challenge}

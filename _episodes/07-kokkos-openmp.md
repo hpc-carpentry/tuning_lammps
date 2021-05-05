@@ -30,9 +30,9 @@ settings as we did it for the **USER-OMP** package.
 >
 > 1. **Know your hardware:** get the number of physical cores per node available to you.
 >    Take care such that
->    ```
+>    ~~~
 >    (number of MPI tasks) * (OpenMP threads per task) <= (total number of physical cores per node)
->    ```
+>    ~~~
 >    {: .source}
 > 2. **Check for hyperthreading:** Sometimes a CPU splits its each physical cores into
 >    multiple *virtual* cores. Intel's term for this is
@@ -41,9 +41,9 @@ settings as we did it for the **USER-OMP** package.
 >    physical execution space. This may result in a 'slight' performance gain. So, a
 >    node with 24 physical cores appears as 48 logical cores to the OS if HT is enabled.
 >    In this case,
->    ```
+>    ~~~
 >    (number of MPI tasks) * (OpenMP threads per task) <= (total number of virtual cores per node)
->    ```
+>    ~~~
 >    {: .source}
 > 3. **CPU affinity:** CPU affinity decides whether a thread running on a particular core is
 >    allowed to migrate to another core (if the operating system thinks that is a good
@@ -68,7 +68,7 @@ To run the **KOKKOS** package, the following three command-line switches are ver
   2. `-sf kk` : This appends the "/kk" suffix to KOKKOS-supported LAMMPS styles
   3. `-pk kokkos` : This is used to modify the default package **KOKKOS** options
 
-To invoke the OpenMP execution mode with KOKKOS, the ```-k on``` switch takes additional
+To invoke the OpenMP execution mode with KOKKOS, the `-k on` switch takes additional
 arguments for hardware settings as shown below:
   4. `-k on t Nt`: Using this switch you can specify the number of OpenMP threads, `Nt`,
      that you want to use per node. You should also set a proper value for your OpenMP
@@ -138,7 +138,7 @@ other settings for these values to avoid wastage of our time and valuable
 computing resources. In the next section, we'll be showing how to do this with
 rhodopsin example. An example of a set of command line arguments which shows
 how these `package` related keywords can be invoked in your LAMMPS run would be
-```-pk kokkos neigh half newton on comm no```.
+`-pk kokkos neigh half newton on comm no`.
 
 > ## The optimum values of the keywords
 >
@@ -169,9 +169,10 @@ how these `package` related keywords can be invoked in your LAMMPS run would be
 > >
 > > 1. The influence on `comm` can be seen in the output file, as it prints the following;
 > >
-> >    ```
-> >    WARNING: Fixes cannot yet send data in KOKKOS communication, switching to classic communication (src/KOKKOS/comm_kokkos.cpp:493)
-> >    ```
+> >    ~~~
+> >    WARNING: Fixes cannot yet send data in KOKKOS communication, switching to classic
+       communication (src/KOKKOS/comm_kokkos.cpp:493)
+> >    ~~~
 > >    {: .output}
 > >
 > >    This means the fixes that we are using in this calculation are not yet supported
