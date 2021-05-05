@@ -92,6 +92,7 @@ The input file we need for the LJ-system is reproduced below:
 ~~~
 {% include {{ site.snippets }}/ep03/in.lj %}
 ~~~
+{: .source}
 
 The timing information for this run with both 1 and 4 processors is also provided with
 the LAMMPS distribution. To do an initial benchmark our installation it would be wise to

@@ -33,6 +33,7 @@ settings as we did it for the **USER-OMP** package.
 >    ```
 >    (number of MPI tasks) * (OpenMP threads per task) <= (total number of physical cores per node)
 >    ```
+>    {: .source}
 > 2. **Check for hyperthreading:** Sometimes a CPU splits its each physical cores into
 >    multiple *virtual* cores. Intel's term for this is
 >    hyperthreads (HT). When hyperthreading is enabled, each physical core appears as
@@ -43,6 +44,7 @@ settings as we did it for the **USER-OMP** package.
 >    ```
 >    (number of MPI tasks) * (OpenMP threads per task) <= (total number of virtual cores per node)
 >    ```
+>    {: .source}
 > 3. **CPU affinity:** CPU affinity decides whether a thread running on a particular core is
 >    allowed to migrate to another core (if the operating system thinks that is a good
 >    idea). You can set *CPU affinity masks* to limit the set of cores that the thread

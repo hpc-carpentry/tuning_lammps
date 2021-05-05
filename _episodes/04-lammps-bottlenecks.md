@@ -261,6 +261,7 @@ we can perform a scalability study for each of the components.
 >    ```
 >    (Speedup factor) = 1.0 / ( (Time taken by N nodes) / (Time taken by 1 node) )
 >    ```
+>    {: .source}
 >    Note here how we have uses a node for our baseline unit of measurement (rather than
 >    a single processor) since running the serial case would take too long.
 >

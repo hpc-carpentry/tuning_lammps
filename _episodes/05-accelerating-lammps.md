@@ -28,7 +28,8 @@ summation method for calculating long range Coulomb interactions effectively usi
 potential. Similarly there are a few FFT schemes offered by LAMMPS and a user has to make a
 trade-off between accuracy and performance depending on their computational needs. This lesson is
 not aimed to discuss such types of algorithm-based speed-up of LAMMPS, instead we'll focus on a few
-accelerator packages that are used to extract the most out of the available hardware of an HPC system.
+accelerator packages that are used to extract the most out of the available hardware of an HPC
+system.
 
 There are five accelerator packages currently offered by LAMMPS. These are;
 
@@ -183,7 +184,8 @@ A list of functionalities enabled with this package can be found
 ### **KOKKOS** package
 
 The KOKKOS package in LAMMPS is implemented to gain performance with portability. This will be
-discussed in more depth in the [next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
+discussed in more depth in the
+[next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
 
 ## How to invoke a package in LAMMPS run?
 
@@ -232,6 +234,7 @@ then;
 ```
 (Number of MPI processes) x (Number of OpenMP threads) = (Number of cores per node)
 ```
+{: .source}
 
 `<arguments>` can potentially include an additional number of *keywords* and their
 corresponding *values*.
@@ -387,7 +390,8 @@ The primary aim for this following exercise is:
 * Finally, one can also make a fair comparison of performance between a *regular* LAMMPS run, the
   GPU package and a KOKKOS implementation of GPU functionality.
 * Moreover, this exercise will also help the users to extend the knowledge of using the *package*
-  command so that they can figure out by themselves how to use other accelerator packages in LAMMPS.
+  command so that they can figure out by themselves how to use other accelerator packages in
+  LAMMPS.
 
 Before invoking the GPU package, you must ask the following questions:
 
@@ -649,8 +653,9 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 > By now we have idea about some of the 'preferred' tuning parameters for an LJ-system. For
 > the current exercise, let us take the system with ~11 million atoms, i.e.
 > `x = y = z = 140` and `t = 500` and for this size of atoms, we know from our previous example
-> that `A GPUs/B MPI` tasks (where `A` is number of GPUs and `B` is number of cores in a node) gives
-> the best performance. We wish to see how much acceleration a GPU package can provide if we offload
+> that `A GPUs/B MPI` tasks (where `A` is number of GPUs and `B` is number of cores in a node)
+> gives the
+> best performance. We wish to see how much acceleration a GPU package can provide if we offload
 > the entire force computation and neighbour list building to the GPUs. This can be done using;
 >
 > ```

@@ -113,12 +113,13 @@ The list of LAMMPS features that is supported by KOKKOS (as of July 2020) is giv
 |             |              | Setforce    |               |             |              |                 |                 |                |
 |             |              | Wall/reflect|               |             |              |                 |                 |                |
 
-This list is likely to be subject to significant changes over time as newer versions of KOKKOS are released.
+This list is likely to be subject to significant changes over time as newer versions of
+KOKKOS are released.
 
 ## How to invoke **KOKKOS** package in a LAMMPS run?
 
-In the [previous episode]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}) you learned how to call
-an accelerator package in LAMMPS.
+In the [previous episode]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}) you
+learned how to call an accelerator package in LAMMPS.
 The basic syntax of this command is;
 
 ```

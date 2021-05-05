@@ -193,12 +193,12 @@ code is the primary objective of KOKKOS.
 > ```
 > -k on g 4 -sf kk -pk kokkos newton off neigh full comm device
 > ```
-> {: .bash}
+> {: .language-bash}
 > or, if *CUDA-aware MPI* is not available to you,
 > ```
 > -k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off
 > ```
-> {: .bash}
+> {: .language-bash}
 >
 >
 > We have created a plot to compare the performance of the **KOKKOS**/GPU runs with the CPU runs
