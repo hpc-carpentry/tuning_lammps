@@ -28,7 +28,8 @@ summation method for calculating long range Coulomb interactions effectively usi
 potential. Similarly there are a few FFT schemes offered by LAMMPS and a user has to make a
 trade-off between accuracy and performance depending on their computational needs. This lesson is
 not aimed to discuss such types of algorithm-based speed-up of LAMMPS, instead we'll focus on a few
-accelerator packages that are used to extract the most out of the available hardware of an HPC system.
+accelerator packages that are used to extract the most out of the available hardware of an HPC
+system.
 
 There are five accelerator packages currently offered by LAMMPS. These are;
 
@@ -183,7 +184,8 @@ A list of functionalities enabled with this package can be found
 ### **KOKKOS** package
 
 The KOKKOS package in LAMMPS is implemented to gain performance with portability. This will be
-discussed in more depth in the [next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
+discussed in more depth in the
+[next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
 
 ## How to invoke a package in LAMMPS run?
 
@@ -207,9 +209,9 @@ in detail from the
 us discuss the syntax of the `package` command in LAMMPS. The basic syntax for the
 additional options to the LAMMPS are:
 
-```
+~~~
 package <style> <arguments>
-```
+~~~
 {: .source}
 
 `<style>` allows you to choose the accelerator package for your run. There are four different
@@ -229,9 +231,10 @@ proper `<arguments>` for the `omp` style. The minimum content of `<arguments>` i
 of OpenMP threads that you like to associate with each MPI process. This is an integer
 and should be chosen sensibly. If you have N number of physical cores available per node
 then;
-```
+~~~
 (Number of MPI processes) x (Number of OpenMP threads) = (Number of cores per node)
-```
+~~~
+{: .source}
 
 `<arguments>` can potentially include an additional number of *keywords* and their
 corresponding *values*.
@@ -251,9 +254,9 @@ There are two alternate ways to add these options to your simulation:
   accelerator packages use in their initialization, before a simulation is defined.
 
   An example of calling the *USER-OMP* package for a LAMMPS input file is given below:
-  ```
+  ~~~
   package omp 4 neigh no
-  ```
+  ~~~
   {: .source}
   (here 4 is the number of OpenMP threads per MPI task)
 
@@ -265,17 +268,17 @@ There are two alternate ways to add these options to your simulation:
   example, if we take a pair potential that would normally be set with
   `lj/charmm/coul/long`, when using **USER-OMP** optimization it would be set in the input
   file as:
-  ```
+  ~~~
   pair_style      lj/charmm/coul/long/omp 8.0 10.0
-  ```
+  ~~~
   {: .source}
 
 * A simpler way to do this is through the command-line when launching LAMMPS using the
   `-pk` command-line switch. The syntax would be essentially the same as when used in an
   input script:
-  ```{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
+  ~~~{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
   {{ mycode | strip }} -sf omp -pk omp $OMP_NUM_THREADS neigh no
-  ```
+  ~~~
   {: .language-bash}
   where `OMP_NUM_THREADS` is now an *environment variable* that we can use to control the
   number of OpenMP threads. This second method appears to be convenient since you don't
@@ -387,7 +390,8 @@ The primary aim for this following exercise is:
 * Finally, one can also make a fair comparison of performance between a *regular* LAMMPS run, the
   GPU package and a KOKKOS implementation of GPU functionality.
 * Moreover, this exercise will also help the users to extend the knowledge of using the *package*
-  command so that they can figure out by themselves how to use other accelerator packages in LAMMPS.
+  command so that they can figure out by themselves how to use other accelerator packages in
+  LAMMPS.
 
 Before invoking the GPU package, you must ask the following questions:
 
@@ -431,9 +435,10 @@ could be useful.
 
 Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 
-```{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
+{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
+~~~
 {{ mycode | strip }} -sf gpu -pk gpu 2 neigh yes newton off split 1.0
-```
+~~~
 {: .language-bash}
 
 
@@ -451,16 +456,16 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > {% capture mycode %}{% include {{ site.snippets }}/ep05/in.lj %}{% endcapture %}
 > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
 >
-> ```{% for member in lines_of_code %}
+> ~~~{% for member in lines_of_code %}
 > {{ member }}{% endfor %}
-> ```
+> ~~~
 > {: .source}
 >
 > > ## Solution
 > >
-> > ```{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
+> > ~~~{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
 > > {{ mycode | strip }} -sf gpu -pk gpu 2 neigh no newton off split -1.0
-> > ```
+> > ~~~
 > > {: .language-bash}
 > >
 > > The breakdown of the command is as follows;
@@ -481,9 +486,9 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > >
 > > {% capture mycode %}{% include {{ site.snippets }}/ep05/gpu_job_script %}{% endcapture %}
 > > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
-> > ```{% for member in lines_of_code %}
+> > ~~~{% for member in lines_of_code %}
 > > {{ member }}{% endfor %}
-> > ```
+> > ~~~
 > > {: .language-bash}
 > {: .solution}
 {: .challenge}
@@ -497,15 +502,15 @@ that you asked for and the rest are to tell you about the performance outcome.
 It prints about the device information both in the screen-output and the log file. You would notice
 something similar to;
 
-```
+~~~
 {% include {{ site.snippets }}/ep05/lammps-gpu-output-1.txt %}
-```
+~~~
 {: .output}
 
 The first thing that you should notice here is that it's using an *acceleration* for the
 pair potential lj/cut
 and for this purpose it is using two devices (`Device 0` and `Device 1`) and 12 MPI-processes per
-device. That is what we asked for using 2 GPUs (```-pk gpu 2```) and in this case there
+device. That is what we asked for using 2 GPUs (`-pk gpu 2`) and in this case there
 were 24 cores on the node. The number of tasks is shared equally by
 each GPU. The detail about the graphics card is also printed, along
 with the *numerical precision* used by the **GPU** package is also printed. In this case, it
@@ -519,9 +524,9 @@ mentioned this as `pair_style  lj/cut 2.5`. This is what happens when you use th
 command-line switch. This automatically ensures that the correct accelerated version is called for
 this run.
 
-```
+~~~
 {% include {{ site.snippets }}/ep05/lammps-gpu-output-2.txt %}
-```
+~~~
 {: .output}
 
 #### **Performance section**
@@ -533,9 +538,9 @@ When you use the
 of information known as `Device Time Info (average)`. This gives you a breakdown of how
 the devices (GPUs) have been utilised to do various parts of the job.
 
-```
+~~~
 {% include {{ site.snippets }}/ep05/lammps-gpu-output-3.txt %}
-```
+~~~
 {: .output}
 
 ### Choosing your parameters
@@ -571,9 +576,9 @@ before starting the production runs. This might save you a lot of resources and 
 >
 > We choose package keywords such that neighbour list building and force computations are
 > done entirely on the GPUs:
-> ```
+> ~~~
 > -sf gpu -pk gpu 4 neigh yes newton off split 1.0
-> ```
+> ~~~
 > {: .source}
 > where 4 GPUs are being used.
 >
@@ -649,13 +654,14 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 > By now we have idea about some of the 'preferred' tuning parameters for an LJ-system. For
 > the current exercise, let us take the system with ~11 million atoms, i.e.
 > `x = y = z = 140` and `t = 500` and for this size of atoms, we know from our previous example
-> that `A GPUs/B MPI` tasks (where `A` is number of GPUs and `B` is number of cores in a node) gives
-> the best performance. We wish to see how much acceleration a GPU package can provide if we offload
+> that `A GPUs/B MPI` tasks (where `A` is number of GPUs and `B` is number of cores in a node)
+> gives the
+> best performance. We wish to see how much acceleration a GPU package can provide if we offload
 > the entire force computation and neighbour list building to the GPUs. This can be done using;
 >
-> ```
+> ~~~
 > -sf gpu -pk gpu 4 neigh yes newton off split 1.0
-> ```
+> ~~~
 > {: .source}
 >
 > The plot below shows an HPC system with 2x12 CPU cores per node and 2 GPUs (4 visible devices)

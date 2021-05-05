@@ -107,7 +107,7 @@ containing about 10 million atoms.
 >
 > > ## Solution
 > > Let us have a look at an example of the timing breakdown table.
-> > ```
+> > ~~~
 > > MPI task timing breakdown:
 > > Section |  min time  |  avg time  |  max time  |%varavg| %total
 > > ---------------------------------------------------------------
@@ -117,7 +117,7 @@ containing about 10 million atoms.
 > > Output  | 7.4148e-05 | 7.4148e-05 | 7.4148e-05 |   0.0 |  0.00
 > > Modify  | 0.20477    | 0.20477    | 0.20477    |   0.0 |  1.41
 > > Other   |            | 0.04296    |            |       |  0.30
-> > ```
+> > ~~~
 > > {: .output}
 > >
 > > The last `%total` column in the table tells about the
@@ -137,7 +137,7 @@ containing about 10 million atoms.
 > > has increased significantly (it now takes about 1.5 hours), the distribution of
 > > `%total` remains roughly the same.
 > >
-> > ```
+> > ~~~
 > > MPI task timing breakdown:
 > > Section |  min time  |  avg time  |  max time  |%varavg| %total
 > > ---------------------------------------------------------------
@@ -147,7 +147,7 @@ containing about 10 million atoms.
 > > Output  | 0.1237     | 0.1237     | 0.1237     |   0.0 |  0.00
 > > Modify  | 168.98     | 168.98     | 168.98     |   0.0 |  2.05
 > > Other   |            | 43.95      |            |       |  0.53
-> > ```
+> > ~~~
 > > {: .output}
 > {: .solution}
 {: .challenge}
@@ -258,9 +258,10 @@ we can perform a scalability study for each of the components.
 >    speedup factor for the `Pair`, `Comm` and `walltime` fields in the timing breakdowns. Use
 >    the below formula to calculate speedup.
 >
->    ```
+>    ~~~
 >    (Speedup factor) = 1.0 / ( (Time taken by N nodes) / (Time taken by 1 node) )
->    ```
+>    ~~~
+>    {: .source}
 >    Note here how we have uses a node for our baseline unit of measurement (rather than
 >    a single processor) since running the serial case would take too long.
 >

@@ -27,13 +27,13 @@ do practical exercises to get further hands-on experiences on using those comman
 
 In this episode, we'll learn to use **KOKKOS** package with GPUs. As we have seen,
 to run the **KOKKOS** package the following three command-line switches are very important:
-  1. ```-k on``` : This enables KOKKOS at runtime
-  2. ```-sf kk``` : This appends the "/kk" suffix to KOKKOS-supported LAMMPS styles
-  3. ```-pk kokkos``` : This is used to modify the default package **KOKKOS** options
+  1. `-k on` : This enables KOKKOS at runtime
+  2. `-sf kk` : This appends the "/kk" suffix to KOKKOS-supported LAMMPS styles
+  3. `-pk kokkos` : This is used to modify the default package **KOKKOS** options
 
-To invoke the GPU execution mode with KOKKOS, the ```-k on``` switch takes additional
+To invoke the GPU execution mode with KOKKOS, the `-k on` switch takes additional
 arguments for hardware settings as shown below:
-  4. ```-k on g Ngpu```: Using this switch you can specify the number of GPU devices, `Ngpu`,
+  4. `-k on g Ngpu`: Using this switch you can specify the number of GPU devices, `Ngpu`,
      that you want to use per node.
 
 
@@ -190,15 +190,15 @@ code is the primary objective of KOKKOS.
 > the entire force computation and neighbour
 > list building to the GPUs using the `<arguments>`:
 >
-> ```
+> ~~~
 > -k on g 4 -sf kk -pk kokkos newton off neigh full comm device
-> ```
-> {: .bash}
+> ~~~
+> {: .language-bash}
 > or, if *CUDA-aware MPI* is not available to you,
-> ```
+> ~~~
 > -k on g 4 -sf kk -pk kokkos newton off neigh full comm device cuda/aware off
-> ```
-> {: .bash}
+> ~~~
+> {: .language-bash}
 >
 >
 > We have created a plot to compare the performance of the **KOKKOS**/GPU runs with the CPU runs

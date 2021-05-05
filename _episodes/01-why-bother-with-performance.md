@@ -101,6 +101,7 @@ and **CPU hours**.
 > ~~~
 > Number of cores * Average frequency * Operations per cycle`
 > ~~~
+> {: .language-bash}
 > What a software program can *achieve* in terms of flops is usually a surprisingly
 > small percentage of this value (e.g., 10% efficiency is not a bad number!).
 >
@@ -144,6 +145,7 @@ and **CPU hours**.
 > > ~~~
 > > {{ site.sched.comment }} {{ site.sched.flag.time }} 5:00:00
 > > ~~~
+> > {: .language-bash} 
 > {: .solution}
 {: .challenge}
 

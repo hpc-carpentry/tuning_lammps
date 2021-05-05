@@ -9,7 +9,8 @@ root: ..
 ~~~
 {:auto_ids}
 package-OPT
-:   As of *3Mar20* version of LAMMPS, the following list of functionalities are available with the OPT package
+:   As of *3Mar20* version of LAMMPS, the following list of functionalities are available
+    with the OPT package
 
     | Pair styles       |
     | :---------------: |
@@ -25,7 +26,8 @@ package-OPT
     |ufm                |
 
 package-USER-INTEL
-:   As of *3Mar20* version of LAMMPS, the following list of functionalities are available with the USER-INTEL package
+:   As of *3Mar20* version of LAMMPS, the following list of functionalities are available
+    with the USER-INTEL package
 
     | Pair styles         | Bond styles | Angle styles | Improper styles | Dihedral styles | Fix styles | K-space styles | Integrator styles |
     | :------------------ | :---------- | :----------- | :-------------- | :-------------- | :--------- | :------------- | :---------------- |
@@ -49,7 +51,8 @@ package-USER-INTEL
     |tersoff              |             |              |                 |                 |            |                |                   |
 
 package-USER-OMP
-:   As of *3Mar20* version of LAMMPS, the following list of functionalities are available with the USER-OMP package
+:   As of *3Mar20* version of LAMMPS, the following list of functionalities are available
+    with the USER-OMP package
 
     | Pair styles         |                       |                               |                        |                      |                         |
     | :------------------ | :-------------------- | :---------------------------- | :--------------------- | :------------------- | :---------------------- |
@@ -92,7 +95,8 @@ package-USER-OMP
     |                    | table            |                 |                  | nvt           |             |                 |
 
 package-GPU
-:   As of *3Mar20* version of LAMMPS, the following list of functionalities are available with the GPU package
+:   As of *3Mar20* version of LAMMPS, the following list of functionalities are
+    available with the GPU package
 
     |                    |                     |    Pair styles   |                     |                    | K-space style |
     | :----------------- | :------------------ | :--------------- | :------------------ | :----------------- | :------------ |

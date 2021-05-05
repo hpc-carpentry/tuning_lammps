@@ -1,11 +1,14 @@
 ---
 layout: page
-title: Introduction to HPC Lesson Outline
+title: Running LAMMPS on HPC Systems -  Lesson Outline
 ---
 
 ## How to use this outline
 
-The following list of items is meant as a guide on what content should go where in this repo. This should work as a guide where you can contribute. If a bullet point is prefixed by a file name, this is the lesson where the listed content should go into. This document is meant as a concept map converted into a flow learning goals and questions.
+The following list of items is meant as a guide on what content should go where in this repo. 
+This should work as a guide where you can contribute. If a bullet point is prefixed by a
+file name, this is the lesson where the listed content should go into. This document is
+meant as a concept map converted into a flow learning goals and questions.
 
 ## Accelerating LAMMPS on a HPC
 
@@ -13,14 +16,16 @@ The following list of items is meant as a guide on what content should go where 
     * Why should I bother about software performance?
     * What can I expect to learn from this course?
 
-* [01-why-bother-with-performance.md:](_episodes/01-why-bother-performance.md): Brief notes on software performance
+* [01-why-bother-with-performance.md:](_episodes/01-why-bother-performance.md): Brief notes
+  on software performance
     * What is software performance?
     * Why is software performance important?
     * How can performance be measured?
     * What is meant by flops, walltime and CPU hours?
     * What can affect performance?
 
-* [02-benchmark-and-scaling.md: How do I benchmark software performance in HPC?](_episodes/02-hardware-performance.md):about benchmark and scaling
+* [02-benchmark-and-scaling.md: How do I benchmark software performance in HPC?](_episodes/02-hardware-performance.md):
+  about benchmark and scaling
     * What is benchmarking?
     * What are the factors that can affect a benchmark?
         * _**Case study 1:**_ A simple benchmarking example of LAMMPS in a HPC
@@ -32,7 +37,8 @@ The following list of items is meant as a guide on what content should go where 
         * _**Case Study 2:**_ Get scaling data for a LAMMPS run
         * _**Hands-on 2:**_ Do a scaling analysis
 
-* [03-acceleration.md: Can I accelerate performance?](_episodes/03-benchmark-and-scaling.md):brief discussion over various aspects of speeding up software performances
+* [03-acceleration.md: Can I accelerate performance?](_episodes/03-benchmark-and-scaling.md):brief
+  discussion over various aspects of speeding up software performances
     * Hardware acceleration and software acceleration
         * multi-core cpu
         * GPU
@@ -58,15 +64,18 @@ The following list of items is meant as a guide on what content should go where 
         *  Brief mention about various optimized libraries like MKL, FFTW
 
 
-* [04-lammps-bottlenecks.md: Identifying bottlenecks in LAMMPS](_episodes/04-lammps-bottlenecks.md):learn to analyze timing data in LAMMPS
+* [04-lammps-bottlenecks.md: Identifying bottlenecks in LAMMPS](_episodes/04-lammps-bottlenecks.md):
+  learn to analyze timing data in LAMMPS
     * _**Case study 3:**_ Understand the task timing breakdown of LAMMPS output
-    * _**Hands-on 3:**_ Understand the task timing breakdown of LAMMPS output of a different problem
+    * _**Hands-on 3:**_ Understand the task timing breakdown of LAMMPS output of a different
+      problem
 
-* [05-accelerating-lammps.md: How can I accelerate LAMMPS performance?](_episodes/05-accelerating-lammps.md):various options to accelerate LAMMPS
+* [05-accelerating-lammps.md: How can I accelerate LAMMPS performance?](_episodes/05-accelerating-lammps.md):
+  various options to accelerate LAMMPS
 
     * Knowing what hardwares LAMMPS can be used on
 
-    * How can I enable arcitecture support at runtime?
+    * How can I enable architecture support at runtime?
 
         * Accelerator packages in LAMMPS
             * What packages for which architecture?
@@ -82,18 +91,22 @@ The following list of items is meant as a guide on what content should go where 
         * Fixes that support KOKKOS in LAMMPS
         * Package options
 
-* [06-invoking-kokkos.md: How do I invoke KOKKOS in LAMMPS?](_episodes/06-invoking-kokkos.md):technical aspects to use KOKKOS with LAMMPS
+* [06-invoking-kokkos.md: How do I invoke KOKKOS in LAMMPS?](_episodes/06-invoking-kokkos.md):
+  technical aspects to use KOKKOS with LAMMPS
     * Transition from regular LAMMPS call to accelerated call
 
-* [07-kokkos-openmp.md: Compare KOKKOS/OpenMP performance with regular LAMMPS/OpenMP performance](_episodes/07-kokkos-openmp.md):learn to use openmp with KOKKOS
+* [07-kokkos-openmp.md: Compare KOKKOS/OpenMP performance with regular LAMMPS/OpenMP performance](_episodes/07-kokkos-openmp.md):
+  learn to use openmp with KOKKOS
 
     * _**Case study 4:**_ using OpenMP+KOKKOS for Skylake AVX-512 architecture
     * Comparing LAMMPS performance between runs with and without KOKKOS
     * _**Exercise 4:**_ Similar study with slightly different problem
 
-* [08-kokkos-gpu.md: Compare KOKKOS/GPU performance with regular LAMMPS/GPU performance](_episodes/08-kokkos-gpu.md):learn to use gpu with KOKKOS
+* [08-kokkos-gpu.md: Compare KOKKOS/GPU performance with regular LAMMPS/GPU performance](_episodes/08-kokkos-gpu.md):
+  learn to use gpu with KOKKOS
     * _**Case study 5:**_ using OpenMP+KOKKOS for NVIDIA Tesla V100 architecture
     * Comparing LAMMPS performance between runs with and without KOKKOS
     * _**Exercise 5:**_ Similar study with slightly different problem
 
-* [09-limitations.md: What are the limitatations of different accelerator packages?](_episodes/09-limitations.md):discuss the limitations of KOKKOS and other accelerator packages
+* [09-limitations.md: What are the limitatations of different accelerator packages?](_episodes/09-limitations.md):
+  discuss the limitations of KOKKOS and other accelerator packages

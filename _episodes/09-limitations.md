@@ -6,12 +6,11 @@ questions:
 - "What are the limitations of KOKKOS and other accelerator packages?"
 - "How can I be sure that LAMMPS is working efficiently"
 objectives:
-- "First learning objective. (FIXME)"
+- "Identify some limitations in accelerator packages"
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "Nothing is perfect, there is no single best solution for all cases"
 ---
 
-FIXME
 
 > ## Discussion
 >
