@@ -1,7 +1,7 @@
 # Running LAMMPS on HPC Systems
 
 This repository generates the corresponding lesson website
-at https://fzj-jsc.github.io/tuning_lammps/  
+at https://hpc-carpentry.github.io/tuning_lammps/  
 
 ## Contributing
 
@@ -14,7 +14,7 @@ We'd like to ask you to familiarize yourself with our
 the [more detailed guidelines][lesson-example] on proper formatting, ways
 to render the lesson locally, and even how to write new episodes.
 
-Please see the current list of [issues](https://github.com/FZJ-JSC/tuning_lammps/issues)
+Please see the current list of [issues](https://github.com/hpc-carpentry/tuning_lammps/issues)
 for ideas for contributing to this
 repository. For making your contribution, we use the GitHub flow, which is
 nicely explained in the chapter
